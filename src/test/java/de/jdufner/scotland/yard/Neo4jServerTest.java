@@ -1,13 +1,13 @@
-package de.jdufner.neo4j.server;
+package de.jdufner.scotland.yard;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for simple App.
+ * Unit test for simple Neo4jServer.
  */
-public class AppTest 
+public class Neo4jServerTest
     extends TestCase
 {
     /**
@@ -15,7 +15,7 @@ public class AppTest
      *
      * @param testName name of the test case
      */
-    public AppTest( String testName )
+    public Neo4jServerTest(String testName)
     {
         super( testName );
     }
@@ -25,7 +25,7 @@ public class AppTest
      */
     public static Test suite()
     {
-        return new TestSuite( AppTest.class );
+      return new TestSuite(Neo4jServerTest.class);
     }
 
     /**
