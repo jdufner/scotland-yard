@@ -5,9 +5,9 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for simple Neo4jServer.
+ * Unit test for simple App.
  */
-public class Neo4jServerTest
+public class AppTest
     extends TestCase
 {
     /**
@@ -15,7 +15,7 @@ public class Neo4jServerTest
      *
      * @param testName name of the test case
      */
-    public Neo4jServerTest(String testName)
+    public AppTest(String testName)
     {
         super( testName );
     }
@@ -25,7 +25,7 @@ public class Neo4jServerTest
      */
     public static Test suite()
     {
-      return new TestSuite(Neo4jServerTest.class);
+      return new TestSuite(AppTest.class);
     }
 
     /**

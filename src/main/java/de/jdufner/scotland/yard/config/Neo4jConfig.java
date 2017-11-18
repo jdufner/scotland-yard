@@ -1,57 +1,72 @@
-package de.jdufner.scotland.yard;
+package de.jdufner.scotland.yard.config;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.kernel.impl.factory.GraphDatabaseFacade;
 import org.neo4j.server.CommunityBootstrapper;
-import org.neo4j.server.NeoServer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class Neo4jServer {
+/**
+ * @author Jürgen Dufner
+ * @since 0.3
+ */
+@Configuration
+public class Neo4jConfig {
 
   private static File databaseDirectory = new File("./neo4j-data");
   private static File configFile = new File("./config/neo4j.conf");
 
-  public static void main(String[] args) {
-    CommunityBootstrapper communityBootstrapper = new CommunityBootstrapper();
-    Map<String, String> properties = new HashMap<>();
+  @Bean
+  public GraphDatabaseService graphDatabaseService() {
+    final GraphDatabaseFacade graphDatabaseFacade = bootstrapGraphDatabase();
+    populateGraphDatabase(graphDatabaseFacade);
+    registerShutdownHook(graphDatabaseFacade);
+    return graphDatabaseFacade;
+  }
+
+  private GraphDatabaseFacade bootstrapGraphDatabase() {
+    final CommunityBootstrapper communityBootstrapper = new CommunityBootstrapper();
+    final Map<String, String> properties = new HashMap<>();
     properties.put("dbms.connector.http.address", "0.0.0.0:7474");
     properties.put("dbms.security.auth_enabled", "false");
     properties.put("dbms.directories.import", "/../src/main/resources");
     communityBootstrapper.start(databaseDirectory, Optional.of(configFile), properties);
-    NeoServer neoServer = communityBootstrapper.getServer();
-    GraphDatabaseFacade graphDatabaseFacade = neoServer.getDatabase().getGraph();
-    registerShutdownHook(graphDatabaseFacade);
+    return communityBootstrapper.getServer().getDatabase()
+        .getGraph();
+  }
 
-    try (Transaction tx = graphDatabaseFacade.beginTx()) {
+  private void populateGraphDatabase(GraphDatabaseService graphDatabaseService) {
+    try (Transaction tx = graphDatabaseService.beginTx()) {
       for (int i = 1; i <= 199; i++) {
-        graphDatabaseFacade.execute("CREATE (n :Node {number: " + i + "})");
+        graphDatabaseService.execute("CREATE (n :Node {number: " + i + "})");
       }
 
-      graphDatabaseFacade.execute("LOAD CSV FROM 'file://" +
+      graphDatabaseService.execute("LOAD CSV FROM 'file://" +
           "/SCOTMAP.TXT' AS line " +
           "MATCH (n:Node), (m:Node) " +
           "WHERE n.number = toInteger(line[0]) and m.number = toInteger(line[1]) " +
           "CREATE (n)-[:RELATION {type: line[2]}]->(m) "
       );
 
-      graphDatabaseFacade.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
+      graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
           ".type=\"Bus\" create (n)-[:BUS]->(m) return n, m");
 
-      graphDatabaseFacade.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
+      graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
           ".type=\"Taxi\" create (n)-[:TAXI]->(m) return n, m");
 
-      graphDatabaseFacade.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
+      graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
           ".type=\"Ship\" create (n)-[:SHIP]->(m) return n, m");
 
-      graphDatabaseFacade.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
+      graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
           ".type=\"Underground\" create (n)-[:UNDERGROUND]->(m) return n, m");
 
-      graphDatabaseFacade.execute("match (:Node)-[r:RELATION]->(:Node) delete r");
+      graphDatabaseService.execute("match (:Node)-[r:RELATION]->(:Node) delete r");
 
       // Welcher Knoten hat die meisten Beziehungen?
       // match (n:Node)-[r]-(:Node) return n.number, count(r) as rels order by rels desc
@@ -61,19 +76,13 @@ public class Neo4jServer {
 
       tx.success();
     }
-
   }
 
-  private static void registerShutdownHook(final GraphDatabaseService graphDb) {
+  private void registerShutdownHook(final GraphDatabaseService graphDb) {
     // Registers a shutdown hook for the Neo4j instance so that it
     // shuts down nicely when the VM exits (even if you "Ctrl-C" the
     // running application).
-    Runtime.getRuntime().addShutdownHook(new Thread() {
-      @Override
-      public void run() {
-        graphDb.shutdown();
-      }
-    });
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> graphDb.shutdown()));
   }
 
 }
