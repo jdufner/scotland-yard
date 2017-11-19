@@ -6,8 +6,13 @@ package de.jdufner.scotland.yard.model.tickets;
  */
 public class Taxi extends Ticket {
 
-  protected Taxi(final int anzahl) {
+  public Taxi(final int anzahl) {
     super(anzahl);
+  }
+
+  @Override
+  public String toString() {
+    return "Taxi: " + getAnzahl();
   }
 
 }

@@ -16,4 +16,8 @@ public class Position {
     return position;
   }
 
+  @Override
+  public String toString() {
+    return "Position: " + String.valueOf(position);
+  }
 }

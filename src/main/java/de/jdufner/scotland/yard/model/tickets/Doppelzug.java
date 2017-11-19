@@ -6,8 +6,13 @@ package de.jdufner.scotland.yard.model.tickets;
  */
 public class Doppelzug extends Ticket {
 
-  protected Doppelzug(final int anzahl) {
+  public Doppelzug(final int anzahl) {
     super(anzahl);
+  }
+
+  @Override
+  public String toString() {
+    return "Doppelzug: " + getAnzahl();
   }
 
 }

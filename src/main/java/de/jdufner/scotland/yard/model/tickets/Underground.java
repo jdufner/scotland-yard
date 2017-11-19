@@ -6,8 +6,13 @@ package de.jdufner.scotland.yard.model.tickets;
  */
 public class Underground extends Ticket {
 
-  protected Underground(final int anzahl) {
+  public Underground(final int anzahl) {
     super(anzahl);
+  }
+
+  @Override
+  public String toString() {
+    return "Underground: " + getAnzahl();
   }
 
 }

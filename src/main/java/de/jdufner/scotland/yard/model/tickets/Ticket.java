@@ -12,4 +12,8 @@ public abstract class Ticket {
     this.anzahl = anzahl;
   }
 
+  public int getAnzahl() {
+    return anzahl;
+  }
+
 }

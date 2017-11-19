@@ -10,4 +10,9 @@ public class BlackTicket extends Ticket {
     super(anzahl);
   }
 
+  @Override
+  public String toString() {
+    return "BlackTicket: " + getAnzahl();
+  }
+
 }

@@ -24,4 +24,14 @@ public class MrX extends Spieler {
     tickets.add(new BlackTicket(2));
   }
 
+  @Override
+  public void ziehe() {
+
+  }
+
+  @Override
+  public String toString() {
+    return "Mr. X: " + super.toString();
+  }
+
 }

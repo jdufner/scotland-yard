@@ -18,4 +18,14 @@ public class Detektiv extends Spieler {
     tickets.add(new Underground(4));
   }
 
+  @Override
+  public void ziehe() {
+
+  }
+
+  @Override
+  public String toString() {
+    return "Detektiv: " + super.toString();
+  }
+
 }
