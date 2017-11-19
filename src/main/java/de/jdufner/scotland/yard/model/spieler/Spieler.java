@@ -26,8 +26,16 @@ public abstract class Spieler {
 
   @Override
   public String toString() {
-    return "{" + positions.get(positions.size() - 1) +
+    return "{" + letztePosition() +
         ", Tickets: " + tickets + "}";
+  }
+
+  public String name() {
+    return getClass().getSimpleName();
+  }
+
+  public Position letztePosition() {
+    return positions.get(positions.size() - 1);
   }
 
   public abstract void ziehe();

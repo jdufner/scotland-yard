@@ -24,6 +24,10 @@ public class Spiel {
     spielers.add(new Detektiv(Startposition.zieheFreiStartposition()));
   }
 
+  public List<Spieler> getSpieler() {
+    return spielers;
+  }
+
   @Override
   public String toString() {
     return "Spieler: {" + spielers.toString() + "}";

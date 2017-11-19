@@ -8,7 +8,7 @@ public class Position {
 
   final int position;
 
-  Position(int position) {
+  public Position(int position) {
     this.position = position;
   }
 

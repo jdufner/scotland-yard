@@ -1,6 +1,7 @@
 package de.jdufner.scotland.yard.config;
 
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.kernel.impl.factory.GraphDatabaseFacade;
 import org.neo4j.server.CommunityBootstrapper;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 /**
  * @author Jürgen Dufner
- * @since 0.3
+ * @since 1.0
  */
 @Configuration
 public class Neo4jConfig {
@@ -43,15 +44,21 @@ public class Neo4jConfig {
 
   private void populateGraphDatabase(GraphDatabaseService graphDatabaseService) {
     try (Transaction tx = graphDatabaseService.beginTx()) {
+      Result execute = graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = 1 RETURN n");
+      if (execute.hasNext()) {
+        tx.close();
+        return;
+      }
+
       for (int i = 1; i <= 199; i++) {
-        graphDatabaseService.execute("CREATE (n :Node {number: " + i + "})");
+        graphDatabaseService.execute("CREATE (n:Node {number: " + i + "})");
       }
 
       graphDatabaseService.execute("LOAD CSV FROM 'file://" +
           "/SCOTMAP.TXT' AS line " +
           "MATCH (n:Node), (m:Node) " +
           "WHERE n.number = toInteger(line[0]) and m.number = toInteger(line[1]) " +
-          "CREATE (n)-[:RELATION {type: line[2]}]->(m) "
+          "CREATE UNIQUE (n)-[:RELATION {type: line[2]}]->(m) "
       );
 
       graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
