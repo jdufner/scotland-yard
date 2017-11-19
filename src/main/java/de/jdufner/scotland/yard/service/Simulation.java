@@ -21,8 +21,10 @@ public class Simulation {
   @PostConstruct
   public void starteSimulation() {
     Spiel spiel = new Spiel();
-    //spielService.ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten();
-    //spielService.displaySpieler(spiel.getSpieler());
+    //spielService.ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten(spiel);
+    spielService.entferneSpieler(spiel.getSpieler());
+    spielService.setzeSpieler(spiel.getSpieler());
+    spielService.findeNachbarAmWeitestenEntferntVonDetektiven();
   }
 
 }
