@@ -7,6 +7,8 @@ import de.jdufner.scotland.yard.model.spieler.Spieler;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SpielService {
+
+  private static final Logger LOG = LoggerFactory.getLogger(SpielService.class);
 
   private final GraphDatabaseService graphDatabaseService;
 
@@ -72,20 +76,18 @@ public class SpielService {
           "(m:Node), p=shortestPath((m)-[:TAXI|BUS|UNDERGROUND*1..]-(d:DETEKTIV)) RETURN n" +
           ".number, m.number, d.number, length(p) ORDER BY m.number, d.number asc, length(p) desc");
 
-      List<Weg> wege = new ArrayList<>();
+      final List<Weg> wege = new ArrayList<>();
       while (result.hasNext()) {
         wege.add(buildWeg(result.next(), "m.number", "d.number", "length(p)"));
       }
-      System.out.println();
-      System.out.println("Alle Wege zum vom einem Nachbarn zu allen Detektiven");
-      System.out.println(wege);
+      LOG.debug("Alle Wege zum vom einem Nachbarn zu allen Detektiven");
+      LOG.debug("{}", wege);
 
       Map<Position, Optional<Weg>> nachbar2KuerzesteDistanzZumNaechstenDetektiv = wege.stream()
           .collect(Collectors.groupingBy(Weg::getStart,
               Collectors.minBy(Comparator.comparing(Weg::getLaenge))));
-      System.out.println();
-      System.out.println("Nachbar mit jeweils kürzester Distanz zu nächsten Detektiv");
-      System.out.println(nachbar2KuerzesteDistanzZumNaechstenDetektiv);
+      LOG.debug("Nachbar mit jeweils kürzester Distanz zu nächsten Detektiv");
+      LOG.debug("{}", nachbar2KuerzesteDistanzZumNaechstenDetektiv);
 
       // if size() == 1 return
 
@@ -93,9 +95,8 @@ public class SpielService {
           .filter(Optional::isPresent)
           .map(Optional::get)
           .collect(Collectors.maxBy(Comparator.comparing(Weg::getLaenge)));
-      System.out.println();
-      System.out.println("Größte Minimaldistanz zu allen Detektiven");
-      System.out.println(weg.get().getLaenge());
+      LOG.debug("Größte Minimaldistanz zu allen Detektiven");
+      LOG.debug("{}", weg.get().getLaenge());
 
       List<Weg> nachbarnMitGroessterDistanzZuAllenDetektiven =
           nachbar2KuerzesteDistanzZumNaechstenDetektiv.values()
@@ -104,23 +105,19 @@ public class SpielService {
               .map(Optional::get)
               .filter(weg1 -> weg1.getLaenge() == weg.get().getLaenge())
               .collect(Collectors.toList());
-      System.out.println();
-      System.out.println("Nachbarn mit größter Distanz zu allen Detektiven");
-      System.out.println(nachbarnMitGroessterDistanzZuAllenDetektiven);
+      LOG.debug("Nachbarn mit größter Distanz zu allen Detektiven");
+      LOG.debug("{}", nachbarnMitGroessterDistanzZuAllenDetektiven);
 
       Map<Position, Double> avg = nachbarnMitGroessterDistanzZuAllenDetektiven.stream()
           .collect(Collectors.groupingBy(Weg::getStart, Collectors.averagingInt(Weg::getLaenge)));
-      System.out.println();
-      System.out.println("Nachbar mit durchschnittlicher Distanz zu allen Detektiven");
-      System.out.println(avg);
+      LOG.debug("Nachbar mit durchschnittlicher Distanz zu allen Detektiven");
+      LOG.debug("{}", avg);
 
-      // Problem: Vergleich double mit int ?!?
       Optional<Map.Entry<Position, Double>> optional = avg.entrySet().stream()
           .collect(Collectors.maxBy(Comparator.comparing(Map.Entry::getValue)));
       Position position = optional.get().getKey();
-      System.out.println();
-      System.out.println("Nächste Position");
-      System.out.println(position);
+      LOG.debug("Nächste Position");
+      LOG.debug("{}", position);
 
       tx.success();
     }
