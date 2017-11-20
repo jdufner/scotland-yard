@@ -24,7 +24,10 @@ public class Simulation {
     //spielService.ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten(spiel);
     spielService.entferneSpieler(spiel.getSpieler());
     spielService.setzeSpieler(spiel.getSpieler());
+    // Spielzug von Mr. X
     spielService.findeNachbarAmWeitestenEntferntVonDetektiven();
+    // Spielzüge von Detektiven
+    spielService.findeWegZuUndergroundInDreiZuegen();
   }
 
 }

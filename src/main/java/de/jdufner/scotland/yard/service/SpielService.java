@@ -70,57 +70,56 @@ public class SpielService {
     }
   }
 
-  public void findeNachbarAmWeitestenEntferntVonDetektiven() {
+  public Position findeNachbarAmWeitestenEntferntVonDetektiven() {
+    final List<Weg> wege = new ArrayList<>();
     try (final Transaction tx = graphDatabaseService.beginTx()) {
       Result result = graphDatabaseService.execute("MATCH (n:MRX)-[:TAXI|BUS|UNDERGROUND]-" +
           "(m:Node), p=shortestPath((m)-[:TAXI|BUS|UNDERGROUND*1..]-(d:DETEKTIV)) RETURN n" +
           ".number, m.number, d.number, length(p) ORDER BY m.number, d.number asc, length(p) desc");
 
-      final List<Weg> wege = new ArrayList<>();
       while (result.hasNext()) {
         wege.add(buildWeg(result.next(), "m.number", "d.number", "length(p)"));
       }
-      LOG.debug("Alle Wege zum vom einem Nachbarn zu allen Detektiven");
-      LOG.debug("{}", wege);
-
-      Map<Position, Optional<Weg>> nachbar2KuerzesteDistanzZumNaechstenDetektiv = wege.stream()
-          .collect(Collectors.groupingBy(Weg::getStart,
-              Collectors.minBy(Comparator.comparing(Weg::getLaenge))));
-      LOG.debug("Nachbar mit jeweils kürzester Distanz zu nächsten Detektiv");
-      LOG.debug("{}", nachbar2KuerzesteDistanzZumNaechstenDetektiv);
-
-      // if size() == 1 return
-
-      Optional<Weg> weg = nachbar2KuerzesteDistanzZumNaechstenDetektiv.values().stream()
-          .filter(Optional::isPresent)
-          .map(Optional::get)
-          .collect(Collectors.maxBy(Comparator.comparing(Weg::getLaenge)));
-      LOG.debug("Größte Minimaldistanz zu allen Detektiven");
-      LOG.debug("{}", weg.get().getLaenge());
-
-      List<Weg> nachbarnMitGroessterDistanzZuAllenDetektiven =
-          nachbar2KuerzesteDistanzZumNaechstenDetektiv.values()
-              .stream()
-              .filter(Optional::isPresent)
-              .map(Optional::get)
-              .filter(weg1 -> weg1.getLaenge() == weg.get().getLaenge())
-              .collect(Collectors.toList());
-      LOG.debug("Nachbarn mit größter Distanz zu allen Detektiven");
-      LOG.debug("{}", nachbarnMitGroessterDistanzZuAllenDetektiven);
-
-      Map<Position, Double> avg = nachbarnMitGroessterDistanzZuAllenDetektiven.stream()
-          .collect(Collectors.groupingBy(Weg::getStart, Collectors.averagingInt(Weg::getLaenge)));
-      LOG.debug("Nachbar mit durchschnittlicher Distanz zu allen Detektiven");
-      LOG.debug("{}", avg);
-
-      Optional<Map.Entry<Position, Double>> optional = avg.entrySet().stream()
-          .collect(Collectors.maxBy(Comparator.comparing(Map.Entry::getValue)));
-      Position position = optional.get().getKey();
-      LOG.debug("Nächste Position");
-      LOG.debug("{}", position);
-
       tx.success();
     }
+    LOG.debug("Alle Wege zum vom einem Nachbarn zu allen Detektiven");
+    LOG.debug("{}", wege);
+
+    Map<Position, Optional<Weg>> nachbar2KuerzesteDistanzZumNaechstenDetektiv = wege.stream()
+        .collect(Collectors.groupingBy(Weg::getStart,
+            Collectors.minBy(Comparator.comparing(Weg::getLaenge))));
+    LOG.debug("Nachbar mit jeweils kürzester Distanz zu nächsten Detektiv");
+    LOG.debug("{}", nachbar2KuerzesteDistanzZumNaechstenDetektiv);
+
+    Optional<Weg> weg = nachbar2KuerzesteDistanzZumNaechstenDetektiv.values().stream()
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(Collectors.maxBy(Comparator.comparing(Weg::getLaenge)));
+    LOG.debug("Größte Minimaldistanz zu allen Detektiven");
+    LOG.debug("{}", weg.get().getLaenge());
+
+    List<Weg> nachbarnMitGroessterDistanzZuAllenDetektiven =
+        nachbar2KuerzesteDistanzZumNaechstenDetektiv.values()
+            .stream()
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(weg1 -> weg1.getLaenge() == weg.get().getLaenge())
+            .collect(Collectors.toList());
+    LOG.debug("Nachbarn mit größter Distanz zu allen Detektiven");
+    LOG.debug("{}", nachbarnMitGroessterDistanzZuAllenDetektiven);
+
+    Map<Position, Double> avg = nachbarnMitGroessterDistanzZuAllenDetektiven.stream()
+        .collect(Collectors.groupingBy(Weg::getStart, Collectors.averagingInt(Weg::getLaenge)));
+    LOG.debug("Nachbar mit durchschnittlicher Distanz zu allen Detektiven");
+    LOG.debug("{}", avg);
+
+    Optional<Map.Entry<Position, Double>> optional = avg.entrySet().stream()
+        .collect(Collectors.maxBy(Comparator.comparing(Map.Entry::getValue)));
+    Position position = optional.get().getKey();
+    LOG.debug("Nächste Position");
+    LOG.debug("{}", position);
+
+    return position;
   }
 
   private Weg buildWeg(final Map<String, Object> row, final String start, final String ende,
@@ -128,6 +127,10 @@ public class SpielService {
     return new Weg(new Position(Integer.parseInt(row.get(start).toString())),
         new Position(Integer.parseInt(row.get(ende).toString())),
         Integer.parseInt(row.get(laenge).toString()));
+  }
+
+  public void findeWegZuUndergroundInDreiZuegen() {
+
   }
 
 }
