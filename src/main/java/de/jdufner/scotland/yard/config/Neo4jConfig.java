@@ -36,13 +36,13 @@ public class Neo4jConfig {
     final Map<String, String> properties = new HashMap<>();
     properties.put("dbms.connector.http.address", "0.0.0.0:7474");
     properties.put("dbms.security.auth_enabled", "false");
-    properties.put("dbms.directories.import", "/../src/main/resources");
+    properties.put("dbms.directories.import", "../src/main/resources");
     communityBootstrapper.start(databaseDirectory, Optional.of(configFile), properties);
     return communityBootstrapper.getServer().getDatabase()
         .getGraph();
   }
 
-  private void populateGraphDatabase(GraphDatabaseService graphDatabaseService) {
+  private void populateGraphDatabase(final GraphDatabaseService graphDatabaseService) {
     try (Transaction tx = graphDatabaseService.beginTx()) {
       Result execute = graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = 1 RETURN n");
       if (execute.hasNext()) {
