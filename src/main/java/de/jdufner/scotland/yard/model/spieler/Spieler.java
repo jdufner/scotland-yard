@@ -40,4 +40,5 @@ public abstract class Spieler {
 
   public abstract void ziehe();
 
+  public abstract void macheNaechstenZug();
 }

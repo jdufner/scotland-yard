@@ -22,7 +22,6 @@ public class Simulation {
   public void starteSimulation() {
     Spiel spiel = new Spiel();
     //spielService.ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten(spiel);
-    spielService.entferneSpieler(spiel.getSpieler());
     spielService.setzeSpieler(spiel.getSpieler());
     // Spielzug von Mr. X
     spielService.findeNachbarAmWeitestenEntferntVonDetektiven();

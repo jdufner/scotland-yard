@@ -24,7 +24,7 @@ public class Startposition extends Position {
     super(position);
   }
 
-  public static Startposition zieheFreiStartposition() {
+  public static Startposition zieheFreieStartposition() {
     return new Startposition(freiePositionen.remove((int) (Math.random() * freiePositionen.size
         ())));
   }

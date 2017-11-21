@@ -34,7 +34,7 @@ public class SpielService {
     this.graphDatabaseService = graphDatabaseService;
   }
 
-  public void entferneSpieler(final Collection<Spieler> spielers) {
+  private void entferneSpieler(final Collection<Spieler> spielers) {
     spielers.stream().forEach(spieler -> {
       try (final Transaction tx = graphDatabaseService.beginTx()) {
         graphDatabaseService.execute("MATCH (n:" + spieler.name().toUpperCase() + ") REMOVE n:"
@@ -45,6 +45,7 @@ public class SpielService {
   }
 
   public void setzeSpieler(final Collection<Spieler> spielers) {
+    entferneSpieler(spielers);
     spielers.stream().forEach(spieler -> {
       try (final Transaction tx = graphDatabaseService.beginTx()) {
         graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = " + spieler.letztePosition
@@ -130,7 +131,17 @@ public class SpielService {
   }
 
   public void findeWegZuUndergroundInDreiZuegen() {
+    final List<Weg> wege = new ArrayList<>();
+    try (final Transaction tx = graphDatabaseService.beginTx()) {
+      Result result = graphDatabaseService.execute("MATCH p=(n:Node)-[:TAXI|BUS*3]-(m:Node) " +
+          "RETURN n.number, m.number, length(p)");
 
+      while (result.hasNext()) {
+//        wege.add(buildWeg(result.next(), "n.number", "m.number", "3"));
+      }
+      tx.success();
+    }
+    LOG.debug("{}", wege);
   }
 
 }

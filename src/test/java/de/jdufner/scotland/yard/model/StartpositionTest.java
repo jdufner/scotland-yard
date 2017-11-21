@@ -20,7 +20,7 @@ public class StartpositionTest {
     // arrange
 
     // act
-    Startposition startposition = Startposition.zieheFreiStartposition();
+    Startposition startposition = Startposition.zieheFreieStartposition();
 
     // assert
     //LOG.debug(String.valueOf(startposition.getPosition()));
