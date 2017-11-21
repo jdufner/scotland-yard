@@ -1,6 +1,5 @@
 package de.jdufner.scotland.yard.model.spiel;
 
-import de.jdufner.scotland.yard.model.position.Startposition;
 import de.jdufner.scotland.yard.model.spieler.Detektiv;
 import de.jdufner.scotland.yard.model.spieler.MrX;
 import de.jdufner.scotland.yard.model.spieler.Spieler;
@@ -9,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * @author Jürgen Dufner
@@ -18,17 +18,16 @@ public class Spiel {
 
   private static final Logger LOG = LoggerFactory.getLogger(Spiel.class);
 
-  private final List<Spieler> spielers = new ArrayList<>();
   private final MrX mrX;
-  private final List<Detektiv> detektivs = new ArrayList<>();
+  private final List<Detektiv> detektivs;
+  private final List<Spieler> spielers = new ArrayList<>();
 
-  public Spiel() {
-    mrX = new MrX(Startposition.zieheFreieStartposition());
+  private boolean spielBeendet = false;
+
+  public Spiel(final MrX mrX, final List<Detektiv> detektivs) {
+    this.mrX = mrX;
+    this.detektivs = detektivs;
     spielers.add(mrX);
-    detektivs.add(new Detektiv(Startposition.zieheFreieStartposition()));
-    detektivs.add(new Detektiv(Startposition.zieheFreieStartposition()));
-    detektivs.add(new Detektiv(Startposition.zieheFreieStartposition()));
-    detektivs.add(new Detektiv(Startposition.zieheFreieStartposition()));
     spielers.addAll(detektivs);
   }
 
@@ -37,29 +36,37 @@ public class Spiel {
   }
 
   public void spieleRunden() {
-    int anzahlRunden = 22;
-    for (int runde = 1; runde <= anzahlRunden; runde++) {
-      zieheSpieler();
-    }
-  }
-
-  private void zieheSpieler() {
-    for (final Spieler spieler : spielers) {
-      spieler.macheNaechstenZug();
-      if (habenDetektiveMrXGefangen()) {
-        beendeSpiel("Detektive haben gewonnen!");
-        return;
-      }
-    }
+    IntStream.rangeClosed(1, 21).anyMatch(i -> zieheSpieler(i));
     beendeSpiel("Mr.X hat gewonnen!");
   }
 
+  private boolean zieheSpieler(final int runde) {
+    LOG.info("Runde: " + runde);
+    return spielers.stream().anyMatch(spieler -> {
+      spieler.ziehe();
+      if (habenDetektiveMrXGefangen()) {
+        beendeSpiel("Detektive haben gewonnen!");
+        return true;
+      }
+      return false;
+    });
+  }
+
   private boolean habenDetektiveMrXGefangen() {
+    for (Detektiv detektiv : detektivs) {
+      if (detektiv.letztePosition().equals(mrX.letztePosition())) {
+        return true;
+      }
+    }
     return false;
   }
 
   private void beendeSpiel(final String text) {
+    if (spielBeendet) {
+      return;
+    }
     LOG.info(text);
+    spielBeendet = true;
   }
 
   @Override

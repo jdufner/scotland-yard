@@ -1,6 +1,7 @@
 package de.jdufner.scotland.yard.service;
 
 import de.jdufner.scotland.yard.model.spiel.Spiel;
+import de.jdufner.scotland.yard.model.spiel.SpielFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +21,7 @@ public class Simulation {
 
   @PostConstruct
   public void starteSimulation() {
-    Spiel spiel = new Spiel();
+    Spiel spiel = SpielFactory.erzeugeSpiel();
     //spielService.ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten(spiel);
     spielService.setzeSpieler(spiel.getSpieler());
     // Spielzug von Mr. X

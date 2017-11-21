@@ -38,7 +38,10 @@ public abstract class Spieler {
     return positions.get(positions.size() - 1);
   }
 
+  public List<Position> getPositions() {
+    return positions;
+  }
+
   public abstract void ziehe();
 
-  public abstract void macheNaechstenZug();
 }
