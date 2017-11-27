@@ -42,6 +42,14 @@ public class Spiel {
     return spielers;
   }
 
+  public int naechsteRunde() {
+    return aktuelleRunde++;
+  }
+
+  public int getAktuelleRunde() {
+    return aktuelleRunde;
+  }
+
   public void spieleRunden() {
     IntStream.rangeClosed(1, 21).anyMatch(i -> zieheSpieler(i));
     beendeSpiel("Mr.X hat gewonnen!");
@@ -81,7 +89,7 @@ public class Spiel {
   }
 
   private boolean sindAlleRundenGespiel() {
-    return aktuelleRunde > MAX_ANZAHL_RUNDEN;
+    return aktuelleRunde >= MAX_ANZAHL_RUNDEN;
   }
 
   @Override
