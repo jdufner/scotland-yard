@@ -1,7 +1,6 @@
 package de.jdufner.scotland.yard.service;
 
 import de.jdufner.scotland.yard.model.spiel.Spiel;
-import de.jdufner.scotland.yard.model.spiel.SpielFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -14,20 +13,26 @@ import javax.annotation.PostConstruct;
 public class Simulation {
 
   private final SpielService spielService;
+  private final SpielbrettService spielbrettService;
 
-  public Simulation(final SpielService spielService) {
+  public Simulation(final SpielService spielService, final SpielbrettService spielbrettService) {
     this.spielService = spielService;
+    this.spielbrettService = spielbrettService;
   }
 
   @PostConstruct
   public void starteSimulation() {
-    Spiel spiel = SpielFactory.erzeugeSpiel();
-    //spielService.ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten(spiel);
-    spielService.setzeSpieler(spiel.getSpieler());
-    // Spielzug von Mr. X
-    spielService.findeNachbarAmWeitestenEntferntVonDetektiven();
-    // Spielzüge von Detektiven
-    spielService.findeWegZuUndergroundInDreiZuegen();
+    final Spiel spiel = spielService.erzeugeSpiel();
+    spielbrettService.aktualisiereSpielbrett(spiel);
+    while (!spiel.isBeendet()) {
+      spielService.naechsteRunde(spiel);
+    }
   }
+
+  //spielbrettService.ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten(spiel);
+  // Spielzug von Mr. X
+  //spielbrettService.findeNachbarAmWeitestenEntferntVonDetektiven();
+  // Spielzüge von Detektiven
+  //spielbrettService.findeWegZuUndergroundInDreiZuegen();
 
 }

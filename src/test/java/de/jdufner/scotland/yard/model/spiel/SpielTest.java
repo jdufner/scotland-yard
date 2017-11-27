@@ -1,25 +1,12 @@
 package de.jdufner.scotland.yard.model.spiel;
 
-import de.jdufner.scotland.yard.model.position.Position;
-import de.jdufner.scotland.yard.model.position.Startposition;
-import de.jdufner.scotland.yard.model.spieler.Detektiv;
-import de.jdufner.scotland.yard.model.spieler.MrX;
-import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.spy;
-
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
 public class SpielTest {
 
+  /*
   @Test
   public void toString_whenSpieleRunden_expectAnzahlSpielrunden() {
     // arrange
@@ -50,5 +37,6 @@ public class SpielTest {
 
     // arrange
   }
+  */
 
 }

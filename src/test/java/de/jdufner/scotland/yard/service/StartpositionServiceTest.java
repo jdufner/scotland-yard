@@ -15,7 +15,7 @@ public class StartpositionServiceTest {
   private StartpositionService underTest;
 
   @Test
-  public void zieheFreieStartposition() {
+  public void testZieheFreieStartposition_whenZweiGezogen_expectZweiUnterschiedliche() {
     // arrange
 
     // act
@@ -25,6 +25,5 @@ public class StartpositionServiceTest {
     // assert
     assertThat(startposition1).isNotEqualTo(startposition2);
   }
-
 
 }

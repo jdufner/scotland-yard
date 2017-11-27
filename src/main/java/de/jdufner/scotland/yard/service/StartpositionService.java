@@ -9,6 +9,8 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 /**
+ * Der Service ist zufallsgesteuert.
+ *
  * @author Jürgen Dufner
  * @since 1.0
  */
@@ -25,6 +27,9 @@ public class StartpositionService {
   }
 
   public Startposition zieheFreieStartposition() {
+    assert freiePositionen.size() > 0 :
+        "Es existiert keine freie Startposition mehr! Es können maximal " + startpositionen.length +
+            " Startpositionen gezogen werden.";
     return new Startposition(
         freiePositionen.remove((int) (Math.random() * freiePositionen.size())));
   }

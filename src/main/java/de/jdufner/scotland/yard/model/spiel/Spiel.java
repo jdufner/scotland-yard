@@ -18,11 +18,15 @@ public class Spiel {
 
   private static final Logger LOG = LoggerFactory.getLogger(Spiel.class);
 
+  private static final int MAX_ANZAHL_RUNDEN = 21;
+
   private final MrX mrX;
   private final List<Detektiv> detektivs;
   private final List<Spieler> spielers = new ArrayList<>();
 
-  private boolean spielBeendet = false;
+  private int aktuelleRunde;
+
+  private boolean beendet = false;
 
   public Spiel(final MrX mrX, final List<Detektiv> detektivs) {
     this.mrX = mrX;
@@ -62,16 +66,24 @@ public class Spiel {
   }
 
   private void beendeSpiel(final String text) {
-    if (spielBeendet) {
+    if (beendet) {
       return;
     }
     LOG.info(text);
-    spielBeendet = true;
+    beendet = true;
   }
 
   @Override
   public String toString() {
     return "Spieler: {" + spielers.toString() + "}";
+  }
+
+  public boolean isBeendet() {
+    return sindAlleRundenGespiel() || habenDetektiveMrXGefangen();
+  }
+
+  private boolean sindAlleRundenGespiel() {
+    return aktuelleRunde > MAX_ANZAHL_RUNDEN;
   }
 
 }
