@@ -16,6 +16,6 @@ public abstract class SpielerService<T extends Spieler> {
 
   public abstract Class<T> getSpielerType();
 
-  public abstract void ziehe(final T spieler);
+  public abstract void ziehe(final Spieler spieler);
 
 }

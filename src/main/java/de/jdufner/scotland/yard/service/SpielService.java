@@ -43,7 +43,7 @@ public class SpielService {
   public void naechsteRunde(final Spiel spiel) {
     spiel.naechsteRunde();
     LOG.debug("Spiele Runde: " + spiel.getAktuelleRunde());
-    spiel.getSpieler().stream().forEach(spieler -> {
+    spiel.getSpieler().forEach(spieler -> {
       SpielerService service = spielerServices.stream().filter(spielerService ->
           spielerService.getSpielerType().equals(spieler.getClass())).findFirst().get();
       service.ziehe(spieler);
