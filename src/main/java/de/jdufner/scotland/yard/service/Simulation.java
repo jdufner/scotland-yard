@@ -23,6 +23,8 @@ public class Simulation {
   @PostConstruct
   public void starteSimulation() {
     final Spiel spiel = spielService.erzeugeSpiel();
+    // TODO Die Simulation sollte nur mit dem Spiel und SpielService arbeiten. Der
+    // SpielbrettService sollte verdeckt bleiben.
     spielbrettService.aktualisiereSpielbrett(spiel);
     while (!spiel.isBeendet()) {
       spielService.naechsteRunde(spiel);

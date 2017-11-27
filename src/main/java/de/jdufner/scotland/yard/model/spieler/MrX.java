@@ -34,4 +34,18 @@ public class MrX extends Spieler {
     return "Mr. X: " + super.toString();
   }
 
+  public static class Builder {
+
+    private MrX mrX;
+
+    public Builder(final int startpositionAsInt) {
+      mrX = new MrX(new Startposition(startpositionAsInt));
+    }
+
+    public MrX build() {
+      return mrX;
+    }
+
+  }
+
 }

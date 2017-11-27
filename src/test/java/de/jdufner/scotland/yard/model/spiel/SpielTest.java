@@ -1,42 +1,34 @@
 package de.jdufner.scotland.yard.model.spiel;
 
+import de.jdufner.scotland.yard.model.spieler.Detektiv;
+import de.jdufner.scotland.yard.model.spieler.MrX;
+import org.junit.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
 public class SpielTest {
 
-  /*
+  private Spiel spiel;
+
   @Test
-  public void toString_whenSpieleRunden_expectAnzahlSpielrunden() {
+  public void testConstructor() {
     // arrange
-    MrX mrX = spy(new MrX(Startposition.zieheFreieStartposition()));
-    doAnswer(new Answer() {
-      @Override
-      public Object answer(final InvocationOnMock invocationOnMock) throws Throwable {
-        MrX m = (MrX) invocationOnMock.getMock();
-        m.getPositions().add(new Position(1));
-        return null;
-      }
-    }).when(mrX).ziehe();
-    List<Detektiv> detektivs = new ArrayList<>();
-    Detektiv detektiv = spy(new Detektiv(Startposition.zieheFreieStartposition()));
-    detektivs.add(detektiv);
-    doAnswer(new Answer() {
-      @Override
-      public Object answer(final InvocationOnMock invocationOnMock) throws Throwable {
-        Detektiv d = (Detektiv) invocationOnMock.getMock();
-        d.getPositions().add(new Position(1));
-        return null;
-      }
-    }).when(detektiv).ziehe();
-    Spiel spiel = new Spiel(mrX, detektivs);
+    final MrX mrX = new MrX.Builder(13).build();
+    final List<Detektiv> detektivs = new Detektiv.Builder(26, 29, 34, 50).build();
 
     // act
-    spiel.spieleRunden();
+    spiel = new Spiel(mrX, detektivs);
 
-    // arrange
+    // assert
+    assertThat(spiel.getSpieler()).containsExactly(mrX, detektivs.get(0), detektivs
+        .get(1), detektivs.get(2), detektivs.get(3));
+    assertThat(spiel.isBeendet()).isFalse();
   }
-  */
 
 }

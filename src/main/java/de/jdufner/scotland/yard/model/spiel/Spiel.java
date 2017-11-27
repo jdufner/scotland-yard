@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 /**
+ * Das Spiel hält Status der Figuren, der Runden etc. Die Transitionen werden von einem Service
+ * ausgelöst.
+ *
  * @author Jürgen Dufner
  * @since 1.0
  */
@@ -56,6 +59,14 @@ public class Spiel {
     });
   }
 
+  private void beendeSpiel(final String text) {
+    if (beendet) {
+      return;
+    }
+    LOG.info(text);
+    beendet = true;
+  }
+
   private boolean habenDetektiveMrXGefangen() {
     for (Detektiv detektiv : detektivs) {
       if (detektiv.letztePosition().equals(mrX.letztePosition())) {
@@ -65,25 +76,17 @@ public class Spiel {
     return false;
   }
 
-  private void beendeSpiel(final String text) {
-    if (beendet) {
-      return;
-    }
-    LOG.info(text);
-    beendet = true;
-  }
-
-  @Override
-  public String toString() {
-    return "Spieler: {" + spielers.toString() + "}";
-  }
-
   public boolean isBeendet() {
     return sindAlleRundenGespiel() || habenDetektiveMrXGefangen();
   }
 
   private boolean sindAlleRundenGespiel() {
     return aktuelleRunde > MAX_ANZAHL_RUNDEN;
+  }
+
+  @Override
+  public String toString() {
+    return "Spieler: {" + spielers.toString() + "}";
   }
 
 }

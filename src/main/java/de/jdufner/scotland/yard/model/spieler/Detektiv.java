@@ -5,6 +5,9 @@ import de.jdufner.scotland.yard.model.tickets.Bus;
 import de.jdufner.scotland.yard.model.tickets.Taxi;
 import de.jdufner.scotland.yard.model.tickets.Underground;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Jürgen Dufner
  * @since 1.0
@@ -26,6 +29,22 @@ public class Detektiv extends Spieler {
   @Override
   public String toString() {
     return "Detektiv: " + super.toString();
+  }
+
+  public static class Builder {
+
+    private List<Detektiv> detektivs = new ArrayList<>();
+
+    public Builder(final int... startpositionAsInts) {
+      for (final int startpositionAsInt : startpositionAsInts) {
+        detektivs.add(new Detektiv(new Startposition(startpositionAsInt)));
+      }
+    }
+
+    public List<Detektiv> build() {
+      return detektivs;
+    }
+
   }
 
 }
