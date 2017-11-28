@@ -31,7 +31,7 @@ public abstract class Spieler {
   }
 
   public String name() {
-    return getClass().getSimpleName();
+    return getClass().getSimpleName().toUpperCase();
   }
 
   public Position letztePosition() {
@@ -42,6 +42,8 @@ public abstract class Spieler {
     return positions;
   }
 
-  public abstract void ziehe();
+  public void zieheAuf(final Position naechstePosition) {
+    positions.add(naechstePosition);
+  }
 
 }

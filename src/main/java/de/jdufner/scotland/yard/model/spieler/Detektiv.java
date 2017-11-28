@@ -22,11 +22,6 @@ public class Detektiv extends Spieler {
   }
 
   @Override
-  public void ziehe() {
-
-  }
-
-  @Override
   public String toString() {
     return "Detektiv: " + super.toString();
   }

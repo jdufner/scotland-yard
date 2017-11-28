@@ -36,25 +36,38 @@ public class SpielbrettService {
     this.graphDatabaseService = graphDatabaseService;
   }
 
-  private void entferneSpieler(final Collection<Spieler> spielers) {
-    spielers.stream().forEach(spieler -> {
-      try (final Transaction tx = graphDatabaseService.beginTx()) {
-        graphDatabaseService.execute("MATCH (n:" + spieler.name().toUpperCase() + ") REMOVE n:"
-            + spieler.name().toUpperCase());
-        tx.success();
-      }
-    });
+  public void verschiebeSpieler(final Spieler spieler) {
+    entferneSpieler(spieler);
+    setzeSpieler(spieler);
   }
 
-  public void setzeSpieler(final Collection<Spieler> spielers) {
+  public void verschiebeSpieler(final Collection<Spieler> spielers) {
     entferneSpieler(spielers);
-    spielers.stream().forEach(spieler -> {
-      try (final Transaction tx = graphDatabaseService.beginTx()) {
-        graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = " + spieler.letztePosition
-            ().getPosition() + " SET n:" + spieler.name().toUpperCase());
-        tx.success();
-      }
-    });
+    setzeSpieler(spielers);
+  }
+
+  private void entferneSpieler(final Collection<Spieler> spielers) {
+    spielers.stream().forEach(this::entferneSpieler);
+  }
+
+  private void entferneSpieler(final Spieler spieler) {
+    try (final Transaction tx = graphDatabaseService.beginTx()) {
+      graphDatabaseService.execute("MATCH (n:" + spieler.name() + ") REMOVE n:"
+          + spieler.name());
+      tx.success();
+    }
+  }
+
+  private void setzeSpieler(final Collection<Spieler> spielers) {
+    spielers.stream().forEach(this::setzeSpieler);
+  }
+
+  private void setzeSpieler(final Spieler spieler) {
+    try (final Transaction tx = graphDatabaseService.beginTx()) {
+      graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = " + spieler.letztePosition
+          ().getPosition() + " SET n:" + spieler.name());
+      tx.success();
+    }
   }
 
   public void ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten(final Spiel spiel) {

@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 /**
  * Das Spiel hält Status der Figuren, der Runden etc. Die Transitionen werden von einem Service
@@ -48,31 +47,6 @@ public class Spiel {
 
   public int getAktuelleRunde() {
     return aktuelleRunde;
-  }
-
-  public void spieleRunden() {
-    IntStream.rangeClosed(1, 21).anyMatch(i -> zieheSpieler(i));
-    beendeSpiel("Mr.X hat gewonnen!");
-  }
-
-  private boolean zieheSpieler(final int runde) {
-    LOG.info("Runde: " + runde);
-    return spielers.stream().anyMatch(spieler -> {
-      spieler.ziehe();
-      if (habenDetektiveMrXGefangen()) {
-        beendeSpiel("Detektive haben gewonnen!");
-        return true;
-      }
-      return false;
-    });
-  }
-
-  private void beendeSpiel(final String text) {
-    if (beendet) {
-      return;
-    }
-    LOG.info(text);
-    beendet = true;
   }
 
   private boolean habenDetektiveMrXGefangen() {

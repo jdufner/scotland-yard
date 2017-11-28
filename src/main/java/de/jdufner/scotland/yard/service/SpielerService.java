@@ -1,5 +1,6 @@
 package de.jdufner.scotland.yard.service;
 
+import de.jdufner.scotland.yard.model.position.Position;
 import de.jdufner.scotland.yard.model.spieler.Spieler;
 
 /**
@@ -16,6 +17,6 @@ public abstract class SpielerService<T extends Spieler> {
 
   public abstract Class<T> getSpielerType();
 
-  public abstract void ziehe(final Spieler spieler);
+  public abstract Position ziehe(final T spieler);
 
 }

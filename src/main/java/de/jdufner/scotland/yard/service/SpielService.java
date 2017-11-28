@@ -3,6 +3,7 @@ package de.jdufner.scotland.yard.service;
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import de.jdufner.scotland.yard.model.spieler.Detektiv;
 import de.jdufner.scotland.yard.model.spieler.MrX;
+import de.jdufner.scotland.yard.model.spieler.Spieler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -37,18 +38,19 @@ public class SpielService {
     detektivs.add(new Detektiv(startpositionService.zieheFreieStartposition()));
     detektivs.add(new Detektiv(startpositionService.zieheFreieStartposition()));
     detektivs.add(new Detektiv(startpositionService.zieheFreieStartposition()));
-    return new Spiel(mrX, Collections.unmodifiableList(detektivs));
+    Spiel spiel = new Spiel(mrX, Collections.unmodifiableList(detektivs));
+    LOG.debug("Spiel erzeugt: {}", spiel);
+    return spiel;
   }
 
   public void naechsteRunde(final Spiel spiel) {
     spiel.naechsteRunde();
     LOG.debug("Spiele Runde: " + spiel.getAktuelleRunde());
-    spiel.getSpieler().forEach(spieler -> {
+    spiel.getSpieler().forEach((Spieler spieler) -> {
       SpielerService service = spielerServices.stream().filter(spielerService ->
           spielerService.getSpielerType().equals(spieler.getClass())).findFirst().get();
       service.ziehe(spieler);
     });
-
   }
 
 }

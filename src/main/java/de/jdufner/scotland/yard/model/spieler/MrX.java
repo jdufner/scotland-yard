@@ -25,11 +25,6 @@ public class MrX extends Spieler {
   }
 
   @Override
-  public void ziehe() {
-
-  }
-
-  @Override
   public String toString() {
     return "Mr. X: " + super.toString();
   }
