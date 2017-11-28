@@ -1,5 +1,6 @@
 package de.jdufner.scotland.yard.model.spieler;
 
+import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.position.Startposition;
 import de.jdufner.scotland.yard.model.tickets.BlackTicket;
 import de.jdufner.scotland.yard.model.tickets.Bus;
@@ -29,14 +30,19 @@ public class MrX extends Spieler {
     return "Mr. X: " + super.toString();
   }
 
+  @Override
+  public void zieheUndVerbraucheTickets(final PositionUndTickets positionUndTickets) {
+
+  }
+
   public static class Builder {
+
 
     private MrX mrX;
 
     public Builder(final int startpositionAsInt) {
       mrX = new MrX(new Startposition(startpositionAsInt));
     }
-
     public MrX build() {
       return mrX;
     }

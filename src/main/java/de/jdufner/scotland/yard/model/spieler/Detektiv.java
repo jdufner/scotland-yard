@@ -1,5 +1,6 @@
 package de.jdufner.scotland.yard.model.spieler;
 
+import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.position.Startposition;
 import de.jdufner.scotland.yard.model.tickets.Bus;
 import de.jdufner.scotland.yard.model.tickets.Taxi;
@@ -26,7 +27,13 @@ public class Detektiv extends Spieler {
     return "Detektiv: " + super.toString();
   }
 
+  @Override
+  public void zieheUndVerbraucheTickets(final PositionUndTickets positionUndTickets) {
+
+  }
+
   public static class Builder {
+
 
     private List<Detektiv> detektivs = new ArrayList<>();
 

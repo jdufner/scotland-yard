@@ -1,5 +1,6 @@
 package de.jdufner.scotland.yard.service;
 
+import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.position.Position;
 import de.jdufner.scotland.yard.model.spieler.MrX;
 import org.slf4j.Logger;
@@ -33,4 +34,8 @@ public class MrXService extends SpielerService<MrX> {
     return position;
   }
 
+  @Override
+  protected PositionUndTickets ermittleNächstenZug() {
+    return null;
+  }
 }

@@ -1,5 +1,6 @@
 package de.jdufner.scotland.yard.service;
 
+import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.position.Position;
 import de.jdufner.scotland.yard.model.spieler.Detektiv;
 import org.slf4j.Logger;
@@ -28,6 +29,11 @@ public class DetektivService extends SpielerService<Detektiv> {
   public Position ziehe(final Detektiv detektiv) {
     LOG.debug("Detektive bleiben erstmal auf ihrer Position: " + detektiv.letztePosition());
     return detektiv.letztePosition();
+  }
+
+  @Override
+  protected PositionUndTickets ermittleNächstenZug() {
+    return null;
   }
 
 }

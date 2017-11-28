@@ -1,5 +1,6 @@
 package de.jdufner.scotland.yard.model.spieler;
 
+import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.position.Position;
 import de.jdufner.scotland.yard.model.position.Startposition;
 import de.jdufner.scotland.yard.model.tickets.Ticket;
@@ -45,5 +46,7 @@ public abstract class Spieler {
   public void zieheAuf(final Position naechstePosition) {
     positions.add(naechstePosition);
   }
+
+  public abstract void zieheUndVerbraucheTickets(final PositionUndTickets positionUndTickets);
 
 }
