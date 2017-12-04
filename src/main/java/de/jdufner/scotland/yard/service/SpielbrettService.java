@@ -98,7 +98,7 @@ public class SpielbrettService {
       }
       tx.success();
     }
-    LOG.debug("Alle Wege zum vom einem Nachbarn zu allen Detektiven");
+    LOG.debug("Alle Wege von den Nachbarn zu allen Detektiven");
     LOG.debug("{}", wege);
 
     Map<Position, Optional<Weg>> nachbar2KuerzesteDistanzZumNaechstenDetektiv = wege.stream()

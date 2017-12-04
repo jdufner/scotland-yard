@@ -32,7 +32,8 @@ public class MrX extends Spieler {
 
   @Override
   public void zieheUndVerbraucheTickets(final PositionUndTickets positionUndTickets) {
-
+    zieheAuf(positionUndTickets.getPosition());
+    verbraucheTickets(positionUndTickets.getTickets());
   }
 
   public static class Builder {
@@ -43,6 +44,7 @@ public class MrX extends Spieler {
     public Builder(final int startpositionAsInt) {
       mrX = new MrX(new Startposition(startpositionAsInt));
     }
+
     public MrX build() {
       return mrX;
     }

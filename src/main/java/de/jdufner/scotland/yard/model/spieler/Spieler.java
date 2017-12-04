@@ -43,10 +43,13 @@ public abstract class Spieler {
     return positions;
   }
 
+  public abstract void zieheUndVerbraucheTickets(final PositionUndTickets positionUndTickets);
+
   public void zieheAuf(final Position naechstePosition) {
     positions.add(naechstePosition);
   }
 
-  public abstract void zieheUndVerbraucheTickets(final PositionUndTickets positionUndTickets);
-
+  protected void verbraucheTickets(final List<Ticket> verbrauchteTickets) {
+    verbrauchteTickets.forEach(verbrauchtesTicket -> this.tickets.forEach(ticket -> ticket.verbrauche(verbrauchtesTicket)));
+  }
 }

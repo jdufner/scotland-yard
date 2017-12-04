@@ -1,8 +1,10 @@
 package de.jdufner.scotland.yard.service;
 
 import de.jdufner.scotland.yard.model.PositionUndTickets;
-import de.jdufner.scotland.yard.model.position.Position;
 import de.jdufner.scotland.yard.model.spieler.Spieler;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * @author Jürgen Dufner
@@ -16,10 +18,6 @@ public abstract class SpielerService<T extends Spieler> {
     this.spielbrettService = spielbrettService;
   }
 
-  public abstract Class<T> getSpielerType();
-
-  public abstract Position ziehe(final T spieler);
-
   /**
    * Template-Method für die Durchführung eines Zuges.
    *
@@ -28,8 +26,21 @@ public abstract class SpielerService<T extends Spieler> {
   public void fuehreZugDurch(final T spieler) {
     PositionUndTickets positionUndTickets = ermittleNächstenZug();
     spieler.zieheUndVerbraucheTickets(positionUndTickets);
+    spielbrettService.verschiebeSpieler(spieler);
   }
 
   protected abstract PositionUndTickets ermittleNächstenZug();
+
+  Class getTypeOf() {
+    final Type genericInterface = this.getClass().getGenericSuperclass();
+    if (genericInterface instanceof ParameterizedType) {
+      final ParameterizedType parameterizedType = (ParameterizedType) genericInterface;
+      if (parameterizedType.getRawType().equals(SpielerService.class)) {
+        return (Class) parameterizedType.getActualTypeArguments()[0];
+      }
+    }
+    throw new RuntimeException(
+        "Implements " + getClass().getSimpleName() + " a generic interface ?");
+  }
 
 }

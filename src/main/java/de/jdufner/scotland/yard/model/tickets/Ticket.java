@@ -16,4 +16,10 @@ public abstract class Ticket {
     return anzahl;
   }
 
+  public void verbrauche(final Ticket ticket) {
+    if (this.getClass().equals(ticket.getClass())) {
+      anzahl -= ticket.anzahl;
+    }
+  }
+
 }

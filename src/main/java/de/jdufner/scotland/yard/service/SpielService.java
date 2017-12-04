@@ -47,9 +47,10 @@ public class SpielService {
     spiel.naechsteRunde();
     LOG.debug("Spiele Runde: " + spiel.getAktuelleRunde());
     spiel.getSpieler().forEach((Spieler spieler) -> {
-      SpielerService service = spielerServices.stream().filter(spielerService ->
-          spielerService.getSpielerType().equals(spieler.getClass())).findFirst().get();
-      service.ziehe(spieler);
+      SpielerService spielerServiceForCurrentSpieler = spielerServices.stream().filter(spielerService ->
+          spielerService.getTypeOf().equals(spieler.getClass())
+      ).findFirst().get();
+      spielerServiceForCurrentSpieler.fuehreZugDurch(spieler);
     });
   }
 
