@@ -49,8 +49,8 @@ public class SpielService {
     spiel.getSpieler().forEach((Spieler spieler) -> {
       SpielerService spielerServiceForCurrentSpieler = spielerServices.stream().filter(spielerService ->
           spielerService.getTypeOf().equals(spieler.getClass())
-      ).findFirst().get();
-      spielerServiceForCurrentSpieler.fuehreZugDurch(spieler);
+      ).findFirst().orElseThrow(AssertionError::new);
+      spielerServiceForCurrentSpieler.fuehreZugDurch(spiel, spieler);
     });
   }
 

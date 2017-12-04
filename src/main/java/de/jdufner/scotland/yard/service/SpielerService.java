@@ -1,6 +1,7 @@
 package de.jdufner.scotland.yard.service;
 
 import de.jdufner.scotland.yard.model.PositionUndTickets;
+import de.jdufner.scotland.yard.model.spiel.Spiel;
 import de.jdufner.scotland.yard.model.spieler.Spieler;
 
 import java.lang.reflect.ParameterizedType;
@@ -21,15 +22,17 @@ public abstract class SpielerService<T extends Spieler> {
   /**
    * Template-Method für die Durchführung eines Zuges.
    *
+   * @param spiel
    * @param spieler
    */
-  public void fuehreZugDurch(final T spieler) {
-    PositionUndTickets positionUndTickets = ermittleNächstenZug();
+  public void fuehreZugDurch(final Spiel spiel, final T spieler) {
+    PositionUndTickets positionUndTickets = ermittleNächstenZug(spiel, spieler);
     spieler.zieheUndVerbraucheTickets(positionUndTickets);
     spielbrettService.verschiebeSpieler(spieler);
   }
 
-  protected abstract PositionUndTickets ermittleNächstenZug();
+  protected abstract PositionUndTickets ermittleNächstenZug(
+      final Spiel spiel, final T spieler);
 
   Class getTypeOf() {
     final Type genericInterface = this.getClass().getGenericSuperclass();

@@ -52,14 +52,14 @@ public class SpielbrettService {
 
   private void entferneSpieler(final Spieler spieler) {
     try (final Transaction tx = graphDatabaseService.beginTx()) {
-      graphDatabaseService.execute("MATCH (n:" + spieler.name() + ") REMOVE n:"
-          + spieler.name());
+      graphDatabaseService.execute("MATCH (n:" + spieler.name() + ") WHERE n.number = " +
+          spieler.letztePosition().getPosition() + " REMOVE n:" + spieler.name());
       tx.success();
     }
   }
 
   private void setzeSpieler(final Collection<Spieler> spielers) {
-    spielers.stream().forEach(this::setzeSpieler);
+    spielers.forEach(this::setzeSpieler);
   }
 
   private void setzeSpieler(final Spieler spieler) {
@@ -145,22 +145,39 @@ public class SpielbrettService {
         Integer.parseInt(row.get(laenge).toString()));
   }
 
-  public void findeWegZuUndergroundInDreiZuegen() {
+  public Position findeWegZuUndergroundInAnzahlZuegen(final Spieler spieler,
+                                                      final int anzahlZuege) {
+    assert anzahlZuege > 0 : "Anzahl der Züge muss größer als 0 sein.";
+    assert anzahlZuege < 3 : "Anzahl der Züge muss kleiner als 3 sein.";
     final List<Weg> wege = new ArrayList<>();
+//    try (final Transaction tx = graphDatabaseService.beginTx()) {
+//      final Result result = graphDatabaseService.execute("MATCH p=(n:Node)-[:TAXI|BUS*"+ anzahlZuege + "]-(m:Node) " +
+//          "WHERE n.number='" + spieler.letztePosition().getPosition() + "' " +
+//          "AND m.number<>'" + spieler.letztePosition().getPosition() + "' " +
+//          "RETURN n.number, m.number, length(p) as laenge");
+//      while (result.hasNext()) {
+//        wege.add(buildWeg(result.next(), "n.number", "m.number", "laenge"));
+//      }
+//      tx.success();
+//    }
     try (final Transaction tx = graphDatabaseService.beginTx()) {
-      Result result = graphDatabaseService.execute("MATCH p=(n:Node)-[:TAXI|BUS*3]-(m:Node) " +
-          "RETURN n.number, m.number, length(p)");
-
+      final Result result = graphDatabaseService.execute("MATCH (n:Node)-[]-(m:Node) " +
+          "WHERE n.number=" + spieler.letztePosition().getPosition() + " " +
+          "RETURN n.number, m.number, 1 as laenge");
       while (result.hasNext()) {
-//        wege.add(buildWeg(result.next(), "n.number", "m.number", "3"));
+        wege.add(buildWeg(result.next(), "n.number", "m.number", "laenge"));
       }
       tx.success();
     }
+
     LOG.debug("{}", wege);
+
+    return wege.get((int) (Math.random() * wege.size())).getEnde();
   }
 
   public void aktualisiereSpielbrett(final Spiel spiel) {
-
+    verschiebeSpieler(spiel.getSpieler());
+//    setzeSpieler(spiel.getSpieler());
   }
 
 }
