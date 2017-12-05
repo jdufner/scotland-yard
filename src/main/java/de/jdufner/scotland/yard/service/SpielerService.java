@@ -39,6 +39,7 @@ public abstract class SpielerService<T extends Spieler> {
     PositionUndTickets positionUndTickets = ermittleNächstenZug(spiel, spieler);
     spieler.zieheUndVerbraucheTickets(positionUndTickets);
     spielbrettService.verschiebeSpieler(spieler);
+    // MrX soll sich zeigen, wenn es ein relevanter Spielzug ist
   }
 
   protected abstract PositionUndTickets ermittleNächstenZug(

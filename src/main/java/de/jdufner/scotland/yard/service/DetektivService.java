@@ -30,14 +30,15 @@ public class DetektivService extends SpielerService<Detektiv> {
 
   @Override
   protected PositionUndTickets ermittleNächstenZug(final Spiel spiel, final Detektiv spieler) {
-//    if (spiel.getAktuelleRunde() < 3) {
-//      spielbrettService.findeWegZuUndergroundInAnzahlZuegen(spieler, 3 - spiel.getAktuelleRunde());
-//    }
+    if (spiel.getAktuelleRunde() < 3) {
+      return new PositionUndTickets(spielbrettService.findeWegZuUndergroundInAnzahlZuegen(spieler,
+          3 - spiel.getAktuelleRunde()), null);
+    }
 
-    return new PositionUndTickets(spielbrettService.findeWegZuUndergroundInAnzahlZuegen(spieler,
-        3 - spiel.getAktuelleRunde()), null);
+//    return new PositionUndTickets(spielbrettService.findeKuerzestenWegZuMrX(spieler,
+//        3 - spiel.getAktuelleRunde()), null);
 
-//    return new PositionUndTickets(spieler.letztePosition(), null);
+    return new PositionUndTickets(spieler.letztePosition(), null);
   }
 
 }

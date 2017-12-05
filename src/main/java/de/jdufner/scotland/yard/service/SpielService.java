@@ -49,8 +49,7 @@ public class SpielService {
     spiel.naechsteRunde();
     LOG.debug("Spiele Runde: " + spiel.getAktuelleRunde());
     spiel.getSpieler().forEach((Spieler spieler) -> {
-      SpielerService spielerServiceForCurrentSpieler = getSpielerService(spieler.getClass());
-      spielerServiceForCurrentSpieler.fuehreZugDurch(spiel, spieler);
+      getSpielerService(spieler.getClass()).fuehreZugDurch(spiel, spieler);
     });
     LOG.debug("Runde {} beendet.", spiel.getAktuelleRunde());
   }
