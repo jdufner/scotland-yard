@@ -20,8 +20,14 @@ public class MrXService extends SpielerService<MrX> {
 
   private static final Logger LOG = LoggerFactory.getLogger(MrXService.class);
 
-  public MrXService(final SpielbrettService spielbrettService) {
-    super(spielbrettService);
+  public MrXService(final SpielbrettService spielbrettService,
+                    final StartpositionService startpositionService) {
+    super(spielbrettService, startpositionService);
+  }
+
+  @Override
+  public MrX erzeugeSpieler() {
+    return new MrX(startpositionService.zieheFreieStartposition());
   }
 
   @Override

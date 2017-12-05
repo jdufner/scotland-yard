@@ -3,6 +3,8 @@ package de.jdufner.scotland.yard.service;
 import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import de.jdufner.scotland.yard.model.spieler.Spieler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -13,11 +15,18 @@ import java.lang.reflect.Type;
  */
 public abstract class SpielerService<T extends Spieler> {
 
-  protected final SpielbrettService spielbrettService;
+  private static final Logger LOG = LoggerFactory.getLogger(SpielerService.class);
 
-  public SpielerService(final SpielbrettService spielbrettService) {
+  protected final SpielbrettService spielbrettService;
+  protected final StartpositionService startpositionService;
+
+  public SpielerService(final SpielbrettService spielbrettService,
+                        final StartpositionService startpositionService) {
     this.spielbrettService = spielbrettService;
+    this.startpositionService = startpositionService;
   }
+
+  public abstract T erzeugeSpieler();
 
   /**
    * Template-Method für die Durchführung eines Zuges.
@@ -26,6 +35,7 @@ public abstract class SpielerService<T extends Spieler> {
    * @param spieler
    */
   public void fuehreZugDurch(final Spiel spiel, final T spieler) {
+    LOG.debug("Führe Zug {} für Spieler {} durch.", spiel.getAktuelleRunde(), spieler);
     PositionUndTickets positionUndTickets = ermittleNächstenZug(spiel, spieler);
     spieler.zieheUndVerbraucheTickets(positionUndTickets);
     spielbrettService.verschiebeSpieler(spieler);

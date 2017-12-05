@@ -16,8 +16,16 @@ public class DetektivService extends SpielerService<Detektiv> {
 
   private static final Logger LOG = LoggerFactory.getLogger(DetektivService.class);
 
-  public DetektivService(final SpielbrettService spielbrettService) {
-    super(spielbrettService);
+  private int detektivNummer = 0;
+
+  public DetektivService(final SpielbrettService spielbrettService,
+                         final StartpositionService startpositionService) {
+    super(spielbrettService, startpositionService);
+  }
+
+  @Override
+  public Detektiv erzeugeSpieler() {
+    return new Detektiv(startpositionService.zieheFreieStartposition(), detektivNummer++);
   }
 
   @Override

@@ -32,12 +32,14 @@ public class SpielService {
   }
 
   public Spiel erzeugeSpiel() {
-    final MrX mrX = new MrX(startpositionService.zieheFreieStartposition());
+    LOG.debug("Erzeuge Spiel!");
+    final MrX mrX =
+        erzeugeSpieler(MrX.class); // new MrX(startpositionService.zieheFreieStartposition());
     final List<Detektiv> detektivs = new ArrayList<>();
-    detektivs.add(new Detektiv(startpositionService.zieheFreieStartposition()));
-    detektivs.add(new Detektiv(startpositionService.zieheFreieStartposition()));
-    detektivs.add(new Detektiv(startpositionService.zieheFreieStartposition()));
-    detektivs.add(new Detektiv(startpositionService.zieheFreieStartposition()));
+    detektivs.add(erzeugeSpieler(Detektiv.class));
+    detektivs.add(erzeugeSpieler(Detektiv.class));
+    detektivs.add(erzeugeSpieler(Detektiv.class));
+    detektivs.add(erzeugeSpieler(Detektiv.class));
     Spiel spiel = new Spiel(mrX, Collections.unmodifiableList(detektivs));
     LOG.debug("Spiel erzeugt: {}", spiel);
     return spiel;
@@ -47,11 +49,21 @@ public class SpielService {
     spiel.naechsteRunde();
     LOG.debug("Spiele Runde: " + spiel.getAktuelleRunde());
     spiel.getSpieler().forEach((Spieler spieler) -> {
-      SpielerService spielerServiceForCurrentSpieler = spielerServices.stream().filter(spielerService ->
-          spielerService.getTypeOf().equals(spieler.getClass())
-      ).findFirst().orElseThrow(AssertionError::new);
+      SpielerService spielerServiceForCurrentSpieler = getSpielerService(spieler.getClass());
       spielerServiceForCurrentSpieler.fuehreZugDurch(spiel, spieler);
     });
+    LOG.debug("Runde {} beendet.", spiel.getAktuelleRunde());
   }
 
+  private <T extends Spieler> T erzeugeSpieler(final Class<T> spielerType) {
+    return (T) getSpielerService(spielerType).erzeugeSpieler();
+  }
+
+  private SpielerService getSpielerService(final Class<? extends Spieler> spielerType) {
+    return spielerServices.stream()
+        .filter(spielerService ->
+            spielerService.getTypeOf().equals(spielerType))
+        .findFirst()
+        .orElseThrow(AssertionError::new);
+  }
 }

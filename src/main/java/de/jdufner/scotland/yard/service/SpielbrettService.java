@@ -47,10 +47,11 @@ public class SpielbrettService {
   }
 
   private void entferneSpieler(final Collection<Spieler> spielers) {
-    spielers.stream().forEach(this::entferneSpieler);
+    spielers.forEach(this::entferneSpieler);
   }
 
   private void entferneSpieler(final Spieler spieler) {
+    LOG.debug("Entferne Label {} an Position {}.", spieler, spieler.letztePosition().getPosition());
     try (final Transaction tx = graphDatabaseService.beginTx()) {
       graphDatabaseService.execute("MATCH (n:" + spieler.name() + ") WHERE n.number = " +
           spieler.letztePosition().getPosition() + " REMOVE n:" + spieler.name());
@@ -63,6 +64,7 @@ public class SpielbrettService {
   }
 
   private void setzeSpieler(final Spieler spieler) {
+    LOG.debug("Setze Label {} an Position {}.", spieler, spieler.letztePosition().getPosition());
     try (final Transaction tx = graphDatabaseService.beginTx()) {
       graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = " + spieler.letztePosition
           ().getPosition() + " SET n:" + spieler.name());
@@ -177,7 +179,6 @@ public class SpielbrettService {
 
   public void aktualisiereSpielbrett(final Spiel spiel) {
     verschiebeSpieler(spiel.getSpieler());
-//    setzeSpieler(spiel.getSpieler());
   }
 
 }
