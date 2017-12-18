@@ -22,19 +22,15 @@ public class SpielService {
 
   private static final Logger LOG = LoggerFactory.getLogger(SpielService.class);
 
-  private final StartpositionService startpositionService;
   private final Collection<SpielerService> spielerServices;
 
-  public SpielService(final StartpositionService startpositionService, final
-  Collection<SpielerService> spielerServices) {
-    this.startpositionService = startpositionService;
+  public SpielService(final Collection<SpielerService> spielerServices) {
     this.spielerServices = spielerServices;
   }
 
   public Spiel erzeugeSpiel() {
     LOG.debug("Erzeuge Spiel!");
-    final MrX mrX =
-        erzeugeSpieler(MrX.class); // new MrX(startpositionService.zieheFreieStartposition());
+    final MrX mrX = erzeugeSpieler(MrX.class);
     final List<Detektiv> detektivs = new ArrayList<>();
     detektivs.add(erzeugeSpieler(Detektiv.class));
     detektivs.add(erzeugeSpieler(Detektiv.class));
@@ -48,9 +44,8 @@ public class SpielService {
   public void naechsteRunde(final Spiel spiel) {
     spiel.naechsteRunde();
     LOG.debug("Spiele Runde: " + spiel.getAktuelleRunde());
-    spiel.getSpieler().forEach((Spieler spieler) -> {
-      getSpielerService(spieler.getClass()).fuehreZugDurch(spiel, spieler);
-    });
+    spiel.getSpieler().forEach((Spieler spieler) ->
+        getSpielerService(spieler.getClass()).fuehreZugDurch(spiel, spieler));
     LOG.debug("Runde {} beendet.", spiel.getAktuelleRunde());
   }
 
@@ -60,9 +55,9 @@ public class SpielService {
 
   private SpielerService getSpielerService(final Class<? extends Spieler> spielerType) {
     return spielerServices.stream()
-        .filter(spielerService ->
-            spielerService.getTypeOf().equals(spielerType))
+        .filter(spielerService -> spielerService.getTypeOf().equals(spielerType))
         .findFirst()
         .orElseThrow(AssertionError::new);
   }
+
 }
