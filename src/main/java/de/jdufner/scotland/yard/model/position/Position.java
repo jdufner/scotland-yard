@@ -39,8 +39,6 @@ public class Position {
   private Position() {
   }
 
-  ;
-
   public Position(int position) {
     this.position = position;
   }
