@@ -47,7 +47,8 @@ public class SpielService {
   }
 
   public Spiel erzeugeSpiel() {
-    LOG.debug("Erzeuge Spiel!");
+    LOG.info(new Object() {
+    }.getClass().getEnclosingMethod().getName());
     final MrX mrX = erzeugeSpieler(MrX.class);
     final List<Detektiv> detektivs = new ArrayList<>();
     detektivs.add(erzeugeSpieler(Detektiv.class));
@@ -60,6 +61,8 @@ public class SpielService {
   }
 
   public void naechsteRunde(final Spiel spiel) {
+    LOG.info(new Object() {
+    }.getClass().getEnclosingMethod().getName());
     spiel.naechsteRunde();
     LOG.debug("Spiele Runde: " + spiel.getAktuelleRunde());
     spiel.getSpieler().forEach((Spieler spieler) ->

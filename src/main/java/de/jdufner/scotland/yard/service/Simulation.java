@@ -21,6 +21,8 @@ package de.jdufner.scotland.yard.service;
 
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import javax.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,6 +31,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Simulation {
+
+  private static final Logger LOG = LoggerFactory.getLogger(Simulation.class);
 
   private final SpielService spielService;
   private final SpielbrettService spielbrettService;
@@ -40,6 +44,8 @@ public class Simulation {
 
   @PostConstruct
   public void starteSimulation() {
+    LOG.info(new Object() {
+    }.getClass().getEnclosingMethod().getName());
     final Spiel spiel = spielService.erzeugeSpiel();
     spielbrettService.aktualisiereSpielbrett(spiel);
     while (!spiel.isBeendet()) {

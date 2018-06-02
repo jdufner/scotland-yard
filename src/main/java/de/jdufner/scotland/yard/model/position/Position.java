@@ -19,13 +19,25 @@
 
 package de.jdufner.scotland.yard.model.position;
 
+import org.neo4j.ogm.annotation.GeneratedValue;
+import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.NodeEntity;
+
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
+@NodeEntity
 public class Position {
 
-  final int position;
+  @Id
+  @GeneratedValue
+  private Long id;
+
+  private int position;
+
+  private Position() {
+  }
 
   public Position(int position) {
     this.position = position;

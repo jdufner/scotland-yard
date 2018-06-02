@@ -19,20 +19,34 @@
 
 package de.jdufner.scotland.yard;
 
-import de.jdufner.scotland.yard.config.AppConfig;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
+@SpringBootApplication
+@EnableNeo4jRepositories()
 public class App {
 
+  private final static Logger LOG = LoggerFactory.getLogger(App.class);
+
   public static void main(final String[] args) {
-
-    ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-
+    SpringApplication.run(App.class, args);
   }
+
+// TODO: Löschen
+//  @Bean
+//  CommandLineRunner initialize(final PositionRepository positionRepository) {
+//    return args -> {
+//      positionRepository.deleteAll();
+//      Position p = new Position(12345);
+//      positionRepository.save(p);
+//    };
+//  }
 
 }
