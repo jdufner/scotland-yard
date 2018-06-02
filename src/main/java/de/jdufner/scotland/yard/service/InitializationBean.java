@@ -4,6 +4,8 @@ import javax.annotation.PostConstruct;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class InitializationBean {
 
+  private static final Logger LOG = LoggerFactory.getLogger(InitializationBean.class);
+
   private final GraphDatabaseService graphDatabaseService;
 
   public InitializationBean(final GraphDatabaseService graphDatabaseService) {
@@ -21,8 +25,12 @@ public class InitializationBean {
 
   @PostConstruct
   public void initialize() {
+    LOG.info(new Object() {
+    }.getClass().getEnclosingMethod().getName());
+    // TODO: Prüfen ob die TX-Steuerung mit Annotationen gelöst werden kann.
     try (Transaction tx = graphDatabaseService.beginTx()) {
-      Result execute = graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = 1 RETURN n");
+      final Result execute = graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = 1 " +
+          "RETURN n");
       if (execute.hasNext()) {
         tx.close();
         return;

@@ -19,14 +19,10 @@
 
 package de.jdufner.scotland.yard;
 
-import de.jdufner.scotland.yard.model.position.Position;
-import de.jdufner.scotland.yard.repository.PositionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 
 /**
@@ -37,19 +33,20 @@ import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 @EnableNeo4jRepositories()
 public class App {
 
-  private final static Logger log = LoggerFactory.getLogger(App.class);
+  private final static Logger LOG = LoggerFactory.getLogger(App.class);
 
   public static void main(final String[] args) {
     SpringApplication.run(App.class, args);
   }
 
-  @Bean
-  CommandLineRunner initialize(final PositionRepository positionRepository) {
-    return args -> {
-      positionRepository.deleteAll();
-      Position p = new Position(12345);
-      positionRepository.save(p);
-    };
-  }
+// TODO: Löschen
+//  @Bean
+//  CommandLineRunner initialize(final PositionRepository positionRepository) {
+//    return args -> {
+//      positionRepository.deleteAll();
+//      Position p = new Position(12345);
+//      positionRepository.save(p);
+//    };
+//  }
 
 }

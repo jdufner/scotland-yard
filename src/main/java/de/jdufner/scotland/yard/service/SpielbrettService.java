@@ -233,6 +233,8 @@ public class SpielbrettService {
   }
 
   public void aktualisiereSpielbrett(final Spiel spiel) {
+    LOG.info(new Object() {
+    }.getClass().getEnclosingMethod().getName());
     verschiebeSpieler(spiel.getSpieler());
   }
 
