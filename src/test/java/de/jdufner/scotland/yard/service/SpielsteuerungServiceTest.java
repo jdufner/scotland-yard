@@ -1,5 +1,5 @@
 /*
- * Scotland Yard is a simulation of the board game.
+ * Scotland Yard is a spielsteuerungService of the board game.
  * Copyright (C) 2008-2018  Juergen Dufner
  *
  * This program is free software: you can redistribute it and/or modify
@@ -33,10 +33,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SimulationTest {
+public class SpielsteuerungServiceTest {
 
   @InjectMocks
-  private Simulation simulation;
+  private SpielsteuerungService spielsteuerungService;
 
   @Mock
   private SpielService spielService;
@@ -45,14 +45,14 @@ public class SimulationTest {
   private SpielbrettService spielbrettService;
 
   @Test
-  public void testStart() {
+  public void whenStarteSpiel_expectSpielEndetNachDreiRunden() {
     // arrange
     Spiel spiel = mock(Spiel.class);
     when(spielService.erzeugeSpiel()).thenReturn(spiel);
     when(spiel.isBeendet()).thenReturn(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
 
     // act
-    simulation.starteSimulation();
+    spielsteuerungService.starteSpiel();
 
     // assert
     verify(spielService, times(2)).naechsteRunde(any(Spiel.class));

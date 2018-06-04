@@ -19,13 +19,13 @@
 
 package de.jdufner.scotland.yard.model.spieler;
 
-import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.position.Startposition;
 import de.jdufner.scotland.yard.model.tickets.BlackTicket;
 import de.jdufner.scotland.yard.model.tickets.Bus;
 import de.jdufner.scotland.yard.model.tickets.Doppelzug;
 import de.jdufner.scotland.yard.model.tickets.Taxi;
 import de.jdufner.scotland.yard.model.tickets.Underground;
+import de.jdufner.scotland.yard.model.zug.Zug;
 
 /**
  * @author Jürgen Dufner
@@ -50,13 +50,12 @@ public class MrX extends Spieler {
   }
 
   @Override
-  public void zieheUndVerbraucheTickets(final PositionUndTickets positionUndTickets) {
-    zieheAuf(positionUndTickets.getPosition());
-    verbraucheTickets(positionUndTickets.getTickets());
+  public void ziehe(final Zug zug) {
+    zieheAuf(zug.getZiel());
+    verbraucheTickets(zug.getTicket());
   }
 
   public static class Builder {
-
 
     private MrX mrX;
 

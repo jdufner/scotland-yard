@@ -41,18 +41,26 @@ public class Spiel {
   private static final int MAX_ANZAHL_RUNDEN = 21;
 
   private final MrX mrX;
-  private final List<Detektiv> detektivs;
+  private final List<Detektiv> detektive;
   private final List<Spieler> spielers = new ArrayList<>();
 
   private int aktuelleRunde;
 
   private boolean beendet = false;
 
-  public Spiel(final MrX mrX, final List<Detektiv> detektivs) {
+  public Spiel(final MrX mrX, final List<Detektiv> detektive) {
     this.mrX = mrX;
-    this.detektivs = detektivs;
+    this.detektive = detektive;
     spielers.add(mrX);
-    spielers.addAll(detektivs);
+    spielers.addAll(detektive);
+  }
+
+  public MrX getMrX() {
+    return mrX;
+  }
+
+  public List<Detektiv> getDetektive() {
+    return detektive;
   }
 
   public List<Spieler> getSpieler() {
@@ -68,7 +76,7 @@ public class Spiel {
   }
 
   private boolean habenDetektiveMrXGefangen() {
-    for (Detektiv detektiv : detektivs) {
+    for (Detektiv detektiv : detektive) {
       if (detektiv.letztePosition().equals(mrX.letztePosition())) {
         return true;
       }
@@ -77,10 +85,10 @@ public class Spiel {
   }
 
   public boolean isBeendet() {
-    return sindAlleRundenGespiel() || habenDetektiveMrXGefangen();
+    return sindAlleRundenGespielt() || habenDetektiveMrXGefangen();
   }
 
-  private boolean sindAlleRundenGespiel() {
+  private boolean sindAlleRundenGespielt() {
     return aktuelleRunde >= MAX_ANZAHL_RUNDEN;
   }
 

@@ -38,6 +38,9 @@ public abstract class Ticket {
   public void verbrauche(final Ticket ticket) {
     if (this.getClass().equals(ticket.getClass())) {
       anzahl -= ticket.anzahl;
+      if (anzahl < 0) {
+        throw new RuntimeException();
+      }
     }
   }
 

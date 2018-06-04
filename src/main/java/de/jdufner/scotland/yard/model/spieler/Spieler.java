@@ -19,10 +19,10 @@
 
 package de.jdufner.scotland.yard.model.spieler;
 
-import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.position.Position;
 import de.jdufner.scotland.yard.model.position.Startposition;
 import de.jdufner.scotland.yard.model.tickets.Ticket;
+import de.jdufner.scotland.yard.model.zug.Zug;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -61,13 +61,15 @@ public abstract class Spieler {
     return positions;
   }
 
-  public abstract void zieheUndVerbraucheTickets(final PositionUndTickets positionUndTickets);
+  public abstract void ziehe(final Zug zug);
 
   public void zieheAuf(final Position naechstePosition) {
     positions.add(naechstePosition);
   }
 
-  protected void verbraucheTickets(final List<Ticket> verbrauchteTickets) {
-    verbrauchteTickets.forEach(verbrauchtesTicket -> this.tickets.forEach(ticket -> ticket.verbrauche(verbrauchtesTicket)));
+  protected void verbraucheTickets(final Ticket verbrauchteTickets) {
+    tickets.stream()
+        //.filter(ticket -> ticket.getClass().equals(verbrauchteTickets.getClass()))
+        .forEach(ticket -> ticket.verbrauche(ticket));
   }
 }

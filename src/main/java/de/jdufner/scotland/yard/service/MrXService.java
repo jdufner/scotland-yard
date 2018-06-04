@@ -19,13 +19,11 @@
 
 package de.jdufner.scotland.yard.service;
 
-import static java.util.Collections.singletonList;
-
-import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.position.Position;
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import de.jdufner.scotland.yard.model.spieler.MrX;
 import de.jdufner.scotland.yard.model.tickets.Taxi;
+import de.jdufner.scotland.yard.model.zug.Zug;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -46,13 +44,17 @@ public class MrXService extends SpielerService<MrX> {
 
   @Override
   public MrX erzeugeSpieler() {
+    return erzeugeMrX();
+  }
+
+  public MrX erzeugeMrX() {
     return new MrX(startpositionService.zieheFreieStartposition());
   }
 
   @Override
-  protected PositionUndTickets ermittleNächstenZug(final Spiel spiel, final MrX spieler) {
+  protected Zug ermittleNächstenZug(final Spiel spiel, final MrX spieler) {
     final Position position = spielbrettService.findeNachbarAmWeitestenEntferntVonDetektiven();
-    return new PositionUndTickets(position, singletonList(new Taxi(1)));
+    return new Zug(position, new Taxi(1));
   }
 
 }
