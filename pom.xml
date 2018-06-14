@@ -24,6 +24,10 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <neo4j.version>3.4.0</neo4j.version>
+    <asciidoctor.maven.plugin.version>1.5.6</asciidoctor.maven.plugin.version>
+    <asciidoctorj.version>1.5.6</asciidoctorj.version>
+    <asciidoctorj.diagram.version>1.5.4.1</asciidoctorj.diagram.version>
+    <jruby.version>1.7.26</jruby.version>
   </properties>
 
   <dependencies>
@@ -82,18 +86,40 @@
     </dependency-->
   </dependencies>
 
-
   <build>
     <plugins>
       <plugin>
         <groupId>org.asciidoctor</groupId>
         <artifactId>asciidoctor-maven-plugin</artifactId>
-        <version>1.5.6</version>
+        <version>${asciidoctor.maven.plugin.version}</version>
+        <dependencies>
+          <!-- Comment this section to use the default jruby artifact provided by the plugin -->
+          <dependency>
+            <groupId>org.jruby</groupId>
+            <artifactId>jruby-complete</artifactId>
+            <version>${jruby.version}</version>
+          </dependency>
+          <!-- Comment this section to use the default AsciidoctorJ artifact provided by the plugin -->
+          <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj</artifactId>
+            <version>${asciidoctorj.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctorj-diagram</artifactId>
+            <version>${asciidoctorj.diagram.version}</version>
+          </dependency>
+        </dependencies>
         <configuration>
           <backend>html5</backend>
           <sourceHighlighter>coderay</sourceHighlighter>
+          <requires>
+            <require>asciidoctor-diagram</require>
+          </requires>
           <attributes>
             <toc>left</toc>
+            <graphvizdot>${graphvizdot}</graphvizdot>
           </attributes>
         </configuration>
         <executions>
@@ -108,5 +134,30 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>Windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <graphvizdot>C:\Program Files (x86)\Graphviz2.38\bin\dot.exe</graphvizdot>
+      </properties>
+    </profile>
+    <profile>
+      <id>Unix</id>
+      <activation>
+        <os>
+          <family>unix</family>
+        </os>
+      </activation>
+      <properties>
+        <graphvizdot>/usr/bin/dot</graphvizdot>
+      </properties>
+    </profile>
+  </profiles>
 
 </project>
