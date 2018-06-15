@@ -73,3 +73,12 @@ Table with role names, person names, and their expectations with respect to the 
 | _<Role-1>_ | _<Contact-1>_ | _<Expectation-1>_
 | _<Role-2>_ | _<Contact-2>_ | _<Expectation-2>_
 |===
+
+[plantuml, "test", png]
+----
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+----
