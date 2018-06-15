@@ -119,6 +119,10 @@
           </requires>
           <attributes>
             <toc>left</toc>
+            <icons>font</icons>
+            <sectanchors>true</sectanchors>
+            <idprefix/>
+            <idseparator>-</idseparator>
             <graphvizdot>${graphvizdot}</graphvizdot>
           </attributes>
         </configuration>
