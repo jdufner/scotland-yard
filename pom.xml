@@ -119,6 +119,8 @@
           </requires>
           <attributes>
             <toc>left</toc>
+            <sourceHighlighter>coderay</sourceHighlighter>
+            <coderay-css>style</coderay-css>
             <icons>font</icons>
             <sectanchors>true</sectanchors>
             <idprefix/>
