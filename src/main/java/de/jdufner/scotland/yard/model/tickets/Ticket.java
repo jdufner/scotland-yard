@@ -20,6 +20,11 @@
 package de.jdufner.scotland.yard.model.tickets;
 
 /**
+ * Superklasse für alle Ticket: Taxi, Bus, Underground und Blackticket.
+ *
+ * Soll die Anzahl der Tickets durch Instanzen dargestellt werden oder durch einen Zähler? Im
+ * Moment entscheide ich mich mal für einen Zähler. Mal schauen wir gut das klappt.
+ *
  * @author Jürgen Dufner
  * @since 1.0
  */

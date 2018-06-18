@@ -20,9 +20,16 @@
 package de.jdufner.scotland.yard.model.tickets;
 
 /**
+ * Ist das überhaupt ein Ticket? Es ist die Erlaubnis in einer Rund zwei Züge machen zu dürfen,
+ * aber es gibt kein Verkehrsmittel, das durch diese Klasse repräsentiert wird. Tendenziell fällt
+ * diese Klasse wieder weg!
+ *
  * @author Jürgen Dufner
  * @since 1.0
+ * @deprecated Ist kein Verkehrsmittel, wird durch {@link de.jdufner.scotland.yard.model.zug.DoppelZug}
+ *             ersetzt.
  */
+@Deprecated
 public class Doppelzug extends Ticket {
 
   public Doppelzug(final int anzahl) {

@@ -53,6 +53,7 @@ public class MrXService extends SpielerService<MrX> {
 
   @Override
   protected Zug ermittleNächstenZug(final Spiel spiel, final MrX spieler) {
+    // Welche Verkehrsmittel kann MrX nutzen?
     final Position position = spielbrettService.findeNachbarAmWeitestenEntferntVonDetektiven();
     return new Zug(position, new Taxi(1));
   }
