@@ -5,15 +5,30 @@
 [role="arc42help"]
 ****
 .Contents
-Any requirement that constrains software architects in their freedom of design and implementation decisions or decision about the development process. These constraints sometimes go beyond individual systems and are valid for whole organizations and companies.
+Any requirement that constrains software architects in their freedom of design and implementation
+decisions or decision about the development process. These constraints sometimes go beyond
+individual systems and are valid for whole organizations and companies.
 
 .Motivation
-Architects should know exactly where they are free in their design decisions and where they must adhere to constraints.
-Constraints must always be dealt with; they may be negotiable, though.
+Architects should know exactly where they are free in their design decisions and where they must
+adhere to constraints. Constraints must always be dealt with; they may be negotiable, though.
 
 .Form
-Simple tables of constraints with explanations.
-If needed you can subdivide them into
+Simple tables of constraints with explanations. If needed you can subdivide them into
 technical constraints, organizational and political constraints and
 conventions (e.g. programming or versioning guidelines, documentation or naming conventions)
 ****
+
+[options="headers",cols="1,1"]
+|===
+|Name
+|Description
+
+|Spring Boot 2, Java 8
+|I want to use Spring Boot 2, a minimum requirement is Java 8.
+
+|Loosely coupled services between board, Mr. X and detectives.
+|It should be possible to separate die core board service from the services of Mr.X and the
+services of the detectives.
+
+|===

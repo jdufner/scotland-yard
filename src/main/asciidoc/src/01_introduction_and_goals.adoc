@@ -70,16 +70,16 @@ A table with quality goals and concrete scenarios, ordered by priorities
 |Scenario
 
 |Accessible example
-|xxx
+|Scotland Yard is a simple understandable board game. The relation to a graph is obviously when you
+look to the traffic network.
 
-|Very strong game engines
-|xxx
-
-|Welcoming platform for experiments
-|xxx
+|Welcoming platform for experiments in player behavior
+|It should be possible to implement different logics for Mr.X and the detectives. The logic should
+be encapsulated so that it is easy exchangeable.
 
 |Platform for competing implementations
-|xxx
+|As consequence of the different player behavior it should be possible to arrange competitions
+comparing implementations of Mr.X vs detectives.
 |===
 
 === Stakeholders
@@ -105,11 +105,12 @@ Table with role names, person names, and their expectations with respect to the 
 documentation.
 ****
 
-[options="header",cols="1,2,2"]
+[options="header",cols="1,2,2a"]
 |===
 |Role/Name|Contact|Expectations
-| _<Role-1>_ | _<Contact-1>_ | _<Expectation-1>_
-| _<Role-2>_ | _<Contact-2>_ | _<Expectation-2>_
+| Creator, Jürgen Dufner | juergen@jdufner.de | * Building up knowledge about Neo4J and Cypher +
+* Building up knowledge about Spring Data
+* Gathering experience in usage of arc42
 |===
 
 [plantuml, "test", png]
