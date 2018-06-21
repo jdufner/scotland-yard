@@ -48,13 +48,7 @@ communication partner, the inputs, and the outputs.
 
 [plantuml, "business-context-diagram", png]
 ----
-skinparam componentStyle uml2
-
-[Scotland-Yard] as sy
-
-note right of sy
-  still no dependencies
-end note
+include::{plantUmlDir}/03_1_business-context-diagram.puml[]
 ----
 
 ==== Explanation
@@ -84,20 +78,7 @@ together with a mapping table showing the relationships between channels and inp
 
 [plantuml, "technical-context-diagram", png]
 ----
-skinparam componentStyle uml2
-
-[Scotland-Yard] as sy
-file log as log
-sy ..> log : write
-
-note right of sy
-  still no dependencies
-end note
-
-note left of log
-  just in debug mode
-end note
-
+include::{plantUmlDir}/03_2_technical-context-diagram.puml[]
 ----
 
 ==== Explanation

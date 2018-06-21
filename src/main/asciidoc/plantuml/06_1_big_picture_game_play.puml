@@ -1,0 +1,27 @@
+@startuml
+
+== initialization ==
+
+gameController -> mrX: initialize
+gameController <-- mrX: set up
+
+loop up to 4 detectives
+  gameController -> detective: initialize
+  gameController <-- detective: set up
+end
+
+== repetition ==
+
+loop up to 21 turns or a detective catches mrX
+
+  gameController -> mrX: do next move
+  gameController <-- mrX: return move
+
+  loop up to 4 detectives
+    gameController -> detective: do next move
+    gameController <-- detective: return move
+  end
+
+end
+
+@enduml
