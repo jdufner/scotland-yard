@@ -64,20 +64,20 @@ buzzwords. If you as an architect do not know how the quality of your work will 
 A table with quality goals and concrete scenarios, ordered by priorities
 ****
 
-[cols="1,2a",options="header"]
+[cols="1,2a", options="header"]
 |===
 |Quality Goal
 |Scenario
 
-|Accessible example
+|Accessible example (accessibility)
 |Scotland Yard is a simple understandable board game. The relation to a graph is obviously when you
 look to the traffic network.
 
-|Welcoming platform for experiments in player behavior
+|Welcoming platform for experiments in player behavior (changability)
 |It should be possible to implement different logics for Mr.X and the detectives. The logic should
 be encapsulated so that it is easy exchangeable.
 
-|Platform for competing implementations
+|Platform for competing implementations (attractivity)
 |As consequence of the different player behavior it should be possible to arrange competitions
 comparing implementations of Mr.X vs detectives.
 |===
@@ -105,7 +105,7 @@ Table with role names, person names, and their expectations with respect to the 
 documentation.
 ****
 
-[options="header",cols="1,2,2a"]
+[options="header", cols="1,2,2a"]
 |===
 |Role/Name|Contact|Expectations
 | Creator, Jürgen Dufner | juergen@jdufner.de | * Building up knowledge about Neo4J and Cypher +

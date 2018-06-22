@@ -1,7 +1,6 @@
 [[section-architecture-constraints]]
 == Architecture Constraints
 
-
 [role="arc42help"]
 ****
 .Contents
@@ -19,7 +18,7 @@ technical constraints, organizational and political constraints and
 conventions (e.g. programming or versioning guidelines, documentation or naming conventions)
 ****
 
-[options="headers",cols="1,1"]
+[options="headers", cols="1,1"]
 |===
 |Name
 |Description
