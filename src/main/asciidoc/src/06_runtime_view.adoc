@@ -68,7 +68,12 @@ end
 
 *Description*
 
+[source,java]
+----
+include::{sourceDir}/de/jdufner/scotland/yard/common/MrxService.java[tag=initializeMethod]
+----
 
+<1> That's the method to implement by Mr. X.
 
 * _<insert runtime diagram or textual description of the scenario>_
 * _<insert description of the notable aspects of the interactions between the

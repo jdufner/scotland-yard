@@ -112,12 +112,3 @@ documentation.
 * Building up knowledge about Spring Data
 * Gathering experience in usage of arc42
 |===
-
-[plantuml, "test", png]
-----
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
-
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
-----
