@@ -19,9 +19,13 @@
 
 package de.jdufner.scotland.yard.service;
 
-import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import de.jdufner.scotland.yard.model.spieler.Detektiv;
+import de.jdufner.scotland.yard.model.zug.Zug;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -35,29 +39,39 @@ public class DetektivService extends SpielerService<Detektiv> {
 
   private static final Logger LOG = LoggerFactory.getLogger(DetektivService.class);
 
-  private int detektivNummer = 0;
-
   public DetektivService(final SpielbrettService spielbrettService,
                          final StartpositionService startpositionService) {
     super(spielbrettService, startpositionService);
   }
 
-  @Override
-  public Detektiv erzeugeSpieler() {
-    return new Detektiv(startpositionService.zieheFreieStartposition(), detektivNummer++);
+  public List<Detektiv> erzeugeDetektive() {
+    final List<Detektiv> detektive = new ArrayList<>();
+    IntStream.rangeClosed(1, 4).forEach(i ->
+        detektive.add(erzeugeDetektiv(i))
+    );
+    return Collections.unmodifiableList(detektive);
+  }
+
+  private Detektiv erzeugeDetektiv(int nummer) {
+    return new Detektiv(startpositionService.zieheFreieStartposition(), nummer);
   }
 
   @Override
-  protected PositionUndTickets ermittleNächstenZug(final Spiel spiel, final Detektiv spieler) {
+  public Detektiv erzeugeSpieler() {
+    return erzeugeDetektiv(0);
+  }
+
+  @Override
+  protected Zug ermittleNächstenZug(final Spiel spiel, final Detektiv spieler) {
     if (spiel.getAktuelleRunde() < 3) {
-      return new PositionUndTickets(spielbrettService.findeWegZuUndergroundInAnzahlZuegen(spieler,
+      return new Zug(spielbrettService.findeWegZuUndergroundInAnzahlZuegen(spieler,
           3 - spiel.getAktuelleRunde()), null);
     }
 
 //    return new PositionUndTickets(spielbrettService.findeKuerzestenWegZuMrX(spieler,
 //        3 - spiel.getAktuelleRunde()), null);
 
-    return new PositionUndTickets(spieler.letztePosition(), null);
+    return new Zug(spieler.letztePosition(), null);
   }
 
 }

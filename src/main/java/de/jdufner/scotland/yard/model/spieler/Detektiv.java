@@ -19,11 +19,11 @@
 
 package de.jdufner.scotland.yard.model.spieler;
 
-import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.position.Startposition;
 import de.jdufner.scotland.yard.model.tickets.Bus;
 import de.jdufner.scotland.yard.model.tickets.Taxi;
 import de.jdufner.scotland.yard.model.tickets.Underground;
+import de.jdufner.scotland.yard.model.zug.Zug;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,12 +49,12 @@ public class Detektiv extends Spieler {
   }
 
   @Override
-  public void zieheUndVerbraucheTickets(final PositionUndTickets positionUndTickets) {
-
+  public void ziehe(final Zug zug) {
+    zieheAuf(zug.getZiel());
+    verbraucheTickets(zug.getTicket());
   }
 
   public static class Builder {
-
 
     private List<Detektiv> detektivs = new ArrayList<>();
 

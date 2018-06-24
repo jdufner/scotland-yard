@@ -47,6 +47,25 @@ public class SpielTest {
     assertThat(spiel.getSpieler()).containsExactly(mrX, detektivs.get(0), detektivs
         .get(1), detektivs.get(2), detektivs.get(3));
     assertThat(spiel.isBeendet()).isFalse();
+    assertThat(spiel.getAktuelleRunde()).isEqualTo(0);
+  }
+
+  @Test
+  public void
+  testIsBeendet_whenEinundzwanzigRundenGespielt_expectSpielBeendet() {
+    // arrange
+    final MrX mrX = new MrX.Builder(13).build();
+    final List<Detektiv> detektivs = new Detektiv.Builder(26, 29, 34, 50).build();
+    spiel = new Spiel(mrX, detektivs);
+
+    // act
+    while (!spiel.isBeendet()) {
+      spiel.naechsteRunde();
+    }
+
+    // assert
+    assertThat(spiel.isBeendet()).isTrue();
+    assertThat(spiel.getAktuelleRunde()).isEqualTo(21);
   }
 
 }

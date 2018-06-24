@@ -23,9 +23,9 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import de.jdufner.scotland.yard.model.spieler.Spieler;
+import de.jdufner.scotland.yard.model.zug.Zug;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -74,7 +74,7 @@ public class SpielerServiceTest {
     }
 
     @Override
-    protected PositionUndTickets ermittleNächstenZug(final Spiel spiel, final Spieler spieler) {
+    protected Zug ermittleNächstenZug(final Spiel spiel, final Spieler spieler) {
       return null;
     }
   }

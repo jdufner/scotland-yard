@@ -22,63 +22,44 @@ package de.jdufner.scotland.yard.service;
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import de.jdufner.scotland.yard.model.spieler.Detektiv;
 import de.jdufner.scotland.yard.model.spieler.MrX;
-import de.jdufner.scotland.yard.model.spieler.Spieler;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
+ * Der {@link SpielService} erzeugt die Spieler, fragt sie nach ihren Zügen und prüft, ob es ein
+ * erlaubter Zug ist.
+ *
  * @author Jürgen Dufner
- * @since 0.3
+ * @since 1.0
  */
 @Service
 public class SpielService {
 
   private static final Logger LOG = LoggerFactory.getLogger(SpielService.class);
 
-  private final Collection<SpielerService> spielerServices;
+  private final MrXService mrXService;
+  private final DetektivService detektivService;
 
-  public SpielService(final Collection<SpielerService> spielerServices) {
-    this.spielerServices = spielerServices;
+  public SpielService(final MrXService mrXService, final DetektivService detektivService) {
+    this.mrXService = mrXService;
+    this.detektivService = detektivService;
   }
 
   public Spiel erzeugeSpiel() {
-    LOG.info(new Object() {
-    }.getClass().getEnclosingMethod().getName());
-    final MrX mrX = erzeugeSpieler(MrX.class);
-    final List<Detektiv> detektivs = new ArrayList<>();
-    detektivs.add(erzeugeSpieler(Detektiv.class));
-    detektivs.add(erzeugeSpieler(Detektiv.class));
-    detektivs.add(erzeugeSpieler(Detektiv.class));
-    detektivs.add(erzeugeSpieler(Detektiv.class));
-    Spiel spiel = new Spiel(mrX, Collections.unmodifiableList(detektivs));
-    LOG.debug("Spiel erzeugt: {}", spiel);
+    final MrX mrX = mrXService.erzeugeMrX();
+    final List<Detektiv> detektive = detektivService.erzeugeDetektive();
+    Spiel spiel = new Spiel(mrX, detektive);
     return spiel;
   }
 
   public void naechsteRunde(final Spiel spiel) {
-    LOG.info(new Object() {
-    }.getClass().getEnclosingMethod().getName());
     spiel.naechsteRunde();
-    LOG.debug("Spiele Runde: " + spiel.getAktuelleRunde());
-    spiel.getSpieler().forEach((Spieler spieler) ->
-        getSpielerService(spieler.getClass()).fuehreZugDurch(spiel, spieler));
+    mrXService.fuehreZugDurch(spiel, spiel.getMrX());
+    spiel.getDetektive().forEach((Detektiv detektiv) -> detektivService.fuehreZugDurch(spiel,
+        detektiv));
     LOG.debug("Runde {} beendet.", spiel.getAktuelleRunde());
-  }
-
-  private <T extends Spieler> T erzeugeSpieler(final Class<T> spielerType) {
-    return (T) getSpielerService(spielerType).erzeugeSpieler();
-  }
-
-  private SpielerService getSpielerService(final Class<? extends Spieler> spielerType) {
-    return spielerServices.stream()
-        .filter(spielerService -> spielerService.getTypeOf().equals(spielerType))
-        .findFirst()
-        .orElseThrow(AssertionError::new);
   }
 
 }

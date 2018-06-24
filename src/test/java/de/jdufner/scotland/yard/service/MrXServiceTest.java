@@ -23,9 +23,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import de.jdufner.scotland.yard.model.spieler.MrX;
+import de.jdufner.scotland.yard.model.zug.Zug;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -52,11 +52,11 @@ public class MrXServiceTest {
     // arrange
 
     // act
-    PositionUndTickets positionUndTickets =
+    Zug zug =
         mrXService.ermittleNächstenZug(mock(Spiel.class), mock(MrX.class));
 
     // assert
-    assertThat(positionUndTickets).isNotNull();
+    assertThat(zug).isNotNull();
     verify(spielbrettService).findeNachbarAmWeitestenEntferntVonDetektiven();
   }
 

@@ -26,9 +26,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import de.jdufner.scotland.yard.model.spieler.Detektiv;
+import de.jdufner.scotland.yard.model.zug.Zug;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -57,11 +57,11 @@ public class DetektivServiceTest {
     when(spiel.getAktuelleRunde()).thenReturn(1);
 
     // act
-    PositionUndTickets positionUndTickets =
+    Zug zug =
         detektivService.ermittleNächstenZug(spiel, mock(Detektiv.class));
 
     // assert
-    assertThat(positionUndTickets).isNotNull();
+    assertThat(zug).isNotNull();
     verify(spielbrettService).findeWegZuUndergroundInAnzahlZuegen(any(Detektiv.class), anyInt());
   }
 

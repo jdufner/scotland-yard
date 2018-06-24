@@ -19,9 +19,9 @@
 
 package de.jdufner.scotland.yard.service;
 
-import de.jdufner.scotland.yard.model.PositionUndTickets;
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import de.jdufner.scotland.yard.model.spieler.Spieler;
+import de.jdufner.scotland.yard.model.zug.Zug;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import org.slf4j.Logger;
@@ -54,13 +54,13 @@ public abstract class SpielerService<T extends Spieler> {
    */
   public void fuehreZugDurch(final Spiel spiel, final T spieler) {
     LOG.debug("Führe Zug {} für Spieler {} durch.", spiel.getAktuelleRunde(), spieler);
-    PositionUndTickets positionUndTickets = ermittleNächstenZug(spiel, spieler);
-    spieler.zieheUndVerbraucheTickets(positionUndTickets);
+    Zug zug = ermittleNächstenZug(spiel, spieler);
+    spieler.ziehe(zug);
     spielbrettService.verschiebeSpieler(spieler);
     // MrX soll sich zeigen, wenn es ein relevanter Spielzug ist
   }
 
-  protected abstract PositionUndTickets ermittleNächstenZug(
+  protected abstract Zug ermittleNächstenZug(
       final Spiel spiel, final T spieler);
 
   Class getTypeOf() {

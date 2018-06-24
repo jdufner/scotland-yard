@@ -1,0 +1,17 @@
+@startuml
+
+skinparam componentStyle uml2
+
+[Scotland-Yard] as sy
+file log as log
+sy ..> log : write
+
+note right of sy
+  still no dependencies
+end note
+
+note left of log
+  just in debug mode
+end note
+
+@enduml

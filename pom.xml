@@ -119,11 +119,15 @@
           </requires>
           <attributes>
             <toc>left</toc>
+            <sourceHighlighter>coderay</sourceHighlighter>
+            <coderay-css>style</coderay-css>
             <icons>font</icons>
             <sectanchors>true</sectanchors>
             <idprefix/>
             <idseparator>-</idseparator>
-            <graphvizdot>${graphvizdot}</graphvizdot>
+            <!--graphvizdot>${graphvizdot}</graphvizdot-->
+            <sourceDir>${project.build.sourceDirectory}</sourceDir>
+            <plantUmlDir>${project.basedir}/src/main/asciidoc/plantuml</plantUmlDir>
           </attributes>
         </configuration>
         <executions>

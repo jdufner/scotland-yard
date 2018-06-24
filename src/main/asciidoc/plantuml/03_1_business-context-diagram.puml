@@ -1,0 +1,11 @@
+@startuml
+
+skinparam componentStyle uml2
+
+[Scotland-Yard] as sy
+
+note right of sy
+  still no dependencies
+end note
+
+@enduml

@@ -17,31 +17,18 @@
  *
  */
 
-package de.jdufner.scotland.yard.model.tickets;
+package de.jdufner.scotland.yard.common;
+
+import de.jdufner.scotland.yard.model.tickets.Ticket;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-public abstract class Ticket {
+public class Tickets {
 
-  private int anzahl;
+  public void spend(Ticket ticket) {
 
-  Ticket(final int anzahl) {
-    this.anzahl = anzahl;
-  }
-
-  public int getAnzahl() {
-    return anzahl;
-  }
-
-  public void verbrauche(final Ticket ticket) {
-    if (this.getClass().equals(ticket.getClass())) {
-      anzahl -= ticket.anzahl;
-      if (anzahl < 0) {
-        throw new RuntimeException();
-      }
-    }
   }
 
 }

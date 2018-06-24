@@ -28,9 +28,7 @@ import de.jdufner.scotland.yard.service.DetektivService;
 import de.jdufner.scotland.yard.service.MrXService;
 import de.jdufner.scotland.yard.service.SpielService;
 import de.jdufner.scotland.yard.service.SpielbrettService;
-import de.jdufner.scotland.yard.service.SpielerService;
 import de.jdufner.scotland.yard.service.StartpositionService;
-import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,12 +44,9 @@ public class SpielServiceCT {
 
   @Before
   public void setUp() {
-    final ArrayList<SpielerService> spielerServices = new ArrayList<>();
     startpositionService = mock(StartpositionService.class);
     spielbrettService = mock(SpielbrettService.class);
-    spielerServices.add(new MrXService(spielbrettService, startpositionService));
-    spielerServices.add(new DetektivService(spielbrettService, startpositionService));
-    spielService = new SpielService(spielerServices);
+    spielService = new SpielService(new MrXService(spielbrettService, startpositionService), new DetektivService(spielbrettService, startpositionService));
   }
 
   @Test

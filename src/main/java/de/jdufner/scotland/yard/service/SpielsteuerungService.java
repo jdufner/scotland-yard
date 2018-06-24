@@ -23,36 +23,33 @@ import de.jdufner.scotland.yard.model.spiel.Spiel;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
+ * Der {@link SpielsteuerungService} steuert das Zusammenspiel der Figuren mit dem Spielbrett.
+ *
  * @author Jürgen Dufner
  * @since 1.0
  */
-@Component
-public class Simulation {
+@Service
+public class SpielsteuerungService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(Simulation.class);
+  private static final Logger LOG = LoggerFactory.getLogger(SpielsteuerungService.class);
 
   private final SpielService spielService;
   private final SpielbrettService spielbrettService;
 
-  public Simulation(final SpielService spielService, final SpielbrettService spielbrettService) {
+  public SpielsteuerungService(final SpielService spielService, final SpielbrettService spielbrettService) {
     this.spielService = spielService;
     this.spielbrettService = spielbrettService;
   }
 
   @PostConstruct
-  public void starteSimulation() {
-    LOG.info(new Object() {
-    }.getClass().getEnclosingMethod().getName());
+  public void starteSpiel() {
     final Spiel spiel = spielService.erzeugeSpiel();
-    spielbrettService.aktualisiereSpielbrett(spiel);
     while (!spiel.isBeendet()) {
       spielService.naechsteRunde(spiel);
     }
   }
-
-  //spielbrettService.ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten(spiel);
 
 }
