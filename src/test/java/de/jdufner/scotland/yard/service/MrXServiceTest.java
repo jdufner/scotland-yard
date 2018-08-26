@@ -45,7 +45,7 @@ public class MrXServiceTest {
   @Mock
   private SpielbrettService spielbrettService;
   @Mock
-  private StartpositionService startpositionService;
+  private StartPositionService startPositionService;
 
   @Test
   public void test() {

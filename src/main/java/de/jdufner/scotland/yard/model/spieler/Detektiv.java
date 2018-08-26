@@ -19,10 +19,10 @@
 
 package de.jdufner.scotland.yard.model.spieler;
 
-import de.jdufner.scotland.yard.model.position.Startposition;
-import de.jdufner.scotland.yard.model.tickets.Bus;
-import de.jdufner.scotland.yard.model.tickets.Taxi;
-import de.jdufner.scotland.yard.model.tickets.Underground;
+import de.jdufner.scotland.yard.model.position.StartPosition;
+import de.jdufner.scotland.yard.common.Bus;
+import de.jdufner.scotland.yard.common.Taxi;
+import de.jdufner.scotland.yard.common.Underground;
 import de.jdufner.scotland.yard.model.zug.Zug;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +35,8 @@ public class Detektiv extends Spieler {
 
   private final Nummer nummer;
 
-  public Detektiv(final Startposition startposition, final int nummer) {
-    super(startposition);
+  public Detektiv(final StartPosition startPosition, final int nummer) {
+    super(startPosition);
     tickets.add(new Taxi(10));
     tickets.add(new Bus(8));
     tickets.add(new Underground(4));
@@ -61,7 +61,7 @@ public class Detektiv extends Spieler {
     public Builder(final int... startpositionAsInts) {
       int nummer = 0;
       for (final int startpositionAsInt : startpositionAsInts) {
-        detektivs.add(new Detektiv(new Startposition(startpositionAsInt), nummer++));
+        detektivs.add(new Detektiv(new StartPosition(startpositionAsInt), nummer++));
       }
     }
 

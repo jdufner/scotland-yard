@@ -34,14 +34,15 @@ import org.springframework.stereotype.Service;
  * @author Jürgen Dufner
  * @since 1.0
  */
+@Deprecated
 @Service
 public class DetektivService extends SpielerService<Detektiv> {
 
   private static final Logger LOG = LoggerFactory.getLogger(DetektivService.class);
 
   public DetektivService(final SpielbrettService spielbrettService,
-                         final StartpositionService startpositionService) {
-    super(spielbrettService, startpositionService);
+                         final StartPositionService startPositionService) {
+    super(spielbrettService, startPositionService);
   }
 
   public List<Detektiv> erzeugeDetektive() {
@@ -53,7 +54,7 @@ public class DetektivService extends SpielerService<Detektiv> {
   }
 
   private Detektiv erzeugeDetektiv(int nummer) {
-    return new Detektiv(startpositionService.zieheFreieStartposition(), nummer);
+    return new Detektiv(startPositionService.zieheFreieStartPosition(), nummer);
   }
 
   @Override

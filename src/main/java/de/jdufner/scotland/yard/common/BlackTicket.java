@@ -19,24 +19,19 @@
 
 package de.jdufner.scotland.yard.common;
 
-import de.jdufner.scotland.yard.model.position.Position;
-
 /**
- * This interface has to be implemented by the game logic, that represents Mr X.
- *
  * @author Jürgen Dufner
  * @since 1.0
  */
-public interface MrxService {
+public class BlackTicket extends Ticket {
 
-  // tag::initializeMethod[]
-  /**
-   * Sets Mr.X to the start position and gives him the tickets to use the public traffic.
-   *
-   * @param position
-   * @param tickets
-   */
-  void initialize(Position position, Tickets tickets); // <1>
-  // end::initializeMethod[]
+  public BlackTicket(final int anzahl) {
+    super(anzahl);
+  }
+
+  @Override
+  public String toString() {
+    return "BlackTicket: " + getAnzahl();
+  }
 
 }

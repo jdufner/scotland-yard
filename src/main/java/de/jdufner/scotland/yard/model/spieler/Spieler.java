@@ -20,8 +20,8 @@
 package de.jdufner.scotland.yard.model.spieler;
 
 import de.jdufner.scotland.yard.model.position.Position;
-import de.jdufner.scotland.yard.model.position.Startposition;
-import de.jdufner.scotland.yard.model.tickets.Ticket;
+import de.jdufner.scotland.yard.model.position.StartPosition;
+import de.jdufner.scotland.yard.common.Ticket;
 import de.jdufner.scotland.yard.model.zug.Zug;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,13 +34,13 @@ import java.util.List;
  */
 public abstract class Spieler {
 
-  final Startposition startposition;
+  final StartPosition startPosition;
   final Collection<Ticket> tickets = new HashSet<>();
   final List<Position> positions = new ArrayList();
 
-  Spieler(final Startposition startposition) {
-    this.startposition = startposition;
-    positions.add(startposition);
+  Spieler(final StartPosition startPosition) {
+    this.startPosition = startPosition;
+    positions.add(startPosition);
   }
 
   @Override

@@ -17,21 +17,18 @@
  *
  */
 
-package de.jdufner.scotland.yard.model.tickets;
+package de.jdufner.scotland.yard.common;
+
+import de.jdufner.scotland.yard.model.position.StartPosition;
 
 /**
+ * This interface has to be implemented by the gamelogic of the detectives.
+ *
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class Taxi extends Ticket {
+public interface DetectiveService {
 
-  public Taxi(final int anzahl) {
-    super(anzahl);
-  }
-
-  @Override
-  public String toString() {
-    return "Taxi: " + getAnzahl();
-  }
+  public void initialize(final StartPosition startPosition, final Tickets tickets);
 
 }

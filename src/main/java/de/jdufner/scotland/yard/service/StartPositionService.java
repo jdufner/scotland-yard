@@ -19,37 +19,38 @@
 
 package de.jdufner.scotland.yard.service;
 
-import de.jdufner.scotland.yard.model.spiel.Spiel;
-import javax.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.util.Arrays.asList;
+
+import de.jdufner.scotland.yard.model.position.StartPosition;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 /**
- * Der {@link SpielsteuerungService} steuert das Zusammenspiel der Figuren mit dem Spielbrett.
+ * Der Service ist zufallsgesteuert.
  *
  * @author Jürgen Dufner
  * @since 1.0
  */
 @Service
-public class SpielsteuerungService {
+public class StartPositionService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(SpielsteuerungService.class);
+  private static Integer[] startpositionen = {13, 26, 29, 34, 50, 53, 91, 94, 103, 112, 117,
+      132, 138, 131, 155, 174, 197, 198};
 
-  private final SpielService spielService;
-  private final SpielbrettService spielbrettService;
+  private static List<Integer> freiePositionen = new ArrayList<>(startpositionen.length);
 
-  public SpielsteuerungService(final SpielService spielService, final SpielbrettService spielbrettService) {
-    this.spielService = spielService;
-    this.spielbrettService = spielbrettService;
+  // So oder besser @PostConstruct?
+  static {
+    freiePositionen.addAll(asList(startpositionen));
   }
 
-  @PostConstruct
-  public void starteSpiel() {
-//    final Spiel spiel = spielService.erzeugeSpiel();
-//    while (!spiel.isBeendet()) {
-//      spielService.naechsteRunde(spiel);
-//    }
+  public StartPosition zieheFreieStartPosition() {
+    assert freiePositionen.size() > 0 :
+        "Es existiert keine freie StartPosition mehr! Es können maximal " + startpositionen.length +
+            " Startpositionen gezogen werden.";
+    return new StartPosition(
+        freiePositionen.remove((int) (Math.random() * freiePositionen.size())));
   }
 
 }

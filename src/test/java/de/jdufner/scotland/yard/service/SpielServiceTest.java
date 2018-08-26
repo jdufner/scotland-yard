@@ -19,50 +19,64 @@
 
 package de.jdufner.scotland.yard.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.jdufner.scotland.yard.model.spiel.Spiel;
-import de.jdufner.scotland.yard.model.spieler.Detektiv;
-import de.jdufner.scotland.yard.model.zug.Zug;
+import de.jdufner.scotland.yard.common.DetectiveService;
+import de.jdufner.scotland.yard.common.MrxService;
+import de.jdufner.scotland.yard.common.Tickets;
+import de.jdufner.scotland.yard.model.position.StartPosition;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 
 /**
- * @author Jürgen DUfner
+ * @author Jürgen Dufner
  * @since 1.0
  */
 @RunWith(MockitoJUnitRunner.class)
-public class DetektivServiceTest {
+public class SpielServiceTest {
 
+  @Spy
   @InjectMocks
-  private DetektivService detektivService;
+  private SpielService spielService;
 
-  @Mock
-  private SpielbrettService spielbrettService;
   @Mock
   private StartPositionService startPositionService;
+  @Mock
+  private StartTicketService startTicketService;
+  @Mock
+  private MrxService mrxService;
+  @Mock
+  private DetectiveService detectiveService;
 
   @Test
-  public void test() {
+  public void whenErzeugeMrx_expectStartPostitionWirdGesetzt() {
     // arrange
-    Spiel spiel = mock(Spiel.class);
-    when(spiel.getAktuelleRunde()).thenReturn(1);
+    StartPosition startPosition = new StartPosition(1);
+    when(startPositionService.zieheFreieStartPosition()).thenReturn(startPosition);
 
     // act
-    Zug zug =
-        detektivService.ermittleNächstenZug(spiel, mock(Detektiv.class));
+    spielService.erzeugeSpiel();
 
     // assert
-    assertThat(zug).isNotNull();
-    verify(spielbrettService).findeWegZuUndergroundInAnzahlZuegen(any(Detektiv.class), anyInt());
+    verify(mrxService).initialize(startPosition, null);
+  }
+
+  @Test
+  public void whenErzeugeMrx_expectTicketsWerdenGesetzt() {
+    // arrange
+    Tickets tickets = new Tickets();
+    when(startTicketService.getMrxTickets()).thenReturn(tickets);
+
+    // act
+    spielService.erzeugeSpiel();
+
+    // assert
+    verify(mrxService).initialize(null, tickets);
   }
 
 }

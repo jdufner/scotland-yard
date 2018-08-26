@@ -1,7 +1,7 @@
 package de.jdufner.scotland.yard.model.zug;
 
 import de.jdufner.scotland.yard.model.position.Position;
-import de.jdufner.scotland.yard.model.tickets.Ticket;
+import de.jdufner.scotland.yard.common.Ticket;
 
 /**
  * @author Jürgen Dufner

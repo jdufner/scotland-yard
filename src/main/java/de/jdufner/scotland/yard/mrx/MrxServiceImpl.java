@@ -17,16 +17,23 @@
  *
  */
 
-package de.jdufner.scotland.yard.model.position;
+package de.jdufner.scotland.yard.mrx;
+
+import de.jdufner.scotland.yard.common.MrxService;
+import de.jdufner.scotland.yard.common.Tickets;
+import de.jdufner.scotland.yard.model.position.Position;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class Startposition extends Position {
+@Service
+public class MrxServiceImpl implements MrxService {
 
-  public Startposition(int position) {
-    super(position);
+  @Override
+  public void initialize(final Position position, final Tickets tickets) {
+
   }
 
 }

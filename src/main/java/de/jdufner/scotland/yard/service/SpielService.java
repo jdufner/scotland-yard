@@ -19,10 +19,8 @@
 
 package de.jdufner.scotland.yard.service;
 
-import de.jdufner.scotland.yard.model.spiel.Spiel;
-import de.jdufner.scotland.yard.model.spieler.Detektiv;
-import de.jdufner.scotland.yard.model.spieler.MrX;
-import java.util.List;
+import de.jdufner.scotland.yard.common.DetectiveService;
+import de.jdufner.scotland.yard.common.MrxService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -39,27 +37,36 @@ public class SpielService {
 
   private static final Logger LOG = LoggerFactory.getLogger(SpielService.class);
 
-  private final MrXService mrXService;
-  private final DetektivService detektivService;
+  private final StartPositionService startPositionService;
+  private final StartTicketService startTicketService;
+  private final MrxService mrxService;
+  private final DetectiveService detectiveService;
 
-  public SpielService(final MrXService mrXService, final DetektivService detektivService) {
-    this.mrXService = mrXService;
-    this.detektivService = detektivService;
+  public SpielService(final StartPositionService startPositionService, final StartTicketService startTicketService, final MrxService mrxService, final DetectiveService detectiveService) {
+    this.startPositionService = startPositionService;
+    this.startTicketService = startTicketService;
+    this.mrxService = mrxService;
+    this.detectiveService = detectiveService;
   }
 
-  public Spiel erzeugeSpiel() {
-    final MrX mrX = mrXService.erzeugeMrX();
-    final List<Detektiv> detektive = detektivService.erzeugeDetektive();
-    Spiel spiel = new Spiel(mrX, detektive);
-    return spiel;
+  public void erzeugeSpiel() {
+    mrxService.initialize(startPositionService.zieheFreieStartPosition(), startTicketService.getMrxTickets());
+    detectiveService.initialize(startPositionService.zieheFreieStartPosition(), startTicketService.getDetectiveTickets());
   }
 
-  public void naechsteRunde(final Spiel spiel) {
-    spiel.naechsteRunde();
-    mrXService.fuehreZugDurch(spiel, spiel.getMrX());
-    spiel.getDetektive().forEach((Detektiv detektiv) -> detektivService.fuehreZugDurch(spiel,
-        detektiv));
-    LOG.debug("Runde {} beendet.", spiel.getAktuelleRunde());
-  }
+//  public Spiel erzeugeSpiel() {
+//    final MrX mrX = mrXService.erzeugeMrX();
+//    final List<Detektiv> detektive = detektivService.erzeugeDetektive();
+//    Spiel spiel = new Spiel(mrX, detektive);
+//    return spiel;
+//  }
+
+//  public void naechsteRunde(final Spiel spiel) {
+//    spiel.naechsteRunde();
+//    mrXService.fuehreZugDurch(spiel, spiel.getMrX());
+//    spiel.getDetektive().forEach((Detektiv detektiv) -> detektivService.fuehreZugDurch(spiel,
+//        detektiv));
+//    LOG.debug("Runde {} beendet.", spiel.getAktuelleRunde());
+//  }
 
 }

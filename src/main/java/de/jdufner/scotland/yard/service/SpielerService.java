@@ -36,12 +36,12 @@ public abstract class SpielerService<T extends Spieler> {
   private static final Logger LOG = LoggerFactory.getLogger(SpielerService.class);
 
   protected final SpielbrettService spielbrettService;
-  protected final StartpositionService startpositionService;
+  protected final StartPositionService startPositionService;
 
   public SpielerService(final SpielbrettService spielbrettService,
-                        final StartpositionService startpositionService) {
+                        final StartPositionService startPositionService) {
     this.spielbrettService = spielbrettService;
-    this.startpositionService = startpositionService;
+    this.startPositionService = startPositionService;
   }
 
   public abstract T erzeugeSpieler();

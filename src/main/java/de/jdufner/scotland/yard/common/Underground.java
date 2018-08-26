@@ -17,7 +17,7 @@
  *
  */
 
-package de.jdufner.scotland.yard.model.tickets;
+package de.jdufner.scotland.yard.common;
 
 /**
  * @author Jürgen Dufner

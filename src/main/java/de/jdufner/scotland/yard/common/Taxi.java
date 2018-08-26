@@ -17,36 +17,21 @@
  *
  */
 
-package de.jdufner.scotland.yard.model.tickets;
+package de.jdufner.scotland.yard.common;
 
 /**
- * Superklasse für alle Ticket: Taxi, Bus, Underground und Blackticket.
- *
- * Soll die Anzahl der Tickets durch Instanzen dargestellt werden oder durch einen Zähler? Im
- * Moment entscheide ich mich mal für einen Zähler. Mal schauen wir gut das klappt.
- *
  * @author Jürgen Dufner
  * @since 1.0
  */
-public abstract class Ticket {
+public class Taxi extends Ticket {
 
-  private int anzahl;
-
-  Ticket(final int anzahl) {
-    this.anzahl = anzahl;
+  public Taxi(final int anzahl) {
+    super(anzahl);
   }
 
-  public int getAnzahl() {
-    return anzahl;
-  }
-
-  public void verbrauche(final Ticket ticket) {
-    if (this.getClass().equals(ticket.getClass())) {
-      anzahl -= ticket.anzahl;
-      if (anzahl < 0) {
-        throw new RuntimeException();
-      }
-    }
+  @Override
+  public String toString() {
+    return "Taxi: " + getAnzahl();
   }
 
 }

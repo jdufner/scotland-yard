@@ -47,7 +47,7 @@ public class SpielerServiceTest {
   @Mock
   private SpielbrettService spielbrettService;
   @Mock
-  private StartpositionService startpositionService;
+  private StartPositionService startPositionService;
 
   @Test
   public void test() {
@@ -64,8 +64,8 @@ public class SpielerServiceTest {
   private static class TestSpielerService extends SpielerService {
 
     public TestSpielerService(final SpielbrettService spielbrettService,
-                              final StartpositionService startpositionService) {
-      super(spielbrettService, startpositionService);
+                              final StartPositionService startPositionService) {
+      super(spielbrettService, startPositionService);
     }
 
     @Override

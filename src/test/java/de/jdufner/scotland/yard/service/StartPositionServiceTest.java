@@ -21,28 +21,28 @@ package de.jdufner.scotland.yard.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.jdufner.scotland.yard.model.position.Startposition;
+import de.jdufner.scotland.yard.model.position.StartPosition;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class StartpositionServiceTest {
+public class StartPositionServiceTest {
 
   @InjectMocks
-  private StartpositionService underTest;
+  private StartPositionService underTest;
 
   @Test
   public void testZieheFreieStartposition_whenZweiGezogen_expectZweiUnterschiedliche() {
     // arrange
 
     // act
-    Startposition startposition1 = underTest.zieheFreieStartposition();
-    Startposition startposition2 = underTest.zieheFreieStartposition();
+    StartPosition startPosition1 = underTest.zieheFreieStartPosition();
+    StartPosition startPosition2 = underTest.zieheFreieStartPosition();
 
     // assert
-    assertThat(startposition1).isNotEqualTo(startposition2);
+    assertThat(startPosition1).isNotEqualTo(startPosition2);
   }
 
 }

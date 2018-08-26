@@ -22,24 +22,30 @@ package de.jdufner.scotland.yard.service;
 import de.jdufner.scotland.yard.model.position.Position;
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import de.jdufner.scotland.yard.model.spieler.MrX;
-import de.jdufner.scotland.yard.model.tickets.Taxi;
+import de.jdufner.scotland.yard.common.Taxi;
 import de.jdufner.scotland.yard.model.zug.Zug;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
+ * Dieser Service hat zuviel gemacht: Hier lag das Wissen wie Mr. X erzeugt wird und auch welche Zug
+ * er machen soll, aber das sind zwei getrennte Aufgaben. Der Spielleiter gibt Mr. X eine
+ * StartPosition und die Tickets. Mr. X darf selbst nur festlegen, wohin er zieht und muss die
+ * Tickets dafür abgeben.
+ *
  * @author Jürgen Dufner
  * @since 1.0
  */
 @Service
+@Deprecated
 public class MrXService extends SpielerService<MrX> {
 
   private static final Logger LOG = LoggerFactory.getLogger(MrXService.class);
 
   public MrXService(final SpielbrettService spielbrettService,
-                    final StartpositionService startpositionService) {
-    super(spielbrettService, startpositionService);
+                    final StartPositionService startPositionService) {
+    super(spielbrettService, startPositionService);
   }
 
   @Override
@@ -48,7 +54,7 @@ public class MrXService extends SpielerService<MrX> {
   }
 
   public MrX erzeugeMrX() {
-    return new MrX(startpositionService.zieheFreieStartposition());
+    return new MrX(startPositionService.zieheFreieStartPosition());
   }
 
   @Override

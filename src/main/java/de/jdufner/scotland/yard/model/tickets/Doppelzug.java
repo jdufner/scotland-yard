@@ -19,6 +19,8 @@
 
 package de.jdufner.scotland.yard.model.tickets;
 
+import de.jdufner.scotland.yard.common.Ticket;
+
 /**
  * Ist das überhaupt ein Ticket? Es ist die Erlaubnis in einer Rund zwei Züge machen zu dürfen,
  * aber es gibt kein Verkehrsmittel, das durch diese Klasse repräsentiert wird. Tendenziell fällt

@@ -17,21 +17,16 @@
  *
  */
 
-package de.jdufner.scotland.yard.model.tickets;
+package de.jdufner.scotland.yard.model.position;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class Bus extends Ticket {
+public class StartPosition extends Position {
 
-  public Bus(final int anzahl) {
-    super(anzahl);
-  }
-
-  @Override
-  public String toString() {
-    return "Bus: " + getAnzahl();
+  public StartPosition(int position) {
+    super(position);
   }
 
 }

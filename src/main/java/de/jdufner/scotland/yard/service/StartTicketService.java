@@ -19,37 +19,34 @@
 
 package de.jdufner.scotland.yard.service;
 
-import static java.util.Arrays.asList;
-
-import de.jdufner.scotland.yard.model.position.Startposition;
-import java.util.ArrayList;
-import java.util.List;
+import de.jdufner.scotland.yard.common.BlackTicket;
+import de.jdufner.scotland.yard.common.Bus;
+import de.jdufner.scotland.yard.common.Taxi;
+import de.jdufner.scotland.yard.common.Tickets;
+import de.jdufner.scotland.yard.common.Underground;
 import org.springframework.stereotype.Service;
 
 /**
- * Der Service ist zufallsgesteuert.
- *
  * @author Jürgen Dufner
  * @since 1.0
  */
 @Service
-public class StartpositionService {
+public class StartTicketService {
 
-  private static Integer[] startpositionen = {13, 26, 29, 34, 50, 53, 91, 94, 103, 112, 117,
-      132, 138, 131, 155, 174, 197, 198};
-
-  private static List<Integer> freiePositionen = new ArrayList<>(startpositionen.length);
-
-  static {
-    freiePositionen.addAll(asList(startpositionen));
+  public Tickets getMrxTickets() {
+    Tickets tickets = new Tickets();
+    tickets.add(new Taxi(4));
+    tickets.add(new Bus(3));
+    tickets.add(new Underground(3));
+    tickets.add(new BlackTicket(2));
+    return tickets;
   }
 
-  public Startposition zieheFreieStartposition() {
-    assert freiePositionen.size() > 0 :
-        "Es existiert keine freie Startposition mehr! Es können maximal " + startpositionen.length +
-            " Startpositionen gezogen werden.";
-    return new Startposition(
-        freiePositionen.remove((int) (Math.random() * freiePositionen.size())));
+  public Tickets getDetectiveTickets() {
+    Tickets tickets = new Tickets();
+    tickets.add(new Taxi(10));
+    tickets.add(new Bus(8));
+    tickets.add(new Underground(4));
+    return tickets;
   }
-
 }

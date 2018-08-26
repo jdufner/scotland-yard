@@ -19,7 +19,9 @@
 
 package de.jdufner.scotland.yard.common;
 
-import de.jdufner.scotland.yard.model.tickets.Ticket;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
 
 /**
  * @author Jürgen Dufner
@@ -27,8 +29,30 @@ import de.jdufner.scotland.yard.model.tickets.Ticket;
  */
 public class Tickets {
 
-  public void spend(Ticket ticket) {
+  private final Collection<Ticket> tickets = new HashSet<Ticket>();
 
+  public void add(Ticket ticket) {
+    tickets.add(ticket);
   }
 
+  public int getTaxiTickets() {
+    return getTicketByType(Taxi.class);
+  }
+
+  private int getTicketByType(Class<? extends Ticket> aClass) {
+    Optional<Ticket> optionalTicket = tickets.stream().filter(ticket -> ticket.getClass().equals(aClass)).findFirst();
+    return optionalTicket.isPresent() ? optionalTicket.get().getAnzahl() : 0;
+  }
+
+  public int getBusTickets() {
+    return getTicketByType(Bus.class);
+  }
+
+  public int getUndergroundTickets() {
+    return getTicketByType(Underground.class);
+  }
+
+  public int getBlackTickets() {
+    return getTicketByType(BlackTicket.class);
+  }
 }
