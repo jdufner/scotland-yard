@@ -19,11 +19,7 @@
 
 package de.jdufner.scotland.yard.service;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import de.jdufner.scotland.yard.model.spiel.Spiel;
 import org.junit.Test;
@@ -49,7 +45,7 @@ public class SpielsteuerungServiceTest {
     // arrange
     Spiel spiel = mock(Spiel.class);
 //    when(spielService.erzeugeSpiel()).thenReturn(spiel);
-    when(spiel.isBeendet()).thenReturn(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
+//    when(spiel.isBeendet()).thenReturn(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
 
     // act
     spielsteuerungService.starteSpiel();
