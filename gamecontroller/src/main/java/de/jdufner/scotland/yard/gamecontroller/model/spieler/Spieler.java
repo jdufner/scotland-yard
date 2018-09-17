@@ -70,6 +70,6 @@ public abstract class Spieler {
   protected void verbraucheTickets(final Ticket verbrauchteTickets) {
     tickets.stream()
         //.filter(ticket -> ticket.getClass().equals(verbrauchteTickets.getClass()))
-        .forEach(ticket -> ticket.consume(ticket));
+        .forEach(ticket -> ticket.consume());
   }
 }

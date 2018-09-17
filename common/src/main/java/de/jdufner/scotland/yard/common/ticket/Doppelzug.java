@@ -17,25 +17,38 @@
  *
  */
 
-package de.jdufner.scotland.yard.gamecontroller.model.tickets;
-
-import de.jdufner.scotland.yard.common.ticket.Ticket;
+package de.jdufner.scotland.yard.common.ticket;
 
 /**
- * Ist das überhaupt ein Ticket? Es ist die Erlaubnis in einer Rund zwei Züge machen zu dürfen,
- * aber es gibt kein Verkehrsmittel, das durch diese Klasse repräsentiert wird. Tendenziell fällt
- * diese Klasse wieder weg!
  *
  * @author Jürgen Dufner
  * @since 1.0
- * @deprecated Ist kein Verkehrsmittel, wird durch {@link de.jdufner.scotland.yard.gamecontroller.model.zug.DoppelZug}
- *             ersetzt.
  */
-@Deprecated
 public class Doppelzug extends Ticket {
+
+  private Ticket firstTicket;
+  private Ticket secondTicket;
 
   public Doppelzug(final int anzahl) {
     super(anzahl);
+  }
+
+  public Doppelzug consume(final Ticket firstTicket, final Ticket secondTicket) {
+    if (firstTicket instanceof Doppelzug || secondTicket instanceof Doppelzug) {
+      throw new RuntimeException();
+    }
+    this.firstTicket = firstTicket;
+    this.secondTicket = secondTicket;
+    consume();
+    return this;
+  }
+
+  public Ticket getFirstTicket() {
+    return firstTicket;
+  }
+
+  public Ticket getSecondTicket() {
+    return secondTicket;
   }
 
   @Override

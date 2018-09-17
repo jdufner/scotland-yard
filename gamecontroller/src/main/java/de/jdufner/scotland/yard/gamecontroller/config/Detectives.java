@@ -17,23 +17,16 @@
  *
  */
 
-package de.jdufner.scotland.yard.gamecontroller.mrx;
+package de.jdufner.scotland.yard.gamecontroller.config;
 
-import de.jdufner.scotland.yard.common.MrxService;
-import de.jdufner.scotland.yard.common.Tickets;
-import de.jdufner.scotland.yard.common.position.Position;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-@Service
-public class MrxServiceImpl implements MrxService {
-
-  @Override
-  public void initialize(final Position position, final Tickets tickets) {
-
-  }
-
+@Configuration
+@ComponentScan("de.jdufner.scotland.yard.detectives")
+public class Detectives {
 }

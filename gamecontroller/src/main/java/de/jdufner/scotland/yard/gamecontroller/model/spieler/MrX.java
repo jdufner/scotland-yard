@@ -22,7 +22,7 @@ package de.jdufner.scotland.yard.gamecontroller.model.spieler;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.common.ticket.BlackTicket;
 import de.jdufner.scotland.yard.common.ticket.Bus;
-import de.jdufner.scotland.yard.gamecontroller.model.tickets.Doppelzug;
+import de.jdufner.scotland.yard.common.ticket.Doppelzug;
 import de.jdufner.scotland.yard.common.ticket.Taxi;
 import de.jdufner.scotland.yard.common.ticket.Underground;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;

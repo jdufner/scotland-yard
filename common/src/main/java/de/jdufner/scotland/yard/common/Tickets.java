@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * This is a container for tickets during initialization of the service.
+ *
  * @author Jürgen Dufner
  * @since 1.0
  */

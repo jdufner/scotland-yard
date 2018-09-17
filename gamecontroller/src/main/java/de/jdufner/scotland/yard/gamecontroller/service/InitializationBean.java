@@ -44,8 +44,7 @@ public class InitializationBean {
 
   @PostConstruct
   public void initialize() {
-    LOG.info(new Object() {
-    }.getClass().getEnclosingMethod().getName());
+    LOG.info(new Object() {}.getClass().getEnclosingMethod().getName());
     // TODO: Prüfen ob die TX-Steuerung mit Annotationen gelöst werden kann.
     try (Transaction tx = graphDatabaseService.beginTx()) {
       final Result execute = graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = 1 " +
