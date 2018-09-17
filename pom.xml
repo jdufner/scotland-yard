@@ -7,14 +7,21 @@
   <groupId>de.jdufner.scotland-yard</groupId>
   <artifactId>scotland-yard</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <modules>
+    <module>common</module>
+    <module>gamecontroller</module>
+    <module>mrx</module>
+    <module>detectives</module>
+  </modules>
+  <packaging>pom</packaging>
 
-  <name>sy</name>
+  <name>scotland-yard</name>
   <description>Scotland Yard board game based on Spring Boot and Neo4J</description>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
+    <!-- Update to 2.0.5.RELEASE -->
     <version>2.0.2.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
