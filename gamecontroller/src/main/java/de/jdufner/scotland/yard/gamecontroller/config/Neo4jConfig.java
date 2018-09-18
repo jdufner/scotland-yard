@@ -26,6 +26,7 @@ import java.util.Optional;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.kernel.impl.factory.GraphDatabaseFacade;
 import org.neo4j.server.CommunityBootstrapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,8 +37,20 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Neo4jConfig {
 
-  private static File databaseDirectory = new File("./neo4j-data");
-  private static File configFile = new File("./config/neo4j.conf");
+  @Value("${neo4j.database.directory:./neo4j-data}")
+  private String databaseDirectoryAsString;
+
+  @Value("${neo4j.config.file:./config/neo4j.conf}")
+  private String configFileAsString;
+
+  @Value("${neo4j.dbms.connector.http.address:${neo4j.dbms.connector.http.address:0.0.0.0:7474}}")
+  private String dbmsConnectorHttpAddress;
+
+  @Value("${neo4j.dbms.security.auth_enabled:false}")
+  private String dbmsSecurityAuthEnable;
+
+  @Value("${neo4j.dbms.directories.import:../src/main/resources}")
+  private String dbmsDirectoriesImport;
 
   @Bean
   public GraphDatabaseService graphDatabaseService() {
@@ -48,12 +61,20 @@ public class Neo4jConfig {
   private GraphDatabaseFacade bootstrapGraphDatabase() {
     final CommunityBootstrapper communityBootstrapper = new CommunityBootstrapper();
     final Map<String, String> properties = new HashMap<>();
-    properties.put("dbms.connector.http.address", "0.0.0.0:7474");
-    properties.put("dbms.security.auth_enabled", "false");
-    properties.put("dbms.directories.import", "../src/main/resources");
-    communityBootstrapper.start(databaseDirectory, Optional.of(configFile), properties);
+    properties.put("dbms.connector.http.address", dbmsConnectorHttpAddress);
+    properties.put("dbms.directories.import", dbmsDirectoriesImport);
+    properties.put("dbms.security.auth_enabled", dbmsSecurityAuthEnable);
+    communityBootstrapper.start(getDatabaseDirectory(), Optional.of(getConfigFile()), properties);
     return communityBootstrapper.getServer().getDatabase()
         .getGraph();
+  }
+
+  private File getDatabaseDirectory() {
+    return new File(databaseDirectoryAsString);
+  }
+
+  private File getConfigFile() {
+    return new File(configFileAsString);
   }
 
 }

@@ -28,5 +28,5 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan("de.jdufner.scotland.yard.detectives")
-public class Detectives {
+public class DetectivesConfig {
 }
