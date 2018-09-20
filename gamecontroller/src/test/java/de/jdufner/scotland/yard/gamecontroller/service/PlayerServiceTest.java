@@ -69,11 +69,6 @@ public class PlayerServiceTest {
     }
 
     @Override
-    public Player erzeugeSpieler() {
-      return null;
-    }
-
-    @Override
     protected Zug ermittleNächstenZug(final Game game, final Player player) {
       return null;
     }

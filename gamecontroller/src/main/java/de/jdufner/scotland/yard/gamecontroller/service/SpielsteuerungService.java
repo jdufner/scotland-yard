@@ -47,7 +47,7 @@ public class SpielsteuerungService {
   public void starteSpiel() {
 //    final Game spiel = spielService.initializeGame();
 //    while (!spiel.isFinished()) {
-//      spielService.naechsteRunde(spiel);
+//      spielService.nextLap(spiel);
 //    }
   }
 

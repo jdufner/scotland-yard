@@ -60,7 +60,7 @@ public class GameServiceCT {
 
     // arrange
 //    assertThat(spiel.isFinished()).isFalse();
-//    assertThat(spiel.getSpieler().size()).isEqualTo(5);
+//    assertThat(spiel.getPlayers().size()).isEqualTo(5);
   }
 
   @Test
@@ -77,7 +77,7 @@ public class GameServiceCT {
 
     // arrange
 //    assertThat(spiel.isFinished()).isTrue();
-//    assertThat(spiel.getSpieler().size()).isEqualTo(5);
+//    assertThat(spiel.getPlayers().size()).isEqualTo(5);
   }
 
 }

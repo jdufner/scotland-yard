@@ -29,6 +29,7 @@ import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.StartPosition;
+import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -57,21 +58,21 @@ public class GameServiceTest {
   private DetectiveService detectiveService;
 
   @Test
-  public void whenSetUpGame_expectStartPostitionIsSet() {
+  public void whenInitializeGame_expectStartPostitionIsSet() {
     // arrange
     when(startPositionService.zieheFreieStartPosition()).thenReturn(mock(StartPosition.class));
 
     // act
-    gameService.initializeGame();
+    Game game = gameService.initializeGame();
 
     // assert
-    verify(startPositionService, times(2)).zieheFreieStartPosition();
+    verify(startPositionService, times(5)).zieheFreieStartPosition();
     verify(mrxService).initialize(any(), any());
-    verify(detectiveService).initialize(any(), any());
+    verify(detectiveService, times(4)).initialize(any(), any());
   }
 
   @Test
-  public void whenSetUpGame_expectTicketsAreSet() {
+  public void whenInitializeGame_expectTicketsAreSet() {
     // arrange
     Tickets mrxTickets = new Tickets();
     when(startTicketService.getMrxTickets()).thenReturn(mrxTickets);
@@ -83,9 +84,9 @@ public class GameServiceTest {
 
     // assert
     verify(startTicketService).getMrxTickets();
-    verify(startTicketService).getDetectiveTickets();
+    verify(startTicketService, times(4)).getDetectiveTickets();
     verify(mrxService).initialize(null, mrxTickets);
-    verify(detectiveService).initialize(null, detectiveTickets);
+    verify(detectiveService, times(4)).initialize(null, detectiveTickets);
   }
 
 }

@@ -235,7 +235,7 @@ public class SpielbrettService {
   public void aktualisiereSpielbrett(final Game game) {
     LOG.info(new Object() {
     }.getClass().getEnclosingMethod().getName());
-    verschiebeSpieler(game.getSpieler());
+    verschiebeSpieler(game.getPlayers());
   }
 
 }

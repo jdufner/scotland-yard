@@ -45,7 +45,7 @@ public class GameTest {
     game = new Game(mrX, detectives);
 
     // assert
-    assertThat(game.getSpieler()).containsExactly(mrX, detectives.get(0), detectives
+    assertThat(game.getPlayers()).containsExactly(mrX, detectives.get(0), detectives
         .get(1), detectives.get(2), detectives.get(3));
     assertThat(game.isFinished()).isFalse();
     assertThat(game.getCurrentLap()).isEqualTo(0);
@@ -61,7 +61,7 @@ public class GameTest {
 
     // act
     while (!game.isFinished()) {
-      game.naechsteRunde();
+      game.nextLap();
     }
 
     // assert

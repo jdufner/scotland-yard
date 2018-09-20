@@ -51,7 +51,7 @@ public class SpielsteuerungServiceTest {
     spielsteuerungService.starteSpiel();
 
     // assert
-//    verify(spielService, times(2)).naechsteRunde(any(Game.class));
+//    verify(spielService, times(2)).nextLap(any(Game.class));
   }
 
 }

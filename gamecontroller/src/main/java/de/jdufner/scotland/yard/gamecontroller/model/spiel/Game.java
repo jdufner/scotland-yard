@@ -28,8 +28,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Das Game hält Status der Figuren, der Runden etc. Die Transitionen werden von einem Service
- * ausgelöst.
+ * The Game represents the status of the board.
+ *
+ * It maintain the status of each {@link Player}, count the laps, checks the if the move was proper
+ * and hands over the tickets from the {@link Detective} to {@link Mrx}. It also check after each
+ * move whether the game is finished, that imply that all laps are over or one detective is on the
+ * same position as Mr. X.
  *
  * @author Jürgen Dufner
  * @since 1.0
@@ -41,33 +45,25 @@ public class Game {
   private static final int TOTAL_LAPS = 21;
 
   private final Mrx mrX;
-  private final List<Detective> detektive;
+  private final List<Detective> detektives;
   private final List<Player> players = new ArrayList<>();
 
   private int currentLap;
 
   private boolean finished = false;
 
-  public Game(final Mrx mrX, final List<Detective> detektive) {
+  public Game(final Mrx mrX, final List<Detective> detektives) {
     this.mrX = mrX;
-    this.detektive = detektive;
+    this.detektives = detektives;
     players.add(mrX);
-    players.addAll(detektive);
+    players.addAll(detektives);
   }
 
-  public Mrx getMrX() {
-    return mrX;
-  }
-
-  public List<Detective> getDetektive() {
-    return detektive;
-  }
-
-  public List<Player> getSpieler() {
+  public List<Player> getPlayers() {
     return players;
   }
 
-  public int naechsteRunde() {
+  public int nextLap() {
     return currentLap++;
   }
 
@@ -76,7 +72,7 @@ public class Game {
   }
 
   private boolean habenDetektiveMrXGefangen() {
-    for (Detective detective : detektive) {
+    for (Detective detective : detektives) {
       if (detective.currentPosition().equals(mrX.currentPosition())) {
         return true;
       }

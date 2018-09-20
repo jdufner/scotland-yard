@@ -35,11 +35,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
- * Der {@link GameService} erzeugt die Player, fragt sie nach ihren Zügen und prüft, ob es ein
- * erlaubter Zug ist.
+ * The {@link GameService} creates a {@link Game} containing the {@link de.jdufner.scotland.yard.gamecontroller.model.spieler.Player},
+ * in detail one {@link Mrx} and up to four {@link Detective}s.
+ *
+ * Each player has a {@link StartPosition} and a certain number of {@link de.jdufner.scotland.yard.common.ticket.Ticket}s.
  *
  * @author Jürgen Dufner
  * @since 1.0
+ * @see StartPositionService
+ * @see StartTicketService
  */
 @Service
 public class GameService {
@@ -51,7 +55,10 @@ public class GameService {
   private final MrxService mrxService;
   private final DetectiveService detectiveService;
 
-  public GameService(final StartPositionService startPositionService, final StartTicketService startTicketService, final MrxService mrxService, final DetectiveService detectiveService) {
+  public GameService(final StartPositionService startPositionService,
+                     final StartTicketService startTicketService,
+                     final MrxService mrxService,
+                     final DetectiveService detectiveService) {
     this.startPositionService = startPositionService;
     this.startTicketService = startTicketService;
     this.mrxService = mrxService;
@@ -73,9 +80,10 @@ public class GameService {
 
   private Detective initializeDetective(final int number) {
     final StartPosition startPosition = startPositionService.zieheFreieStartPosition();
-    final Tickets detectiveTickets = startTicketService.getMrxTickets();
+    final Tickets detectiveTickets = startTicketService.getDetectiveTickets();
     final Detective detective = new Detective(number, startPosition, detectiveTickets);
     detectiveService.initialize(startPosition, detectiveTickets);
+    // TODO [jdufner, 2018-09-20] When and how will be set the players on the board?
     return detective;
   }
 
@@ -84,11 +92,12 @@ public class GameService {
     final Tickets mrxTickets = startTicketService.getMrxTickets();
     final Mrx mrx = new Mrx(startPosition, mrxTickets);
     mrxService.initialize(startPosition, mrxTickets);
+    // TODO [jdufner, 2018-09-20] When and how will be set the players on the board?
     return mrx;
   }
 
-//  public void naechsteRunde(final Game spiel) {
-//    spiel.naechsteRunde();
+//  public void nextLap(final Game spiel) {
+//    spiel.nextLap();
 //    mrXService.fuehreZugDurch(spiel, spiel.getMrX());
 //    spiel.getDetektive().forEach((Detective detektiv) -> detektivService.fuehreZugDurch(spiel,
 //        detektiv));
