@@ -19,29 +19,21 @@
 
 package de.jdufner.scotland.yard.gamecontroller.model.spieler;
 
+import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.StartPosition;
-import de.jdufner.scotland.yard.common.ticket.BlackTicket;
-import de.jdufner.scotland.yard.common.ticket.Bus;
-import de.jdufner.scotland.yard.common.ticket.Doppelzug;
-import de.jdufner.scotland.yard.common.ticket.Taxi;
-import de.jdufner.scotland.yard.common.ticket.Underground;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class MrX extends Spieler {
+public class Mrx extends Player {
 
+  // TODO [jdufner, 2018-09-19] Is this the right place?
   private static final int[] auftauchen = {3, 8, 13, 18};
 
-  public MrX(final StartPosition startPosition) {
-    super(startPosition);
-    tickets.add(new Taxi(4));
-    tickets.add(new Bus(3));
-    tickets.add(new Underground(3));
-    tickets.add(new Doppelzug(2));
-    tickets.add(new BlackTicket(2));
+  public Mrx(final StartPosition startPosition, final Tickets tickets) {
+    super(startPosition, tickets);
   }
 
   @Override
@@ -52,18 +44,18 @@ public class MrX extends Spieler {
   @Override
   public void ziehe(final Zug zug) {
     zieheAuf(zug.getZiel());
-    verbraucheTickets(zug.getTicket());
+    consumeTicket(zug.getTicket());
   }
 
   public static class Builder {
 
-    private MrX mrX;
+    private Mrx mrX;
 
     public Builder(final int startpositionAsInt) {
-      mrX = new MrX(new StartPosition(startpositionAsInt));
+      mrX = new Mrx(new StartPosition(startpositionAsInt), new Tickets());
     }
 
-    public MrX build() {
+    public Mrx build() {
       return mrX;
     }
 

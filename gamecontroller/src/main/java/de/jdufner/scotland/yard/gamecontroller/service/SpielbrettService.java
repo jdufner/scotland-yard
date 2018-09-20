@@ -20,9 +20,9 @@
 package de.jdufner.scotland.yard.gamecontroller.service;
 
 import de.jdufner.scotland.yard.common.position.Position;
-import de.jdufner.scotland.yard.gamecontroller.model.spiel.Spiel;
+import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Weg;
-import de.jdufner.scotland.yard.gamecontroller.model.spieler.Spieler;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Player;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -55,43 +55,43 @@ public class SpielbrettService {
     this.graphDatabaseService = graphDatabaseService;
   }
 
-  public void verschiebeSpieler(final Spieler spieler) {
-    entferneSpieler(spieler);
-    setzeSpieler(spieler);
+  public void verschiebeSpieler(final Player player) {
+    entferneSpieler(player);
+    setzeSpieler(player);
   }
 
-  public void verschiebeSpieler(final Collection<Spieler> spielers) {
-    entferneSpieler(spielers);
-    setzeSpieler(spielers);
+  public void verschiebeSpieler(final Collection<Player> players) {
+    entferneSpieler(players);
+    setzeSpieler(players);
   }
 
-  private void entferneSpieler(final Collection<Spieler> spielers) {
-    spielers.forEach(this::entferneSpieler);
+  private void entferneSpieler(final Collection<Player> players) {
+    players.forEach(this::entferneSpieler);
   }
 
-  private void entferneSpieler(final Spieler spieler) {
-    LOG.debug("Entferne Label {} an Position {}.", spieler, spieler.letztePosition().getPosition());
+  private void entferneSpieler(final Player player) {
+    LOG.debug("Entferne Label {} an Position {}.", player, player.currentPosition().getPosition());
     try (final Transaction tx = graphDatabaseService.beginTx()) {
-      graphDatabaseService.execute("MATCH (n:" + spieler.name() + ") WHERE n.number = " +
-          spieler.letztePosition().getPosition() + " REMOVE n:" + spieler.name());
+      graphDatabaseService.execute("MATCH (n:" + player.name() + ") WHERE n.number = " +
+          player.currentPosition().getPosition() + " REMOVE n:" + player.name());
       tx.success();
     }
   }
 
-  private void setzeSpieler(final Collection<Spieler> spielers) {
-    spielers.forEach(this::setzeSpieler);
+  private void setzeSpieler(final Collection<Player> players) {
+    players.forEach(this::setzeSpieler);
   }
 
-  private void setzeSpieler(final Spieler spieler) {
-    LOG.debug("Setze Label {} an Position {}.", spieler, spieler.letztePosition().getPosition());
+  private void setzeSpieler(final Player player) {
+    LOG.debug("Setze Label {} an Position {}.", player, player.currentPosition().getPosition());
     try (final Transaction tx = graphDatabaseService.beginTx()) {
-      graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = " + spieler.letztePosition
-          ().getPosition() + " SET n:" + spieler.name());
+      graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = " + player.currentPosition
+          ().getPosition() + " SET n:" + player.name());
       tx.success();
     }
   }
 
-  public void ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten(final Spiel spiel) {
+  public void ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten(final Game game) {
     try (final Transaction tx = graphDatabaseService.beginTx()) {
       for (int n = 1; n <= 198; n++) {
         for (int m = n + 1; m <= 199; m++) {
@@ -125,7 +125,7 @@ public class SpielbrettService {
     Map<Position, Optional<Weg>> nachbar2KuerzesteDistanzZumNaechstenDetektiv = wege.stream()
         .collect(Collectors.groupingBy(Weg::getStart,
             Collectors.minBy(Comparator.comparing(Weg::getLaenge))));
-    LOG.debug("Nachbar mit jeweils kürzester Distanz zu nächsten Detektiv");
+    LOG.debug("Nachbar mit jeweils kürzester Distanz zu nächsten Detective");
     LOG.debug("{}", nachbar2KuerzesteDistanzZumNaechstenDetektiv);
 
     Optional<Weg> weg = nachbar2KuerzesteDistanzZumNaechstenDetektiv.values().stream()
@@ -166,7 +166,7 @@ public class SpielbrettService {
         Integer.parseInt(row.get(laenge).toString()));
   }
 
-  public Position findeWegZuUndergroundInAnzahlZuegen(final Spieler spieler,
+  public Position findeWegZuUndergroundInAnzahlZuegen(final Player player,
                                                       final int anzahlZuege) {
     assert anzahlZuege > 0 : "Anzahl der Züge muss größer als 0 sein.";
     assert anzahlZuege < 3 : "Anzahl der Züge muss kleiner als 3 sein.";
@@ -174,7 +174,7 @@ public class SpielbrettService {
     final List<Weg> wege = new ArrayList<>();
     try (final Transaction tx = graphDatabaseService.beginTx()) {
       final Result result = graphDatabaseService.execute("MATCH (n:Node)-[]-(m:Node) " +
-          "WHERE n.number=" + spieler.letztePosition().getPosition() + " " +
+          "WHERE n.number=" + player.currentPosition().getPosition() + " " +
           "RETURN n.number, m.number, 1 as laenge");
       while (result.hasNext()) {
         wege.add(buildWeg(result.next(), "n.number", "m.number", "laenge"));
@@ -187,7 +187,7 @@ public class SpielbrettService {
     return wege.get((int) (Math.random() * wege.size())).getEnde();
   }
 
-  public Position findeKuerzestenWegZuMrX(final Spieler spieler,
+  public Position findeKuerzestenWegZuMrX(final Player player,
                                           final Position letzteBekanntePositionVonMrX,
                                           final int anzahlVergangeneRundenSeitSichMrXGezeigthat) {
     assert anzahlVergangeneRundenSeitSichMrXGezeigthat >= 0 :
@@ -201,7 +201,7 @@ public class SpielbrettService {
 //    final List<Weg> wege = new ArrayList<>();
 //    try (final Transaction tx = graphDatabaseService.beginTx()) {
 //      final Result result = graphDatabaseService.execute("MATCH (n:Node)-[]-(m:Node) " +
-//          "WHERE n.number=" + spieler.letztePosition().getPosition() + " " +
+//          "WHERE n.number=" + player.currentPosition().getPosition() + " " +
 //          "RETURN n.number, m.number, 1 as laenge");
 //      while (result.hasNext()) {
 //        wege.add(buildWeg(result.next(), "n.number", "m.number", "laenge"));
@@ -232,10 +232,10 @@ public class SpielbrettService {
     return null;
   }
 
-  public void aktualisiereSpielbrett(final Spiel spiel) {
+  public void aktualisiereSpielbrett(final Game game) {
     LOG.info(new Object() {
     }.getClass().getEnclosingMethod().getName());
-    verschiebeSpieler(spiel.getSpieler());
+    verschiebeSpieler(game.getSpieler());
   }
 
 }

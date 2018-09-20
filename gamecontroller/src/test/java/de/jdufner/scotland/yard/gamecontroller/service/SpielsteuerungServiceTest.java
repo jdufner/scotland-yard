@@ -21,7 +21,7 @@ package de.jdufner.scotland.yard.gamecontroller.service;
 
 import static org.mockito.Mockito.mock;
 
-import de.jdufner.scotland.yard.gamecontroller.model.spiel.Spiel;
+import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -35,7 +35,7 @@ public class SpielsteuerungServiceTest {
   private SpielsteuerungService spielsteuerungService;
 
   @Mock
-  private SpielService spielService;
+  private GameService gameService;
 
   @Mock
   private SpielbrettService spielbrettService;
@@ -43,15 +43,15 @@ public class SpielsteuerungServiceTest {
   @Test
   public void whenStarteSpiel_expectSpielEndetNachDreiRunden() {
     // arrange
-    Spiel spiel = mock(Spiel.class);
-//    when(spielService.erzeugeSpiel()).thenReturn(spiel);
-//    when(spiel.isBeendet()).thenReturn(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
+    Game game = mock(Game.class);
+//    when(spielService.initializeGame()).thenReturn(game);
+//    when(game.isFinished()).thenReturn(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
 
     // act
     spielsteuerungService.starteSpiel();
 
     // assert
-//    verify(spielService, times(2)).naechsteRunde(any(Spiel.class));
+//    verify(spielService, times(2)).naechsteRunde(any(Game.class));
   }
 
 }

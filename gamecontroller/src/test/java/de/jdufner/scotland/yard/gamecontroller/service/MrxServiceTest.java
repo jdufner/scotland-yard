@@ -23,8 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import de.jdufner.scotland.yard.gamecontroller.model.spiel.Spiel;
-import de.jdufner.scotland.yard.gamecontroller.model.spieler.MrX;
+import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +37,7 @@ import org.mockito.junit.MockitoJUnitRunner;
  * @since 1.0
  */
 @RunWith(MockitoJUnitRunner.class)
-public class MrXServiceTest {
+public class MrxServiceTest {
 
   @InjectMocks
   private MrXService mrXService;
@@ -53,7 +53,7 @@ public class MrXServiceTest {
 
     // act
     Zug zug =
-        mrXService.ermittleNächstenZug(mock(Spiel.class), mock(MrX.class));
+        mrXService.ermittleNächstenZug(mock(Game.class), mock(Mrx.class));
 
     // assert
     assertThat(zug).isNotNull();

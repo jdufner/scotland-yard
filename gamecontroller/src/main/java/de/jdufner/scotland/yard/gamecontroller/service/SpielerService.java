@@ -19,8 +19,8 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
-import de.jdufner.scotland.yard.gamecontroller.model.spiel.Spiel;
-import de.jdufner.scotland.yard.gamecontroller.model.spieler.Spieler;
+import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Player;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * @author Jürgen Dufner
  * @since 1.0
  */
-public abstract class SpielerService<T extends Spieler> {
+public abstract class SpielerService<T extends Player> {
 
   private static final Logger LOG = LoggerFactory.getLogger(SpielerService.class);
 
@@ -44,24 +44,22 @@ public abstract class SpielerService<T extends Spieler> {
     this.startPositionService = startPositionService;
   }
 
-  public abstract T erzeugeSpieler();
-
   /**
    * Template-Method für die Durchführung eines Zuges.
    *
-   * @param spiel
+   * @param game
    * @param spieler
    */
-  public void fuehreZugDurch(final Spiel spiel, final T spieler) {
-    LOG.debug("Führe Zug {} für Spieler {} durch.", spiel.getAktuelleRunde(), spieler);
-    Zug zug = ermittleNächstenZug(spiel, spieler);
+  public void fuehreZugDurch(final Game game, final T spieler) {
+    LOG.debug("Führe Zug {} für Player {} durch.", game.getCurrentLap(), spieler);
+    Zug zug = ermittleNächstenZug(game, spieler);
     spieler.ziehe(zug);
     spielbrettService.verschiebeSpieler(spieler);
-    // MrX soll sich zeigen, wenn es ein relevanter Spielzug ist
+    // Mrx soll sich zeigen, wenn es ein relevanter Spielzug ist
   }
 
   protected abstract Zug ermittleNächstenZug(
-      final Spiel spiel, final T spieler);
+      final Game game, final T spieler);
 
   Class getTypeOf() {
     final Type genericInterface = this.getClass().getGenericSuperclass();

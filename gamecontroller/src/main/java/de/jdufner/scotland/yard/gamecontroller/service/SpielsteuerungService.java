@@ -35,18 +35,18 @@ public class SpielsteuerungService {
 
   private static final Logger LOG = LoggerFactory.getLogger(SpielsteuerungService.class);
 
-  private final SpielService spielService;
+  private final GameService gameService;
   private final SpielbrettService spielbrettService;
 
-  public SpielsteuerungService(final SpielService spielService, final SpielbrettService spielbrettService) {
-    this.spielService = spielService;
+  public SpielsteuerungService(final GameService gameService, final SpielbrettService spielbrettService) {
+    this.gameService = gameService;
     this.spielbrettService = spielbrettService;
   }
 
   @PostConstruct
   public void starteSpiel() {
-//    final Spiel spiel = spielService.erzeugeSpiel();
-//    while (!spiel.isBeendet()) {
+//    final Game spiel = spielService.initializeGame();
+//    while (!spiel.isFinished()) {
 //      spielService.naechsteRunde(spiel);
 //    }
   }

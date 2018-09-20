@@ -21,9 +21,9 @@ package de.jdufner.scotland.yard.gamecontroller.spiel;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.jdufner.scotland.yard.gamecontroller.model.spiel.Spiel;
-import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detektiv;
-import de.jdufner.scotland.yard.gamecontroller.model.spieler.MrX;
+import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
 import java.util.List;
 import org.junit.Test;
 
@@ -31,42 +31,42 @@ import org.junit.Test;
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class SpielTest {
+public class GameTest {
 
-  private Spiel spiel;
+  private Game game;
 
   @Test
   public void testConstructor() {
     // arrange
-    final MrX mrX = new MrX.Builder(13).build();
-    final List<Detektiv> detektivs = new Detektiv.Builder(26, 29, 34, 50).build();
+    final Mrx mrX = new Mrx.Builder(13).build();
+    final List<Detective> detectives = new Detective.Builder(26, 29, 34, 50).build();
 
     // act
-    spiel = new Spiel(mrX, detektivs);
+    game = new Game(mrX, detectives);
 
     // assert
-    assertThat(spiel.getSpieler()).containsExactly(mrX, detektivs.get(0), detektivs
-        .get(1), detektivs.get(2), detektivs.get(3));
-    assertThat(spiel.isBeendet()).isFalse();
-    assertThat(spiel.getAktuelleRunde()).isEqualTo(0);
+    assertThat(game.getSpieler()).containsExactly(mrX, detectives.get(0), detectives
+        .get(1), detectives.get(2), detectives.get(3));
+    assertThat(game.isFinished()).isFalse();
+    assertThat(game.getCurrentLap()).isEqualTo(0);
   }
 
   @Test
   public void
   testIsBeendet_whenEinundzwanzigRundenGespielt_expectSpielBeendet() {
     // arrange
-    final MrX mrX = new MrX.Builder(13).build();
-    final List<Detektiv> detektivs = new Detektiv.Builder(26, 29, 34, 50).build();
-    spiel = new Spiel(mrX, detektivs);
+    final Mrx mrX = new Mrx.Builder(13).build();
+    final List<Detective> detectives = new Detective.Builder(26, 29, 34, 50).build();
+    game = new Game(mrX, detectives);
 
     // act
-    while (!spiel.isBeendet()) {
-      spiel.naechsteRunde();
+    while (!game.isFinished()) {
+      game.naechsteRunde();
     }
 
     // assert
-    assertThat(spiel.isBeendet()).isTrue();
-    assertThat(spiel.getAktuelleRunde()).isEqualTo(21);
+    assertThat(game.isFinished()).isTrue();
+    assertThat(game.getCurrentLap()).isEqualTo(21);
   }
 
 }

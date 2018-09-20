@@ -21,6 +21,7 @@ package de.jdufner.scotland.yard.gamecontroller.service;
 
 import de.jdufner.scotland.yard.common.ticket.BlackTicket;
 import de.jdufner.scotland.yard.common.ticket.Bus;
+import de.jdufner.scotland.yard.common.ticket.Doppelzug;
 import de.jdufner.scotland.yard.common.ticket.Taxi;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.ticket.Underground;
@@ -39,6 +40,7 @@ public class StartTicketService {
     tickets.add(new Bus(3));
     tickets.add(new Underground(3));
     tickets.add(new BlackTicket(2));
+    tickets.add(new Doppelzug(2));
     return tickets;
   }
 

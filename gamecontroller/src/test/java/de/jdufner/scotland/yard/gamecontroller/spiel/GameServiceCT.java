@@ -19,12 +19,11 @@
 
 package de.jdufner.scotland.yard.gamecontroller.spiel;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import de.jdufner.scotland.yard.common.position.StartPosition;
-import de.jdufner.scotland.yard.gamecontroller.service.SpielService;
+import de.jdufner.scotland.yard.gamecontroller.service.GameService;
 import de.jdufner.scotland.yard.gamecontroller.service.SpielbrettService;
 import de.jdufner.scotland.yard.gamecontroller.service.StartPositionService;
 import org.junit.Before;
@@ -34,9 +33,9 @@ import org.junit.Test;
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class SpielServiceCT {
+public class GameServiceCT {
 
-  private SpielService spielService;
+  private GameService gameService;
   private SpielbrettService spielbrettService;
   private StartPositionService startPositionService;
 
@@ -57,10 +56,10 @@ public class SpielServiceCT {
         .thenReturn(new StartPosition(5));
 
     // act
-//    Spiel spiel = spielService.erzeugeSpiel();
+//    Game spiel = spielService.initializeGame();
 
     // arrange
-//    assertThat(spiel.isBeendet()).isFalse();
+//    assertThat(spiel.isFinished()).isFalse();
 //    assertThat(spiel.getSpieler().size()).isEqualTo(5);
   }
 
@@ -74,10 +73,10 @@ public class SpielServiceCT {
         .thenReturn(new StartPosition(4));
 
     // act
-//    Spiel spiel = spielService.erzeugeSpiel();
+//    Game spiel = spielService.initializeGame();
 
     // arrange
-//    assertThat(spiel.isBeendet()).isTrue();
+//    assertThat(spiel.isFinished()).isTrue();
 //    assertThat(spiel.getSpieler().size()).isEqualTo(5);
   }
 

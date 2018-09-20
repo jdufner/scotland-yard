@@ -23,8 +23,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import de.jdufner.scotland.yard.gamecontroller.model.spiel.Spiel;
-import de.jdufner.scotland.yard.gamecontroller.model.spieler.Spieler;
+import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Player;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,11 +38,11 @@ import org.mockito.runners.MockitoJUnitRunner;
  * @since 1.0
  */
 @RunWith(MockitoJUnitRunner.class)
-public class SpielerServiceTest {
+public class PlayerServiceTest {
 
   @InjectMocks
   @Spy
-  private TestSpielerService spielerService;
+  private TestPlayerService spielerService;
 
   @Mock
   private SpielbrettService spielbrettService;
@@ -54,27 +54,27 @@ public class SpielerServiceTest {
     // arrange
 
     // act
-    spielerService.fuehreZugDurch(mock(Spiel.class), mock(Spieler.class));
+    spielerService.fuehreZugDurch(mock(Game.class), mock(Player.class));
 
     // assert
-    verify(spielerService).ermittleNächstenZug(any(Spiel.class), any(Spieler.class));
-    verify(spielbrettService).verschiebeSpieler(any(Spieler.class));
+    verify(spielerService).ermittleNächstenZug(any(Game.class), any(Player.class));
+    verify(spielbrettService).verschiebeSpieler(any(Player.class));
   }
 
-  private static class TestSpielerService extends SpielerService {
+  private static class TestPlayerService extends SpielerService {
 
-    public TestSpielerService(final SpielbrettService spielbrettService,
-                              final StartPositionService startPositionService) {
+    public TestPlayerService(final SpielbrettService spielbrettService,
+                             final StartPositionService startPositionService) {
       super(spielbrettService, startPositionService);
     }
 
     @Override
-    public Spieler erzeugeSpieler() {
+    public Player erzeugeSpieler() {
       return null;
     }
 
     @Override
-    protected Zug ermittleNächstenZug(final Spiel spiel, final Spieler spieler) {
+    protected Zug ermittleNächstenZug(final Game game, final Player player) {
       return null;
     }
   }

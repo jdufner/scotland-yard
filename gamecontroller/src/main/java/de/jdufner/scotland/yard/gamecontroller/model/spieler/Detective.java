@@ -19,10 +19,8 @@
 
 package de.jdufner.scotland.yard.gamecontroller.model.spieler;
 
+import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.StartPosition;
-import de.jdufner.scotland.yard.common.ticket.Bus;
-import de.jdufner.scotland.yard.common.ticket.Taxi;
-import de.jdufner.scotland.yard.common.ticket.Underground;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,42 +29,39 @@ import java.util.List;
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class Detektiv extends Spieler {
+public class Detective extends Player {
 
   private final Nummer nummer;
 
-  public Detektiv(final StartPosition startPosition, final int nummer) {
-    super(startPosition);
-    tickets.add(new Taxi(10));
-    tickets.add(new Bus(8));
-    tickets.add(new Underground(4));
+  public Detective(final int nummer, final StartPosition startPosition, final Tickets tickets) {
+    super(startPosition, tickets);
     this.nummer = new Nummer(nummer);
   }
 
   @Override
   public String toString() {
-    return "Detektiv: " + super.toString() + ", " + nummer;
+    return "Detective: " + super.toString() + ", " + nummer;
   }
 
   @Override
   public void ziehe(final Zug zug) {
     zieheAuf(zug.getZiel());
-    verbraucheTickets(zug.getTicket());
+    consumeTicket(zug.getTicket());
   }
 
   public static class Builder {
 
-    private List<Detektiv> detektivs = new ArrayList<>();
+    private List<Detective> detectives = new ArrayList<>();
 
     public Builder(final int... startpositionAsInts) {
       int nummer = 0;
       for (final int startpositionAsInt : startpositionAsInts) {
-        detektivs.add(new Detektiv(new StartPosition(startpositionAsInt), nummer++));
+        detectives.add(new Detective(nummer++, new StartPosition(startpositionAsInt), new Tickets()));
       }
     }
 
-    public List<Detektiv> build() {
-      return detektivs;
+    public List<Detective> build() {
+      return detectives;
     }
 
   }

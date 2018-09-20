@@ -21,6 +21,7 @@ package de.jdufner.scotland.yard.common;
 
 import de.jdufner.scotland.yard.common.ticket.BlackTicket;
 import de.jdufner.scotland.yard.common.ticket.Bus;
+import de.jdufner.scotland.yard.common.ticket.Doppelzug;
 import de.jdufner.scotland.yard.common.ticket.Taxi;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
 import de.jdufner.scotland.yard.common.ticket.Underground;
@@ -42,13 +43,17 @@ public class Tickets {
     tickets.add(ticket);
   }
 
-  public int getTaxiTickets() {
-    return getTicketByType(Taxi.class);
+  public List<Ticket> getTickets() {
+    return tickets;
   }
 
   private int getTicketByType(Class<? extends Ticket> aClass) {
     Optional<Ticket> optionalTicket = tickets.stream().filter(ticket -> ticket.getClass().equals(aClass)).findFirst();
     return optionalTicket.isPresent() ? optionalTicket.get().getAnzahl() : 0;
+  }
+
+  public int getTaxiTickets() {
+    return getTicketByType(Taxi.class);
   }
 
   public int getBusTickets() {
@@ -61,5 +66,9 @@ public class Tickets {
 
   public int getBlackTickets() {
     return getTicketByType(BlackTicket.class);
+  }
+
+  public int getDoppelzugTickets() {
+    return getTicketByType(Doppelzug.class);
   }
 }

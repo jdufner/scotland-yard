@@ -19,82 +19,82 @@
 
 package de.jdufner.scotland.yard.gamecontroller.model.spiel;
 
-import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detektiv;
-import de.jdufner.scotland.yard.gamecontroller.model.spieler.MrX;
-import de.jdufner.scotland.yard.gamecontroller.model.spieler.Spieler;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Player;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Das Spiel hält Status der Figuren, der Runden etc. Die Transitionen werden von einem Service
+ * Das Game hält Status der Figuren, der Runden etc. Die Transitionen werden von einem Service
  * ausgelöst.
  *
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class Spiel {
+public class Game {
 
-  private static final Logger LOG = LoggerFactory.getLogger(Spiel.class);
+  private static final Logger LOG = LoggerFactory.getLogger(Game.class);
 
-  private static final int MAX_ANZAHL_RUNDEN = 21;
+  private static final int TOTAL_LAPS = 21;
 
-  private final MrX mrX;
-  private final List<Detektiv> detektive;
-  private final List<Spieler> spielers = new ArrayList<>();
+  private final Mrx mrX;
+  private final List<Detective> detektive;
+  private final List<Player> players = new ArrayList<>();
 
-  private int aktuelleRunde;
+  private int currentLap;
 
-  private boolean beendet = false;
+  private boolean finished = false;
 
-  public Spiel(final MrX mrX, final List<Detektiv> detektive) {
+  public Game(final Mrx mrX, final List<Detective> detektive) {
     this.mrX = mrX;
     this.detektive = detektive;
-    spielers.add(mrX);
-    spielers.addAll(detektive);
+    players.add(mrX);
+    players.addAll(detektive);
   }
 
-  public MrX getMrX() {
+  public Mrx getMrX() {
     return mrX;
   }
 
-  public List<Detektiv> getDetektive() {
+  public List<Detective> getDetektive() {
     return detektive;
   }
 
-  public List<Spieler> getSpieler() {
-    return spielers;
+  public List<Player> getSpieler() {
+    return players;
   }
 
   public int naechsteRunde() {
-    return aktuelleRunde++;
+    return currentLap++;
   }
 
-  public int getAktuelleRunde() {
-    return aktuelleRunde;
+  public int getCurrentLap() {
+    return currentLap;
   }
 
   private boolean habenDetektiveMrXGefangen() {
-    for (Detektiv detektiv : detektive) {
-      if (detektiv.letztePosition().equals(mrX.letztePosition())) {
+    for (Detective detective : detektive) {
+      if (detective.currentPosition().equals(mrX.currentPosition())) {
         return true;
       }
     }
     return false;
   }
 
-  public boolean isBeendet() {
+  public boolean isFinished() {
     return sindAlleRundenGespielt() || habenDetektiveMrXGefangen();
   }
 
   private boolean sindAlleRundenGespielt() {
-    return aktuelleRunde >= MAX_ANZAHL_RUNDEN;
+    return currentLap >= TOTAL_LAPS;
   }
 
   @Override
   public String toString() {
-    return "Spieler: {" + spielers.toString() + "}";
+    return "Player: {" + players.toString() + "}";
   }
 
 }

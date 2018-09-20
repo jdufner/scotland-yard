@@ -20,8 +20,8 @@
 package de.jdufner.scotland.yard.gamecontroller.service;
 
 import de.jdufner.scotland.yard.common.position.Position;
-import de.jdufner.scotland.yard.gamecontroller.model.spiel.Spiel;
-import de.jdufner.scotland.yard.gamecontroller.model.spieler.MrX;
+import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
 import de.jdufner.scotland.yard.common.ticket.Taxi;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Deprecated
-public class MrXService extends SpielerService<MrX> {
+public class MrXService extends SpielerService<Mrx> {
 
   private static final Logger LOG = LoggerFactory.getLogger(MrXService.class);
 
@@ -49,17 +49,8 @@ public class MrXService extends SpielerService<MrX> {
   }
 
   @Override
-  public MrX erzeugeSpieler() {
-    return erzeugeMrX();
-  }
-
-  public MrX erzeugeMrX() {
-    return new MrX(startPositionService.zieheFreieStartPosition());
-  }
-
-  @Override
-  protected Zug ermittleNächstenZug(final Spiel spiel, final MrX spieler) {
-    // Welche Verkehrsmittel kann MrX nutzen?
+  protected Zug ermittleNächstenZug(final Game game, final Mrx spieler) {
+    // Welche Verkehrsmittel kann Mrx nutzen?
     final Position position = spielbrettService.findeNachbarAmWeitestenEntferntVonDetektiven();
     return new Zug(position, new Taxi(1));
   }

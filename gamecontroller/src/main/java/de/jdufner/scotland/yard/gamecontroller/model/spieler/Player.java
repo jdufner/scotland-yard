@@ -19,33 +19,33 @@
 
 package de.jdufner.scotland.yard.gamecontroller.model.spieler;
 
+import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-public abstract class Spieler {
+public abstract class Player {
 
   final StartPosition startPosition;
-  final Collection<Ticket> tickets = new HashSet<>();
-  final List<Position> positions = new ArrayList();
+  final Tickets tickets;
+  final List<Position> track = new ArrayList();
 
-  Spieler(final StartPosition startPosition) {
+  Player(final StartPosition startPosition, final Tickets tickets) {
     this.startPosition = startPosition;
-    positions.add(startPosition);
+    this.tickets = tickets;
+    track.add(startPosition);
   }
 
   @Override
   public String toString() {
-    return "{" + letztePosition() +
+    return "{" + currentPosition() +
         ", Tickets: " + tickets + "}";
   }
 
@@ -53,23 +53,23 @@ public abstract class Spieler {
     return getClass().getSimpleName().toUpperCase();
   }
 
-  public Position letztePosition() {
-    return positions.get(positions.size() - 1);
+  public Position currentPosition() {
+    return track.get(track.size() - 1);
   }
 
-  public List<Position> getPositions() {
-    return positions;
+  public List<Position> getTrack() {
+    return track;
   }
 
   public abstract void ziehe(final Zug zug);
 
   public void zieheAuf(final Position naechstePosition) {
-    positions.add(naechstePosition);
+    track.add(naechstePosition);
   }
 
-  protected void verbraucheTickets(final Ticket verbrauchteTickets) {
-    tickets.stream()
-        //.filter(ticket -> ticket.getClass().equals(verbrauchteTickets.getClass()))
-        .forEach(ticket -> ticket.consume());
+  protected void consumeTicket(final Ticket verbrauchteTickets) {
+//    tickets.stream()
+//        //.filter(ticket -> ticket.getClass().equals(verbrauchteTickets.getClass()))
+//        .forEach(ticket -> ticket.consume());
   }
 }

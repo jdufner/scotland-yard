@@ -19,6 +19,9 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,11 +41,11 @@ import org.mockito.junit.MockitoJUnitRunner;
  * @since 1.0
  */
 @RunWith(MockitoJUnitRunner.class)
-public class SpielServiceTest {
+public class GameServiceTest {
 
   @Spy
   @InjectMocks
-  private SpielService spielService;
+  private GameService gameService;
 
   @Mock
   private StartPositionService startPositionService;
@@ -54,29 +57,35 @@ public class SpielServiceTest {
   private DetectiveService detectiveService;
 
   @Test
-  public void whenErzeugeMrx_expectStartPostitionWirdGesetzt() {
+  public void whenSetUpGame_expectStartPostitionIsSet() {
     // arrange
-    StartPosition startPosition = new StartPosition(1);
-    when(startPositionService.zieheFreieStartPosition()).thenReturn(startPosition);
+    when(startPositionService.zieheFreieStartPosition()).thenReturn(mock(StartPosition.class));
 
     // act
-    spielService.erzeugeSpiel();
+    gameService.initializeGame();
 
     // assert
-    verify(mrxService).initialize(startPosition, null);
+    verify(startPositionService, times(2)).zieheFreieStartPosition();
+    verify(mrxService).initialize(any(), any());
+    verify(detectiveService).initialize(any(), any());
   }
 
   @Test
-  public void whenErzeugeMrx_expectTicketsWerdenGesetzt() {
+  public void whenSetUpGame_expectTicketsAreSet() {
     // arrange
-    Tickets tickets = new Tickets();
-    when(startTicketService.getMrxTickets()).thenReturn(tickets);
+    Tickets mrxTickets = new Tickets();
+    when(startTicketService.getMrxTickets()).thenReturn(mrxTickets);
+    Tickets detectiveTickets = new Tickets();
+    when(startTicketService.getDetectiveTickets()).thenReturn(detectiveTickets);
 
     // act
-    spielService.erzeugeSpiel();
+    gameService.initializeGame();
 
     // assert
-    verify(mrxService).initialize(null, tickets);
+    verify(startTicketService).getMrxTickets();
+    verify(startTicketService).getDetectiveTickets();
+    verify(mrxService).initialize(null, mrxTickets);
+    verify(detectiveService).initialize(null, detectiveTickets);
   }
 
 }

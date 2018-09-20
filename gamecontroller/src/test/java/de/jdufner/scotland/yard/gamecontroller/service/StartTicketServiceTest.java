@@ -22,6 +22,11 @@ package de.jdufner.scotland.yard.gamecontroller.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.jdufner.scotland.yard.common.Tickets;
+import de.jdufner.scotland.yard.common.ticket.BlackTicket;
+import de.jdufner.scotland.yard.common.ticket.Bus;
+import de.jdufner.scotland.yard.common.ticket.Doppelzug;
+import de.jdufner.scotland.yard.common.ticket.Taxi;
+import de.jdufner.scotland.yard.common.ticket.Underground;
 import org.junit.Test;
 
 /**
@@ -40,10 +45,7 @@ public class StartTicketServiceTest {
     Tickets mrxTickets = startTicketService.getMrxTickets();
 
     // assert
-    assertThat(mrxTickets.getTaxiTickets()).isEqualTo(4);
-    assertThat(mrxTickets.getBusTickets()).isEqualTo(3);
-    assertThat(mrxTickets.getUndergroundTickets()).isEqualTo(3);
-    assertThat(mrxTickets.getBlackTickets()).isEqualTo(2);
+    assertThat(mrxTickets.getTickets()).containsExactly(new Taxi(4), new Bus(3), new Underground(3), new BlackTicket(2), new Doppelzug(2));
   }
 
   @Test
@@ -54,10 +56,7 @@ public class StartTicketServiceTest {
     Tickets mrxTickets = startTicketService.getDetectiveTickets();
 
     // assert
-    assertThat(mrxTickets.getTaxiTickets()).isEqualTo(10);
-    assertThat(mrxTickets.getBusTickets()).isEqualTo(8);
-    assertThat(mrxTickets.getUndergroundTickets()).isEqualTo(4);
-    assertThat(mrxTickets.getBlackTickets()).isEqualTo(0);
+    assertThat(mrxTickets.getTickets()).containsExactly(new Taxi(10), new Bus(8), new Underground(4));
   }
 
 }

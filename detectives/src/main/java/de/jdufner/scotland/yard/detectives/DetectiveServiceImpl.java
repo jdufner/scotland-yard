@@ -35,4 +35,5 @@ public class DetectiveServiceImpl implements DetectiveService {
   public void initialize(StartPosition startPosition, Tickets tickets) {
 
   }
+
 }
