@@ -19,6 +19,7 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
+import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +46,10 @@ public class SpielsteuerungService {
 
   @PostConstruct
   public void starteSpiel() {
-//    final Game spiel = spielService.initializeGame();
-//    while (!spiel.isFinished()) {
-//      spielService.nextLap(spiel);
-//    }
+    final Game game = gameService.initializeGame();
+    while (!game.isFinished()) {
+      gameService.nextLap(game);
+    }
   }
 
 }

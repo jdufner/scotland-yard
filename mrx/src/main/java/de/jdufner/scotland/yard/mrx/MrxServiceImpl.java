@@ -21,6 +21,7 @@ package de.jdufner.scotland.yard.mrx;
 
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.Tickets;
+import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,11 @@ public class MrxServiceImpl implements MrxService {
   @Override
   public void initialize(final Position position, final Tickets tickets) {
 
+  }
+
+  @Override
+  public Move nextMove() {
+    return null;
   }
 
 }

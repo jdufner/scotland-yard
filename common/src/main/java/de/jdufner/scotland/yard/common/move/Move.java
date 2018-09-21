@@ -17,36 +17,36 @@
  *
  */
 
-package de.jdufner.scotland.yard.common;
+package de.jdufner.scotland.yard.common.move;
 
-import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
+import de.jdufner.scotland.yard.common.ticket.Ticket;
 
 /**
- * This interface has to be implemented by the game logic, that represents Mr X.
- *
  * @author Jürgen Dufner
  * @since 1.0
  */
-public interface MrxService {
+public class Move {
 
-  // tag::initializeMethod[]
-  /**
-   * Sets Mr.X to the start position and gives him the tickets to use the public traffic.
-   *
-   * This method is called by the game controller.
-   *
-   * @param position
-   * @param tickets
-   */
-  void initialize(Position position, Tickets tickets); // <1>
-  // end::initializeMethod[]
+  private final Position start;
+  private final Position end;
+  private final Ticket ticket;
 
-  /**
-   * Asks Mr. X. to do the next.
-   *
-   * This method is called by the game controller.
-   */
-  Move nextMove();
+  public Move(final Position start, final Position end, final Ticket ticket) {
+    this.start = start;
+    this.end = end;
+    this.ticket = ticket;
+  }
 
+  public Position getStart() {
+    return start;
+  }
+
+  public Position getEnd() {
+    return end;
+  }
+
+  public Ticket getTicket() {
+    return ticket;
+  }
 }

@@ -22,6 +22,7 @@ package de.jdufner.scotland.yard.gamecontroller.service;
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.Tickets;
+import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
@@ -96,12 +97,12 @@ public class GameService {
     return mrx;
   }
 
-//  public void nextLap(final Game spiel) {
-//    spiel.nextLap();
-//    mrXService.fuehreZugDurch(spiel, spiel.getMrX());
+  public void nextLap(final Game spiel) {
+    spiel.nextLap();
+    Move move = mrxService.nextMove();
 //    spiel.getDetektive().forEach((Detective detektiv) -> detektivService.fuehreZugDurch(spiel,
 //        detektiv));
 //    LOG.debug("Runde {} beendet.", spiel.getCurrentLap());
-//  }
+  }
 
 }

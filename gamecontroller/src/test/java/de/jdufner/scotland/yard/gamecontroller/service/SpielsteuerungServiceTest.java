@@ -19,7 +19,11 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import org.junit.Test;
@@ -44,14 +48,14 @@ public class SpielsteuerungServiceTest {
   public void whenStarteSpiel_expectSpielEndetNachDreiRunden() {
     // arrange
     Game game = mock(Game.class);
-//    when(spielService.initializeGame()).thenReturn(game);
-//    when(game.isFinished()).thenReturn(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
+    when(gameService.initializeGame()).thenReturn(game);
+    when(game.isFinished()).thenReturn(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
 
     // act
     spielsteuerungService.starteSpiel();
 
     // assert
-//    verify(spielService, times(2)).nextLap(any(Game.class));
+    verify(gameService, times(2)).nextLap(any(Game.class));
   }
 
 }
