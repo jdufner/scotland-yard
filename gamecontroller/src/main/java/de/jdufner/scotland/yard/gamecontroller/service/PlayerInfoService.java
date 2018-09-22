@@ -16,19 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.scotland.yard.common;
+package de.jdufner.scotland.yard.gamecontroller.service;
 
+import de.jdufner.scotland.yard.common.PlayerInfo;
+import org.springframework.stereotype.Service;
 
-import de.jdufner.scotland.yard.common.position.StartPosition;
+import java.util.UUID;
 
-/**
- * This interface has to be implemented by the gamelogic of the detectives.
- *
- * @author Jürgen Dufner
- * @since 1.0
- */
-public interface DetectiveService {
+@Service
+public class PlayerInfoService {
 
-  void initialize(final PlayerInfo playerInfo, final StartPosition startPosition, final Tickets tickets);
+  public PlayerInfo getMrxPlayerInfo() {
+    return new PlayerInfo(PlayerInfo.Type.MRX, new PlayerInfo.Id(UUID.randomUUID().toString()));
+  }
+
+  public PlayerInfo getDetectivePlayerInfo() {
+    return new PlayerInfo(PlayerInfo.Type.DETECTIVE, new PlayerInfo.Id(UUID.randomUUID().toString()));
+  }
 
 }

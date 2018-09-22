@@ -14,16 +14,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.model.spieler;
 
+import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +34,13 @@ import java.util.List;
  */
 public abstract class Player {
 
+  final PlayerInfo playerInfo;
   final StartPosition startPosition;
   final Tickets tickets;
   final List<Position> track = new ArrayList();
 
-  Player(final StartPosition startPosition, final Tickets tickets) {
+  Player(final PlayerInfo playerInfo, final StartPosition startPosition, final Tickets tickets) {
+    this.playerInfo = playerInfo;
     this.startPosition = startPosition;
     this.tickets = tickets;
     track.add(startPosition);
@@ -45,7 +48,7 @@ public abstract class Player {
 
   @Override
   public String toString() {
-    return "{" + currentPosition() +
+    return "{" + getCurrentPosition() +
         ", Tickets: " + tickets + "}";
   }
 
@@ -53,7 +56,7 @@ public abstract class Player {
     return getClass().getSimpleName().toUpperCase();
   }
 
-  public Position currentPosition() {
+  public Position getCurrentPosition() {
     return track.get(track.size() - 1);
   }
 
@@ -72,4 +75,5 @@ public abstract class Player {
 //        //.filter(ticket -> ticket.getClass().equals(verbrauchteTickets.getClass()))
 //        .forEach(ticket -> ticket.consume());
   }
+
 }

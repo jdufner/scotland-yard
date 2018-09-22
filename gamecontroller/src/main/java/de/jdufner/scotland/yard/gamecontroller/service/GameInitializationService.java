@@ -14,52 +14,59 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
+import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static java.lang.String.format;
+
 /**
- * The {@link GameService} creates a {@link Game} containing the {@link de.jdufner.scotland.yard.gamecontroller.model.spieler.Player},
+ * The {@link GameInitializationService} creates a {@link Game} containing the {@link de.jdufner.scotland.yard.gamecontroller.model.spieler.Player},
  * in detail one {@link Mrx} and up to four {@link Detective}s.
  *
  * Each player has a {@link StartPosition} and a certain number of {@link de.jdufner.scotland.yard.common.ticket.Ticket}s.
  *
  * @author Jürgen Dufner
  * @since 1.0
+ * @see PlayerInfoService
  * @see StartPositionService
  * @see StartTicketService
  */
 @Service
-public class GameService {
+public class GameInitializationService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(GameService.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GameInitializationService.class);
 
   private final StartPositionService startPositionService;
   private final StartTicketService startTicketService;
   private final MrxService mrxService;
   private final DetectiveService detectiveService;
+  private final PlayerInfoService playerInfoService;
 
-  public GameService(final StartPositionService startPositionService,
-                     final StartTicketService startTicketService,
-                     final MrxService mrxService,
-                     final DetectiveService detectiveService) {
+  public GameInitializationService(final PlayerInfoService playerInfoService,
+                                   final StartPositionService startPositionService,
+                                   final StartTicketService startTicketService,
+                                   final MrxService mrxService,
+                                   final DetectiveService detectiveService) {
+    this.playerInfoService = playerInfoService;
     this.startPositionService = startPositionService;
     this.startTicketService = startTicketService;
     this.mrxService = mrxService;
@@ -82,27 +89,40 @@ public class GameService {
   private Detective initializeDetective(final int number) {
     final StartPosition startPosition = startPositionService.zieheFreieStartPosition();
     final Tickets detectiveTickets = startTicketService.getDetectiveTickets();
-    final Detective detective = new Detective(number, startPosition, detectiveTickets);
-    detectiveService.initialize(startPosition, detectiveTickets);
+    final PlayerInfo playerInfo = playerInfoService.getDetectivePlayerInfo();
+    final Detective detective = new Detective(number, playerInfo, startPosition, detectiveTickets);
+    detectiveService.initialize(playerInfo, startPosition, detectiveTickets);
     // TODO [jdufner, 2018-09-20] When and how will be set the players on the board?
     return detective;
   }
 
   private Mrx initializeMrx() {
+    final PlayerInfo playerInfo = playerInfoService.getMrxPlayerInfo();
     final StartPosition startPosition = startPositionService.zieheFreieStartPosition();
     final Tickets mrxTickets = startTicketService.getMrxTickets();
-    final Mrx mrx = new Mrx(startPosition, mrxTickets);
-    mrxService.initialize(startPosition, mrxTickets);
+    final Mrx mrx = new Mrx(playerInfo, startPosition, mrxTickets);
+    mrxService.initialize(playerInfo, startPosition, mrxTickets);
     // TODO [jdufner, 2018-09-20] When and how will be set the players on the board?
     return mrx;
   }
 
-  public void nextLap(final Game spiel) {
-    spiel.nextLap();
-    Move move = mrxService.nextMove();
-//    spiel.getDetektive().forEach((Detective detektiv) -> detektivService.fuehreZugDurch(spiel,
+  public void nextLap(final Game game) {
+    game.nextLap();
+    moveMrx(game);
+//    game.getDetektive().forEach((Detective detektiv) -> detektivService.fuehreZugDurch(game,
 //        detektiv));
-//    LOG.debug("Runde {} beendet.", spiel.getCurrentLap());
+//    LOG.debug("Runde {} beendet.", game.getCurrentLap());
+  }
+
+  private void moveMrx(final Game game) {
+    Move move = mrxService.nextMove();
+    // check start position
+    if (game.getMrx().getCurrentPosition().equals(move.getStart())) {
+      throw new RuntimeException(format("Move of Mr. X starts from the from position. " +
+          "Expected position=%s, but was=%s", game.getMrx().getCurrentPosition(), move.getStart()));
+    }
+    // check move on board, exists a connection between start and end using the means of transport
+    // move player
   }
 
 }

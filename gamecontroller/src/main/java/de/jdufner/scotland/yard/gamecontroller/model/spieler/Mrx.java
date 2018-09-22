@@ -14,11 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.model.spieler;
 
+import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
@@ -32,8 +32,8 @@ public class Mrx extends Player {
   // TODO [jdufner, 2018-09-19] Is this the right place?
   private static final int[] auftauchen = {3, 8, 13, 18};
 
-  public Mrx(final StartPosition startPosition, final Tickets tickets) {
-    super(startPosition, tickets);
+  public Mrx(final PlayerInfo playerInfo, final StartPosition startPosition, final Tickets tickets) {
+    super(playerInfo, startPosition, tickets);
   }
 
   @Override
@@ -52,7 +52,7 @@ public class Mrx extends Player {
     private Mrx mrX;
 
     public Builder(final int startpositionAsInt) {
-      mrX = new Mrx(new StartPosition(startpositionAsInt), new Tickets());
+      mrX = new Mrx(new PlayerInfo(PlayerInfo.Type.MRX, new PlayerInfo.Id("1")), new StartPosition(startpositionAsInt), new Tickets());
     }
 
     public Mrx build() {

@@ -14,7 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common;
@@ -39,11 +38,11 @@ public interface MrxService {
    * @param position
    * @param tickets
    */
-  void initialize(Position position, Tickets tickets); // <1>
+  void initialize(final PlayerInfo playerInfo, final Position position, final Tickets tickets); // <1>
   // end::initializeMethod[]
 
   /**
-   * Asks Mr. X. to do the next.
+   * Asks Mr. X. to do the next move.
    *
    * This method is called by the game controller.
    */

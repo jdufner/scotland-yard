@@ -14,12 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.mrx;
 
 import de.jdufner.scotland.yard.common.MrxService;
+import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
@@ -33,8 +33,7 @@ import org.springframework.stereotype.Service;
 public class MrxServiceImpl implements MrxService {
 
   @Override
-  public void initialize(final Position position, final Tickets tickets) {
-
+  public void initialize(final PlayerInfo playerInfo, final Position position, final Tickets tickets) {
   }
 
   @Override

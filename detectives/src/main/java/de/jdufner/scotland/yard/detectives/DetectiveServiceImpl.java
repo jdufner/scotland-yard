@@ -14,12 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.detectives;
 
 import de.jdufner.scotland.yard.common.DetectiveService;
+import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 public class DetectiveServiceImpl implements DetectiveService {
 
   @Override
-  public void initialize(StartPosition startPosition, Tickets tickets) {
+  public void initialize(PlayerInfo playerInfo, StartPosition startPosition, Tickets tickets) {
 
   }
 

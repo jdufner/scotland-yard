@@ -14,11 +14,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common.move;
 
+import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
 
@@ -28,14 +28,20 @@ import de.jdufner.scotland.yard.common.ticket.Ticket;
  */
 public class Move {
 
+  private final PlayerInfo playerInfo;
   private final Position start;
   private final Position end;
   private final Ticket ticket;
 
-  public Move(final Position start, final Position end, final Ticket ticket) {
+  public Move(final PlayerInfo playerInfo, final Position start, final Position end, final Ticket ticket) {
+    this.playerInfo = playerInfo;
     this.start = start;
     this.end = end;
     this.ticket = ticket;
+  }
+
+  public PlayerInfo getPlayerInfo() {
+    return playerInfo;
   }
 
   public Position getStart() {

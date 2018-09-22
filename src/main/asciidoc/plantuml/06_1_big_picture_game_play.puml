@@ -2,12 +2,12 @@
 
 == initialization ==
 
-loop mrX and up to 4 detectives
+loop mrx and up to 4 detectives
   gameController -> startPositionService: getStartPosition
   gameController <-- startPositionService: startPosition
   gameController -> ticketService: getTickets
   gameController <-- ticketService: tickets
-  alt mrX or detective
+  alt mrx or detective
     gameController -> mrXService: initialize(startPosition, tickets)
     gameController <-- mrXService: set up
   else
@@ -18,7 +18,7 @@ end
 
 == repetition ==
 
-loop up to 21 turns or a detective catches mrX
+loop up to 21 turns or a detective catches mrx
 
   gameController -> mrXService: doNextMove
   gameController <-- mrXService: tickets

@@ -1,5 +1,5 @@
 /*
- * Scotland Yard is a spielsteuerungService of the board game.
+ * Scotland Yard is a simulation of the board game.
  * Copyright (C) 2008-2018  Juergen Dufner
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,16 +14,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.service;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import org.junit.Test;
@@ -32,27 +25,33 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
+
 @RunWith(MockitoJUnitRunner.class)
-public class SpielsteuerungServiceTest {
+public class GamecontrollerServiceTest {
 
   @InjectMocks
-  private SpielsteuerungService spielsteuerungService;
+  private GamecontrollerService gamecontrollerService;
 
   @Mock
-  private GameService gameService;
+  private GameInitializationService gameInitializationService;
 
   @Test
-  public void whenStarteSpiel_expectSpielEndetNachDreiRunden() {
+  public void whenStartsSpiel_expectSpielEndsAfterThreeLaps() {
     // arrange
     Game game = mock(Game.class);
-    when(gameService.initializeGame()).thenReturn(game);
+    when(gameInitializationService.initializeGame()).thenReturn(game);
     when(game.isFinished()).thenReturn(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
 
     // act
-    spielsteuerungService.starteSpiel();
+    gamecontrollerService.startGame();
 
     // assert
-    verify(gameService, times(2)).nextLap(any(Game.class));
+    verify(gameInitializationService, times(2)).nextLap(any(Game.class));
   }
 
 }

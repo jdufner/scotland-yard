@@ -14,28 +14,27 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.spiel;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import de.jdufner.scotland.yard.common.position.StartPosition;
-import de.jdufner.scotland.yard.gamecontroller.service.GameService;
+import de.jdufner.scotland.yard.gamecontroller.service.GameInitializationService;
 import de.jdufner.scotland.yard.gamecontroller.service.SpielbrettService;
 import de.jdufner.scotland.yard.gamecontroller.service.StartPositionService;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class GameServiceCT {
+public class GameInitializationServiceCT {
 
-  private GameService gameService;
+  private GameInitializationService gameInitializationService;
   private SpielbrettService spielbrettService;
   private StartPositionService startPositionService;
 

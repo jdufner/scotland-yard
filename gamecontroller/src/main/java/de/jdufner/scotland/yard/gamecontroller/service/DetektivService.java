@@ -14,7 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.service;
@@ -48,7 +47,7 @@ public class DetektivService extends SpielerService<Detective> {
           3 - game.getCurrentLap()), null);
     }
 
-    return new Zug(spieler.currentPosition(), null);
+    return new Zug(spieler.getCurrentPosition(), null);
   }
 
 }

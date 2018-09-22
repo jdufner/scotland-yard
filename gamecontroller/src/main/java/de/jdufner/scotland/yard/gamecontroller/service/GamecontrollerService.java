@@ -14,41 +14,39 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
+
 /**
- * Der {@link SpielsteuerungService} steuert das Zusammenspiel der Figuren mit dem Spielbrett.
+ * Der {@link GamecontrollerService} steuert das Zusammenspiel der Figuren mit dem Spielbrett.
  *
  * @author Jürgen Dufner
  * @since 1.0
  */
 @Service
-public class SpielsteuerungService {
+public class GamecontrollerService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(SpielsteuerungService.class);
+  private static final Logger LOG = LoggerFactory.getLogger(GamecontrollerService.class);
 
-  private final GameService gameService;
-  private final SpielbrettService spielbrettService;
+  private final GameInitializationService gameInitializationService;
 
-  public SpielsteuerungService(final GameService gameService, final SpielbrettService spielbrettService) {
-    this.gameService = gameService;
-    this.spielbrettService = spielbrettService;
+  public GamecontrollerService(final GameInitializationService gameInitializationService) {
+    this.gameInitializationService = gameInitializationService;
   }
 
   @PostConstruct
-  public void starteSpiel() {
-    final Game game = gameService.initializeGame();
+  public void startGame() {
+    final Game game = gameInitializationService.initializeGame();
     while (!game.isFinished()) {
-      gameService.nextLap(game);
+      gameInitializationService.nextLap(game);
     }
   }
 

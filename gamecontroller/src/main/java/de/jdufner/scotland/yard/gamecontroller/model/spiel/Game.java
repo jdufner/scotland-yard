@@ -14,7 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.model.spiel;
@@ -22,10 +21,11 @@ package de.jdufner.scotland.yard.gamecontroller.model.spiel;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Player;
-import java.util.ArrayList;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Game represents the status of the board.
@@ -44,7 +44,7 @@ public class Game {
 
   private static final int TOTAL_LAPS = 21;
 
-  private final Mrx mrX;
+  private final Mrx mrx;
   private final List<Detective> detektives;
   private final List<Player> players = new ArrayList<>();
 
@@ -52,10 +52,10 @@ public class Game {
 
   private boolean finished = false;
 
-  public Game(final Mrx mrX, final List<Detective> detektives) {
-    this.mrX = mrX;
+  public Game(final Mrx mrx, final List<Detective> detektives) {
+    this.mrx = mrx;
     this.detektives = detektives;
-    players.add(mrX);
+    players.add(mrx);
     players.addAll(detektives);
   }
 
@@ -73,7 +73,7 @@ public class Game {
 
   private boolean habenDetektiveMrXGefangen() {
     for (Detective detective : detektives) {
-      if (detective.currentPosition().equals(mrX.currentPosition())) {
+      if (detective.getCurrentPosition().equals(mrx.getCurrentPosition())) {
         return true;
       }
     }
@@ -93,4 +93,7 @@ public class Game {
     return "Player: {" + players.toString() + "}";
   }
 
+  public Mrx getMrx() {
+    return mrx;
+  }
 }
