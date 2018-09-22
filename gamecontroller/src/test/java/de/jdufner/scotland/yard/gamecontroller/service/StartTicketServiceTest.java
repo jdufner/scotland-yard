@@ -14,20 +14,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.ticket.BlackTicket;
-import de.jdufner.scotland.yard.common.ticket.Bus;
-import de.jdufner.scotland.yard.common.ticket.Doppelzug;
-import de.jdufner.scotland.yard.common.ticket.Taxi;
+import de.jdufner.scotland.yard.common.ticket.BusTicket;
+import de.jdufner.scotland.yard.common.ticket.DoppelzugTicket;
+import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import de.jdufner.scotland.yard.common.ticket.Underground;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Jürgen Dufner
@@ -45,7 +44,7 @@ public class StartTicketServiceTest {
     Tickets mrxTickets = startTicketService.getMrxTickets();
 
     // assert
-    assertThat(mrxTickets.getTickets()).containsExactly(new Taxi(4), new Bus(3), new Underground(3), new BlackTicket(2), new Doppelzug(2));
+    assertThat(mrxTickets.getTickets()).containsExactly(new TaxiTicket(4), new BusTicket(3), new Underground(3), new BlackTicket(2), new DoppelzugTicket(2));
   }
 
   @Test
@@ -56,7 +55,7 @@ public class StartTicketServiceTest {
     Tickets mrxTickets = startTicketService.getDetectiveTickets();
 
     // assert
-    assertThat(mrxTickets.getTickets()).containsExactly(new Taxi(10), new Bus(8), new Underground(4));
+    assertThat(mrxTickets.getTickets()).containsExactly(new TaxiTicket(10), new BusTicket(8), new Underground(4));
   }
 
 }

@@ -22,7 +22,6 @@ import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
-import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
@@ -35,8 +34,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static java.lang.String.format;
 
 /**
  * The {@link GameInitializationService} creates a {@link Game} containing the {@link de.jdufner.scotland.yard.gamecontroller.model.spieler.Player},
@@ -104,25 +101,6 @@ public class GameInitializationService {
     mrxService.initialize(playerInfo, startPosition, mrxTickets);
     // TODO [jdufner, 2018-09-20] When and how will be set the players on the board?
     return mrx;
-  }
-
-  public void nextLap(final Game game) {
-    game.nextLap();
-    moveMrx(game);
-//    game.getDetektive().forEach((Detective detektiv) -> detektivService.fuehreZugDurch(game,
-//        detektiv));
-//    LOG.debug("Runde {} beendet.", game.getCurrentLap());
-  }
-
-  private void moveMrx(final Game game) {
-    Move move = mrxService.nextMove();
-    // check start position
-    if (game.getMrx().getCurrentPosition().equals(move.getStart())) {
-      throw new RuntimeException(format("Move of Mr. X starts from the from position. " +
-          "Expected position=%s, but was=%s", game.getMrx().getCurrentPosition(), move.getStart()));
-    }
-    // check move on board, exists a connection between start and end using the means of transport
-    // move player
   }
 
 }

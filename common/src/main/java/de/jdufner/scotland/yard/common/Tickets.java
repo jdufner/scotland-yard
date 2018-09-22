@@ -14,17 +14,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common;
 
 import de.jdufner.scotland.yard.common.ticket.BlackTicket;
-import de.jdufner.scotland.yard.common.ticket.Bus;
-import de.jdufner.scotland.yard.common.ticket.Doppelzug;
-import de.jdufner.scotland.yard.common.ticket.Taxi;
+import de.jdufner.scotland.yard.common.ticket.BusTicket;
+import de.jdufner.scotland.yard.common.ticket.DoppelzugTicket;
+import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
 import de.jdufner.scotland.yard.common.ticket.Underground;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -53,11 +53,11 @@ public class Tickets {
   }
 
   public int getTaxiTickets() {
-    return getTicketByType(Taxi.class);
+    return getTicketByType(TaxiTicket.class);
   }
 
   public int getBusTickets() {
-    return getTicketByType(Bus.class);
+    return getTicketByType(BusTicket.class);
   }
 
   public int getUndergroundTickets() {
@@ -69,6 +69,20 @@ public class Tickets {
   }
 
   public int getDoppelzugTickets() {
-    return getTicketByType(Doppelzug.class);
+    return getTicketByType(DoppelzugTicket.class);
   }
+
+  public boolean contains(final Ticket searchTicket) {
+    return tickets.stream()
+        .filter(ticket -> ticket.contains(searchTicket))
+        .filter(ticket -> {
+          if (searchTicket instanceof DoppelzugTicket) {
+            return this.contains(((DoppelzugTicket) searchTicket).getFirstTicket())
+                && this.contains(((DoppelzugTicket) searchTicket).getSecondTicket());
+          }
+          return true;
+        })
+        .anyMatch(ticket -> true);
+  }
+
 }

@@ -18,6 +18,7 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
+import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Weg;
@@ -238,4 +239,7 @@ public class SpielbrettService {
     verschiebeSpieler(game.getPlayers());
   }
 
+  public void isMoveValid(Move move) {
+
+  }
 }

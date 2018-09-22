@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  * The Game represents the status of the board.
- *
+ * <p>
  * It maintain the status of each {@link Player}, count the laps, checks the if the move was proper
  * and hands over the tickets from the {@link Detective} to {@link Mrx}. It also check after each
  * move whether the game is finished, that imply that all laps are over or one detective is on the
@@ -50,8 +50,6 @@ public class Game {
 
   private int currentLap;
 
-  private boolean finished = false;
-
   public Game(final Mrx mrx, final List<Detective> detektives) {
     this.mrx = mrx;
     this.detektives = detektives;
@@ -71,20 +69,17 @@ public class Game {
     return currentLap;
   }
 
-  private boolean habenDetektiveMrXGefangen() {
-    for (Detective detective : detektives) {
-      if (detective.getCurrentPosition().equals(mrx.getCurrentPosition())) {
-        return true;
-      }
-    }
-    return false;
+  private boolean didDetectivesCatchMrx() {
+    return detektives.stream().anyMatch(detective ->
+        detective.getCurrentPosition().equals(mrx.getCurrentPosition())
+    );
   }
 
   public boolean isFinished() {
-    return sindAlleRundenGespielt() || habenDetektiveMrXGefangen();
+    return areAllLapsDone() || didDetectivesCatchMrx();
   }
 
-  private boolean sindAlleRundenGespielt() {
+  private boolean areAllLapsDone() {
     return currentLap >= TOTAL_LAPS;
   }
 
@@ -96,4 +91,9 @@ public class Game {
   public Mrx getMrx() {
     return mrx;
   }
+
+  public List<Detective> getDetektives() {
+    return detektives;
+  }
+
 }

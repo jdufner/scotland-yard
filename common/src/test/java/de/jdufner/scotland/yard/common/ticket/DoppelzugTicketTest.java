@@ -14,7 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common.ticket;
@@ -26,33 +25,33 @@ import org.junit.Test;
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class DoppelzugTest {
+public class DoppelzugTicketTest {
 
   @Test
   public void whenDoubleRounds_expectThreeTicketsConsumed() {
     // arrange
-    Doppelzug doppelzugTickets = new Doppelzug(2);
-    Taxi firstTicket = new Taxi(1);
-    Taxi secondTicket = new Taxi(1);
+    DoppelzugTicket doppelzugTickets = new DoppelzugTicket(2);
+    TaxiTicket firstTicket = new TaxiTicket(1);
+    TaxiTicket secondTicket = new TaxiTicket(1);
 
     // act
-    Doppelzug doppelzug = doppelzugTickets.consume(firstTicket, secondTicket);
+    DoppelzugTicket doppelzugTicket = doppelzugTickets.consume(firstTicket, secondTicket);
 
     // assert
     SoftAssertions.assertSoftly(softAssertions -> {
-      softAssertions.assertThat(doppelzug.getAnzahl()).isEqualTo(1);
+      softAssertions.assertThat(doppelzugTicket.getAnzahl()).isEqualTo(1);
       softAssertions.assertThat(doppelzugTickets.getAnzahl()).isEqualTo(1);
-      softAssertions.assertThat(doppelzug.getFirstTicket()).isEqualTo(firstTicket);
-      softAssertions.assertThat(doppelzug.getSecondTicket()).isEqualTo(secondTicket);
+      softAssertions.assertThat(doppelzugTicket.getFirstTicket()).isEqualTo(firstTicket);
+      softAssertions.assertThat(doppelzugTicket.getSecondTicket()).isEqualTo(secondTicket);
     });
   }
 
   @Test(expected = RuntimeException.class)
   public void whenDoubleRoundsConsumed_expectException() {
     // arrange
-    Doppelzug doppelzugTickets = new Doppelzug(0);
-    Taxi firstTicket = new Taxi(1);
-    Taxi secondTicket = new Taxi(1);
+    DoppelzugTicket doppelzugTickets = new DoppelzugTicket(0);
+    TaxiTicket firstTicket = new TaxiTicket(1);
+    TaxiTicket secondTicket = new TaxiTicket(1);
 
     // act + assert
     doppelzugTickets.consume(firstTicket, secondTicket);

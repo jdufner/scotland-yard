@@ -14,46 +14,38 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common.ticket;
 
+import org.assertj.core.api.Assertions;
+import org.junit.Test;
+
 /**
- *
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class Doppelzug extends Ticket {
+public class TaxiTicketTest {
 
-  private Ticket firstTicket;
-  private Ticket secondTicket;
+  @Test
+  public void whenCompare_expectEquals() {
+    // arrange
+    int anzahl = 10;
+    TaxiTicket taxiTicket1 = new TaxiTicket(anzahl);
+    TaxiTicket taxiTicket2 = new TaxiTicket(anzahl);
 
-  public Doppelzug(final int anzahl) {
-    super(anzahl);
+    // act + assert
+    Assertions.assertThat(taxiTicket1).isEqualTo(taxiTicket2);
   }
 
-  public Doppelzug consume(final Ticket firstTicket, final Ticket secondTicket) {
-    if (firstTicket instanceof Doppelzug || secondTicket instanceof Doppelzug) {
-      throw new RuntimeException();
-    }
-    this.firstTicket = firstTicket;
-    this.secondTicket = secondTicket;
-    consume();
-    return this;
-  }
+  @Test
+  public void whenCompare_expectNotEquals() {
+    // arrange
+    TaxiTicket taxiTicket1 = new TaxiTicket(5);
+    TaxiTicket taxiTicket2 = new TaxiTicket(10);
 
-  public Ticket getFirstTicket() {
-    return firstTicket;
-  }
-
-  public Ticket getSecondTicket() {
-    return secondTicket;
-  }
-
-  @Override
-  public String toString() {
-    return "Doppelzug: " + getAnzahl();
+    // act + assert
+    Assertions.assertThat(taxiTicket1).isNotEqualTo(taxiTicket2);
   }
 
 }

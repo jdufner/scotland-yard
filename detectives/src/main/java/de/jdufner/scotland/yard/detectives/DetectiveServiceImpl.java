@@ -21,6 +21,7 @@ package de.jdufner.scotland.yard.detectives;
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
+import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,11 @@ public class DetectiveServiceImpl implements DetectiveService {
   @Override
   public void initialize(PlayerInfo playerInfo, StartPosition startPosition, Tickets tickets) {
 
+  }
+
+  @Override
+  public Move nextMove() {
+    return null;
   }
 
 }

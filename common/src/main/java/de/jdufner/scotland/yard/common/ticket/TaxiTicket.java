@@ -14,41 +14,23 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common.ticket;
-
-import static org.junit.Assert.*;
-
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class BusTest {
+public class TaxiTicket extends Ticket {
 
-  @Test
-  public void whenCompare_expectEquals() {
-    // arrange
-    int anzahl = 10;
-    Bus bus1 = new Bus(anzahl);
-    Bus bus2 = new Bus(anzahl);
-
-    // act + assert
-    Assertions.assertThat(bus1).isEqualTo(bus2);
+  public TaxiTicket(final int anzahl) {
+    super(anzahl);
   }
 
-  @Test
-  public void whenCompare_expectNotEquals() {
-    // arrange
-    Bus bus1 = new Bus(5);
-    Bus bus2 = new Bus(10);
-
-    // act + assert
-    Assertions.assertThat(bus1).isNotEqualTo(bus2);
+  @Override
+  public String toString() {
+    return "TaxiTicket: " + getAnzahl();
   }
 
 }

@@ -14,7 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common.ticket;
@@ -45,8 +44,8 @@ public class TicketTest {
   public void whenCompareDifferentTicketTypes_expectDifferent() {
     // arrange
     int numberOfTickets = 10;
-    Ticket taxi = new Taxi(numberOfTickets);
-    Ticket bus = new Bus(numberOfTickets);
+    Ticket taxi = new TaxiTicket(numberOfTickets);
+    Ticket bus = new BusTicket(numberOfTickets);
 
     // act + assert
     Assertions.assertThat(taxi).isNotEqualTo(bus);

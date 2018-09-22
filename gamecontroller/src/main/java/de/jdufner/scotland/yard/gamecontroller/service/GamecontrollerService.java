@@ -37,16 +37,19 @@ public class GamecontrollerService {
   private static final Logger LOG = LoggerFactory.getLogger(GamecontrollerService.class);
 
   private final GameInitializationService gameInitializationService;
+  private final GameLapService gameLapService;
 
-  public GamecontrollerService(final GameInitializationService gameInitializationService) {
+  public GamecontrollerService(final GameInitializationService gameInitializationService,
+                               final GameLapService gameLapService) {
     this.gameInitializationService = gameInitializationService;
+    this.gameLapService = gameLapService;
   }
 
   @PostConstruct
   public void startGame() {
     final Game game = gameInitializationService.initializeGame();
     while (!game.isFinished()) {
-      gameInitializationService.nextLap(game);
+      gameLapService.nextLap(game);
     }
   }
 

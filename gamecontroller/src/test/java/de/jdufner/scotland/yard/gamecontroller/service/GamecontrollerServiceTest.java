@@ -39,6 +39,8 @@ public class GamecontrollerServiceTest {
 
   @Mock
   private GameInitializationService gameInitializationService;
+  @Mock
+  private GameLapService gameLapService;
 
   @Test
   public void whenStartsSpiel_expectSpielEndsAfterThreeLaps() {
@@ -51,7 +53,7 @@ public class GamecontrollerServiceTest {
     gamecontrollerService.startGame();
 
     // assert
-    verify(gameInitializationService, times(2)).nextLap(any(Game.class));
+    verify(gameLapService, times(2)).nextLap(any(Game.class));
   }
 
 }

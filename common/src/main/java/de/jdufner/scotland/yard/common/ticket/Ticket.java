@@ -14,13 +14,12 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common.ticket;
 
 /**
- * Superklasse für alle Ticket: Taxi, Bus, Underground und Blackticket.
+ * Superklasse für alle Ticket: TaxiTicket, BusTicket, Underground und Blackticket.
  * <p>
  * Soll die Anzahl der Tickets durch Instanzen dargestellt werden oder durch einen Zähler? Im
  * Moment entscheide ich mich mal für einen Zähler. Mal schauen wir gut das klappt.
@@ -38,6 +37,11 @@ public abstract class Ticket {
 
   public int getAnzahl() {
     return anzahl;
+  }
+
+  public boolean contains(Ticket other) {
+    if (getClass() != other.getClass()) return false;
+    return anzahl >= other.anzahl;
   }
 
   public void consume() {

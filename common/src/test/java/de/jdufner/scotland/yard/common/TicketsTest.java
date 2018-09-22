@@ -14,14 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common;
 
-import static org.junit.Assert.*;
-
+import de.jdufner.scotland.yard.common.ticket.BusTicket;
+import de.jdufner.scotland.yard.common.ticket.DoppelzugTicket;
+import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
+import de.jdufner.scotland.yard.common.ticket.Underground;
 import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Jürgen Dufner
@@ -30,13 +34,91 @@ import org.junit.Test;
 public class TicketsTest {
 
   @Test
-  public void when_expect() {
+  public void whenTicketsContainsMoreTaxiTicketThanRequested_expectTrue() {
     // arrange
+    Tickets tickets = new Tickets();
+    TaxiTicket taxiTicket = new TaxiTicket(3);
+    tickets.add(taxiTicket);
 
-    // act
+    // act + assert
+    assertTrue(tickets.contains(new TaxiTicket(1)));
+  }
 
-    // assert
-    assertTrue(true);
+  @Test
+  public void whenTicketsContainsLessTaxiTicketsThenRequested_expectFalse() {
+    // arrange
+    Tickets tickets = new Tickets();
+    TaxiTicket taxiTicket = new TaxiTicket(3);
+    tickets.add(taxiTicket);
+
+    // act + assert
+    assertFalse(tickets.contains(new TaxiTicket(5)));
+  }
+
+  @Test
+  public void whenTicketsContainsOneTaxiTicketButRequestBusTicket_expectFalse() {
+    // arrange
+    Tickets tickets = new Tickets();
+    TaxiTicket taxiTicket = new TaxiTicket(3);
+    tickets.add(taxiTicket);
+
+    // act + assert
+    assertFalse(tickets.contains(new BusTicket(1)));
+  }
+
+  @Test
+  public void whenTicketsContainsDoppelzugAndBusAndTaxtTicket_expectTrue() {
+    // arrange
+    Tickets tickets = new Tickets();
+    DoppelzugTicket doppelzugTicket = new DoppelzugTicket(1);
+    tickets.add(doppelzugTicket);
+    TaxiTicket taxiTicket = new TaxiTicket(1);
+    tickets.add(taxiTicket);
+    BusTicket busTicket = new BusTicket(1);
+    tickets.add(busTicket);
+
+    DoppelzugTicket searchTicket = new DoppelzugTicket(1);
+    searchTicket.setFirstTicket(new BusTicket(1));
+    searchTicket.setSecondTicket(new TaxiTicket(1));
+
+    // act + assert
+    assertTrue(tickets.contains(searchTicket));
+  }
+
+  @Test
+  public void whenTicketsContainsDoppelzugAndBusAndUndergroudTicket_expectFalse() {
+    // arrange
+    Tickets tickets = new Tickets();
+    DoppelzugTicket doppelzugTicket = new DoppelzugTicket(1);
+    tickets.add(doppelzugTicket);
+    Underground underground = new Underground(1);
+    tickets.add(underground);
+    BusTicket busTicket = new BusTicket(1);
+    tickets.add(busTicket);
+
+    DoppelzugTicket searchTicket = new DoppelzugTicket(1);
+    searchTicket.setFirstTicket(new BusTicket(1));
+    searchTicket.setSecondTicket(new TaxiTicket(1));
+
+    // act + assert
+    assertFalse(tickets.contains(searchTicket));
+  }
+
+  @Test
+  public void whenTicketsContainsBusAndTaxtTicket_expectFalse() {
+    // arrange
+    Tickets tickets = new Tickets();
+    TaxiTicket taxiTicket = new TaxiTicket(1);
+    tickets.add(taxiTicket);
+    BusTicket busTicket = new BusTicket(1);
+    tickets.add(busTicket);
+
+    DoppelzugTicket searchTicket = new DoppelzugTicket(1);
+    searchTicket.setFirstTicket(new BusTicket(1));
+    searchTicket.setSecondTicket(new TaxiTicket(1));
+
+    // act + assert
+    assertFalse(tickets.contains(searchTicket));
   }
 
 }

@@ -14,18 +14,18 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
-import javax.annotation.PostConstruct;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Jürgen Dufner
@@ -66,10 +66,10 @@ public class InitializationBean {
       );
 
       graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
-          ".type=\"Bus\" create (n)-[:BUS]->(m) return n, m");
+          ".type=\"BusTicket\" create (n)-[:BUS]->(m) return n, m");
 
       graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
-          ".type=\"Taxi\" create (n)-[:TAXI]->(m) return n, m");
+          ".type=\"TaxiTicket\" create (n)-[:TAXI]->(m) return n, m");
 
       graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
           ".type=\"Ship\" create (n)-[:SHIP]->(m) return n, m");

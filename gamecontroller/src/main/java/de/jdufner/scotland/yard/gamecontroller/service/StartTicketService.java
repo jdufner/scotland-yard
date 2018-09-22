@@ -14,16 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
-import de.jdufner.scotland.yard.common.ticket.BlackTicket;
-import de.jdufner.scotland.yard.common.ticket.Bus;
-import de.jdufner.scotland.yard.common.ticket.Doppelzug;
-import de.jdufner.scotland.yard.common.ticket.Taxi;
 import de.jdufner.scotland.yard.common.Tickets;
+import de.jdufner.scotland.yard.common.ticket.BlackTicket;
+import de.jdufner.scotland.yard.common.ticket.BusTicket;
+import de.jdufner.scotland.yard.common.ticket.DoppelzugTicket;
+import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import de.jdufner.scotland.yard.common.ticket.Underground;
 import org.springframework.stereotype.Service;
 
@@ -36,18 +35,18 @@ public class StartTicketService {
 
   public Tickets getMrxTickets() {
     Tickets tickets = new Tickets();
-    tickets.add(new Taxi(4));
-    tickets.add(new Bus(3));
+    tickets.add(new TaxiTicket(4));
+    tickets.add(new BusTicket(3));
     tickets.add(new Underground(3));
     tickets.add(new BlackTicket(2));
-    tickets.add(new Doppelzug(2));
+    tickets.add(new DoppelzugTicket(2));
     return tickets;
   }
 
   public Tickets getDetectiveTickets() {
     Tickets tickets = new Tickets();
-    tickets.add(new Taxi(10));
-    tickets.add(new Bus(8));
+    tickets.add(new TaxiTicket(10));
+    tickets.add(new BusTicket(8));
     tickets.add(new Underground(4));
     return tickets;
   }

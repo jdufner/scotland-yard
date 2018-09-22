@@ -70,10 +70,13 @@ public abstract class Player {
     track.add(naechstePosition);
   }
 
-  protected void consumeTicket(final Ticket verbrauchteTickets) {
+  public void consumeTicket(final Ticket verbrauchteTickets) {
 //    tickets.stream()
 //        //.filter(ticket -> ticket.getClass().equals(verbrauchteTickets.getClass()))
 //        .forEach(ticket -> ticket.consume());
   }
 
+  public Tickets getTickets() {
+    return tickets;
+  }
 }

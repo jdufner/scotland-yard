@@ -14,15 +14,14 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
 import de.jdufner.scotland.yard.common.position.Position;
+import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
-import de.jdufner.scotland.yard.common.ticket.Taxi;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +51,7 @@ public class MrXService extends SpielerService<Mrx> {
   protected Zug ermittleNächstenZug(final Game game, final Mrx spieler) {
     // Welche Verkehrsmittel kann Mrx nutzen?
     final Position position = spielbrettService.findeNachbarAmWeitestenEntferntVonDetektiven();
-    return new Zug(position, new Taxi(1));
+    return new Zug(position, new TaxiTicket(1));
   }
 
 }
