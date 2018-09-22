@@ -14,7 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common.ticket;
@@ -23,15 +22,15 @@ package de.jdufner.scotland.yard.common.ticket;
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class Underground extends Ticket {
+public class UndergroundTicket extends Ticket {
 
-  public Underground(final int anzahl) {
+  public UndergroundTicket(final int anzahl) {
     super(anzahl);
   }
 
   @Override
   public String toString() {
-    return "Underground: " + getAnzahl();
+    return "UndergroundTicket: " + getAnzahl();
   }
 
 }

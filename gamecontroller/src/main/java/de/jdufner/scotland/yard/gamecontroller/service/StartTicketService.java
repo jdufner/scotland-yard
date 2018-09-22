@@ -23,7 +23,7 @@ import de.jdufner.scotland.yard.common.ticket.BlackTicket;
 import de.jdufner.scotland.yard.common.ticket.BusTicket;
 import de.jdufner.scotland.yard.common.ticket.DoppelzugTicket;
 import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
-import de.jdufner.scotland.yard.common.ticket.Underground;
+import de.jdufner.scotland.yard.common.ticket.UndergroundTicket;
 import org.springframework.stereotype.Service;
 
 /**
@@ -37,7 +37,7 @@ public class StartTicketService {
     Tickets tickets = new Tickets();
     tickets.add(new TaxiTicket(4));
     tickets.add(new BusTicket(3));
-    tickets.add(new Underground(3));
+    tickets.add(new UndergroundTicket(3));
     tickets.add(new BlackTicket(2));
     tickets.add(new DoppelzugTicket(2));
     return tickets;
@@ -47,7 +47,7 @@ public class StartTicketService {
     Tickets tickets = new Tickets();
     tickets.add(new TaxiTicket(10));
     tickets.add(new BusTicket(8));
-    tickets.add(new Underground(4));
+    tickets.add(new UndergroundTicket(4));
     return tickets;
   }
 }

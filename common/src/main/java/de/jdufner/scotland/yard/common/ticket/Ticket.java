@@ -19,7 +19,7 @@
 package de.jdufner.scotland.yard.common.ticket;
 
 /**
- * Superklasse für alle Ticket: TaxiTicket, BusTicket, Underground und Blackticket.
+ * Superklasse für alle Ticket: TaxiTicket, BusTicket, UndergroundTicket und Blackticket.
  * <p>
  * Soll die Anzahl der Tickets durch Instanzen dargestellt werden oder durch einen Zähler? Im
  * Moment entscheide ich mich mal für einen Zähler. Mal schauen wir gut das klappt.

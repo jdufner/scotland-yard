@@ -23,7 +23,7 @@ import de.jdufner.scotland.yard.common.ticket.BusTicket;
 import de.jdufner.scotland.yard.common.ticket.DoppelzugTicket;
 import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
-import de.jdufner.scotland.yard.common.ticket.Underground;
+import de.jdufner.scotland.yard.common.ticket.UndergroundTicket;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class Tickets {
   }
 
   public int getUndergroundTickets() {
-    return getTicketByType(Underground.class);
+    return getTicketByType(UndergroundTicket.class);
   }
 
   public int getBlackTickets() {

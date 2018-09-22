@@ -21,7 +21,7 @@ package de.jdufner.scotland.yard.common;
 import de.jdufner.scotland.yard.common.ticket.BusTicket;
 import de.jdufner.scotland.yard.common.ticket.DoppelzugTicket;
 import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
-import de.jdufner.scotland.yard.common.ticket.Underground;
+import de.jdufner.scotland.yard.common.ticket.UndergroundTicket;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
@@ -91,8 +91,8 @@ public class TicketsTest {
     Tickets tickets = new Tickets();
     DoppelzugTicket doppelzugTicket = new DoppelzugTicket(1);
     tickets.add(doppelzugTicket);
-    Underground underground = new Underground(1);
-    tickets.add(underground);
+    UndergroundTicket undergroundTicket = new UndergroundTicket(1);
+    tickets.add(undergroundTicket);
     BusTicket busTicket = new BusTicket(1);
     tickets.add(busTicket);
 

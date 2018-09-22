@@ -23,7 +23,7 @@ import de.jdufner.scotland.yard.common.ticket.BlackTicket;
 import de.jdufner.scotland.yard.common.ticket.BusTicket;
 import de.jdufner.scotland.yard.common.ticket.DoppelzugTicket;
 import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
-import de.jdufner.scotland.yard.common.ticket.Underground;
+import de.jdufner.scotland.yard.common.ticket.UndergroundTicket;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,7 +44,7 @@ public class StartTicketServiceTest {
     Tickets mrxTickets = startTicketService.getMrxTickets();
 
     // assert
-    assertThat(mrxTickets.getTickets()).containsExactly(new TaxiTicket(4), new BusTicket(3), new Underground(3), new BlackTicket(2), new DoppelzugTicket(2));
+    assertThat(mrxTickets.getTickets()).containsExactly(new TaxiTicket(4), new BusTicket(3), new UndergroundTicket(3), new BlackTicket(2), new DoppelzugTicket(2));
   }
 
   @Test
@@ -55,7 +55,7 @@ public class StartTicketServiceTest {
     Tickets mrxTickets = startTicketService.getDetectiveTickets();
 
     // assert
-    assertThat(mrxTickets.getTickets()).containsExactly(new TaxiTicket(10), new BusTicket(8), new Underground(4));
+    assertThat(mrxTickets.getTickets()).containsExactly(new TaxiTicket(10), new BusTicket(8), new UndergroundTicket(4));
   }
 
 }

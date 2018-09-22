@@ -14,12 +14,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common.ticket;
-
-import static org.junit.Assert.*;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -28,27 +25,27 @@ import org.junit.Test;
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class UndergroundTest {
+public class UndergroundTicketTest {
 
   @Test
   public void whenCompare_expectEquals() {
     // arrange
     int anzahl = 10;
-    Underground underground1 = new Underground(anzahl);
-    Underground underground2 = new Underground(anzahl);
+    UndergroundTicket undergroundTicket1 = new UndergroundTicket(anzahl);
+    UndergroundTicket undergroundTicket2 = new UndergroundTicket(anzahl);
 
     // act + assert
-    Assertions.assertThat(underground1).isEqualTo(underground2);
+    Assertions.assertThat(undergroundTicket1).isEqualTo(undergroundTicket2);
   }
 
   @Test
   public void whenCompare_expectNotEquals() {
     // arrange
-    Underground underground1 = new Underground(5);
-    Underground underground2 = new Underground(10);
+    UndergroundTicket undergroundTicket1 = new UndergroundTicket(5);
+    UndergroundTicket undergroundTicket2 = new UndergroundTicket(10);
 
     // act + assert
-    Assertions.assertThat(underground1).isNotEqualTo(underground2);
+    Assertions.assertThat(undergroundTicket1).isNotEqualTo(undergroundTicket2);
   }
 
 }

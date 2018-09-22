@@ -75,7 +75,7 @@ public class InitializationBean {
           ".type=\"Ship\" create (n)-[:SHIP]->(m) return n, m");
 
       graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
-          ".type=\"Underground\" create (n)-[:UNDERGROUND]->(m) return n, m");
+          ".type=\"UndergroundTicket\" create (n)-[:UNDERGROUND]->(m) return n, m");
 
       graphDatabaseService.execute("match (:Node)-[r:RELATION]->(:Node) delete r");
 
