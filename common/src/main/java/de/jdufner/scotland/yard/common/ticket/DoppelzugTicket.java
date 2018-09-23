@@ -32,20 +32,13 @@ public class DoppelzugTicket extends Ticket {
     super(anzahl);
   }
 
-//  @Override
-//  public boolean contains(Ticket other) {
-//    if (getClass() != other.getClass()) return false;
-//    DoppelzugTicket that = (DoppelzugTicket) other;
-//    return super.contains(that) && firstTicket.contains(that.firstTicket) && secondTicket.contains(that.secondTicket);
-//  }
-
   public DoppelzugTicket consume(final Ticket firstTicket, final Ticket secondTicket) {
     if (firstTicket instanceof DoppelzugTicket || secondTicket instanceof DoppelzugTicket) {
       throw new RuntimeException();
     }
     this.firstTicket = firstTicket;
     this.secondTicket = secondTicket;
-    consume();
+    consumeOne();
     return this;
   }
 

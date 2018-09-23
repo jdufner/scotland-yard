@@ -29,6 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+
 import static java.lang.String.format;
 
 /**
@@ -37,6 +39,9 @@ import static java.lang.String.format;
  */
 @Service
 public class GameLapService {
+
+  // TODO [jdufner, 2018-09-19] Is this the right place?
+  private static final int[] auftauchen = {3, 8, 13, 18};
 
   private static final Logger LOG = LoggerFactory.getLogger(GameLapService.class);
 
@@ -64,12 +69,7 @@ public class GameLapService {
     checkStartPosition(move, game.getMrx());
     checkIsMoveValid(move);
     checkHasEnoughTickets(move, game.getMrx());
-    // move player
-    //player.consumeTicket(move.getTicket());
-  }
-
-  private void checkHasEnoughTickets(Move move, Player player) {
-    player.getTickets().contains(move.getTicket());
+    game.getMrx().move(move);
   }
 
   private void moveDetectives(Game game) {
@@ -77,19 +77,22 @@ public class GameLapService {
   }
 
   private void moveDetective(final Game game, final Detective detective) {
-    Move move = detectiveService.nextMove();
+    Move move = doMoveDetective(game, detective);
     checkStartPosition(move, detective);
     checkIsMoveValid(move);
     checkHasEnoughTickets(move, detective);
-    handOverTicket(detective, game.getMrx());
+    detective.move(move);
+    handOverTicket(move, game.getMrx());
   }
 
-  private void handOverTicket(Detective detective, Mrx mrx) {
-
-  }
-
-  private void checkIsMoveValid(Move move) {
-    spielbrettService.isMoveValid(move);
+  private Move doMoveDetective(Game game, Detective detective) {
+    Move move;
+    if (Arrays.asList(auftauchen).contains(game.getCurrentLap())) {
+      move = detectiveService.nextMove(detective.getPlayerInfo(), game.getMrx().getCurrentPosition());
+    } else {
+      move = detectiveService.nextMove(detective.getPlayerInfo());
+    }
+    return move;
   }
 
   private void checkStartPosition(Move move, Player player) {
@@ -97,6 +100,18 @@ public class GameLapService {
       throw new RuntimeException(format("Move of Mr. X starts from the from position. " +
           "Expected position=%s, but was=%s", player.getCurrentPosition(), move.getStart()));
     }
+  }
+
+  private void checkIsMoveValid(Move move) {
+    spielbrettService.isMoveValid(move);
+  }
+
+  private void checkHasEnoughTickets(Move move, Player player) {
+    player.getTickets().contains(move.getTicket());
+  }
+
+  private void handOverTicket(Move move, Mrx mrx) {
+    mrx.addTicket(move.getTicket());
   }
 
 }

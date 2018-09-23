@@ -34,7 +34,7 @@ public class TicketTest {
     Ticket ticket = new TestTicket(numberOfTickets);
 
     // act
-    ticket.consume();
+    ticket.consumeOne();
 
     // assert
     Assertions.assertThat(ticket.getAnzahl()).isEqualTo(numberOfTickets - 1);

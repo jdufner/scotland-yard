@@ -20,6 +20,7 @@ package de.jdufner.scotland.yard.gamecontroller.model.spieler;
 
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
+import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
@@ -60,23 +61,31 @@ public abstract class Player {
     return track.get(track.size() - 1);
   }
 
-  public List<Position> getTrack() {
-    return track;
+  @Deprecated
+  public void ziehe(final Zug zug) {
   }
 
-  public abstract void ziehe(final Zug zug);
-
-  public void zieheAuf(final Position naechstePosition) {
+  private void moveTo(final Position naechstePosition) {
     track.add(naechstePosition);
   }
 
-  public void consumeTicket(final Ticket verbrauchteTickets) {
-//    tickets.stream()
-//        //.filter(ticket -> ticket.getClass().equals(verbrauchteTickets.getClass()))
-//        .forEach(ticket -> ticket.consume());
+  public void consumeTicket(final Ticket verbrauchtesTicket) {
+    tickets.getTickets().stream()
+        .filter(ticket -> ticket.getClass().equals(verbrauchtesTicket.getClass()))
+        .forEach(ticket -> ticket.consumeOne());
   }
 
   public Tickets getTickets() {
     return tickets;
   }
+
+  public void move(Move move) {
+    moveTo(move.getEnd());
+    consumeTicket(move.getTicket());
+  }
+
+  public PlayerInfo getPlayerInfo() {
+    return playerInfo;
+  }
+
 }

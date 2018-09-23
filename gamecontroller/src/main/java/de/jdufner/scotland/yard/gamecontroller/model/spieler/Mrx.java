@@ -21,6 +21,7 @@ package de.jdufner.scotland.yard.gamecontroller.model.spieler;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.StartPosition;
+import de.jdufner.scotland.yard.common.ticket.Ticket;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 
 /**
@@ -28,9 +29,6 @@ import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
  * @since 1.0
  */
 public class Mrx extends Player {
-
-  // TODO [jdufner, 2018-09-19] Is this the right place?
-  private static final int[] auftauchen = {3, 8, 13, 18};
 
   public Mrx(final PlayerInfo playerInfo, final StartPosition startPosition, final Tickets tickets) {
     super(playerInfo, startPosition, tickets);
@@ -43,8 +41,12 @@ public class Mrx extends Player {
 
   @Override
   public void ziehe(final Zug zug) {
-    zieheAuf(zug.getZiel());
-    consumeTicket(zug.getTicket());
+//    moveTo(zug.getZiel());
+//    consumeTicket(zug.getTicket());
+  }
+
+  public void addTicket(Ticket ticket) {
+    tickets.add(ticket);
   }
 
   public static class Builder {

@@ -121,4 +121,18 @@ public class TicketsTest {
     assertFalse(tickets.contains(searchTicket));
   }
 
+  @Test
+  public void whenAddedTicketsTwoTimesTicketsContainsMoreTaxiTicketThanRequested_expectTrue() {
+    // arrange
+    Tickets tickets = new Tickets();
+    TaxiTicket taxiTicket1 = new TaxiTicket(3);
+    tickets.add(taxiTicket1);
+    TaxiTicket taxiTicket2 = new TaxiTicket(2);
+    tickets.add(taxiTicket2);
+
+    // act + assert
+    assertTrue(tickets.contains(new TaxiTicket(5)));
+  }
+
+
 }

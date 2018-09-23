@@ -44,11 +44,17 @@ public abstract class Ticket {
     return anzahl >= other.anzahl;
   }
 
-  public void consume() {
+  // TODO [jdufner, 2018-09-23] Return a new instance with new value, instead of modifying value.
+  public void consumeOne() {
     if (anzahl <= 0) {
       throw new RuntimeException();
     }
     --anzahl;
+  }
+
+  // TODO [jdufner, 2018-09-23] Return a new instance with new value, instead of modifying value.
+  public void add(Ticket newTicket) {
+    anzahl += newTicket.anzahl;
   }
 
   @Override
@@ -63,4 +69,5 @@ public abstract class Ticket {
   public int hashCode() {
     return anzahl;
   }
+
 }

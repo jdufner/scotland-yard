@@ -20,6 +20,7 @@ package de.jdufner.scotland.yard.common;
 
 
 import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 
 /**
@@ -32,5 +33,7 @@ public interface DetectiveService {
 
   void initialize(final PlayerInfo playerInfo, final StartPosition startPosition, final Tickets tickets);
 
-  Move nextMove();
+  Move nextMove(PlayerInfo playerInfo);
+
+  Move nextMove(PlayerInfo playerInfo, Position positionOfMrx);
 }

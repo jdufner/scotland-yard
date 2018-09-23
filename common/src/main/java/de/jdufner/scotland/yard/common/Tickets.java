@@ -18,16 +18,11 @@
 
 package de.jdufner.scotland.yard.common;
 
-import de.jdufner.scotland.yard.common.ticket.BlackTicket;
-import de.jdufner.scotland.yard.common.ticket.BusTicket;
 import de.jdufner.scotland.yard.common.ticket.DoppelzugTicket;
-import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
-import de.jdufner.scotland.yard.common.ticket.UndergroundTicket;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * This is a container for tickets during initialization of the service.
@@ -37,39 +32,25 @@ import java.util.Optional;
  */
 public class Tickets {
 
+  // TODO [jdufner, 2018-09-23] Is it better to use a Map?
   private final List<Ticket> tickets = new LinkedList<>();
 
-  public void add(Ticket ticket) {
-    tickets.add(ticket);
+  // TODO [jdufner, 2018-09-23] Replace by constructor parameter
+  public void add(Ticket newTicket) {
+    boolean present = tickets.stream()
+        .filter(ticket -> ticket.getClass().equals(newTicket.getClass()))
+        .map(ticket -> {
+          ticket.add(newTicket);
+          return ticket;
+        })
+        .findFirst().isPresent();
+    if (!present) {
+      tickets.add(newTicket);
+    }
   }
 
   public List<Ticket> getTickets() {
     return tickets;
-  }
-
-  private int getTicketByType(Class<? extends Ticket> aClass) {
-    Optional<Ticket> optionalTicket = tickets.stream().filter(ticket -> ticket.getClass().equals(aClass)).findFirst();
-    return optionalTicket.isPresent() ? optionalTicket.get().getAnzahl() : 0;
-  }
-
-  public int getTaxiTickets() {
-    return getTicketByType(TaxiTicket.class);
-  }
-
-  public int getBusTickets() {
-    return getTicketByType(BusTicket.class);
-  }
-
-  public int getUndergroundTickets() {
-    return getTicketByType(UndergroundTicket.class);
-  }
-
-  public int getBlackTickets() {
-    return getTicketByType(BlackTicket.class);
-  }
-
-  public int getDoppelzugTickets() {
-    return getTicketByType(DoppelzugTicket.class);
   }
 
   public boolean contains(final Ticket searchTicket) {

@@ -21,7 +21,6 @@ package de.jdufner.scotland.yard.gamecontroller.model.spieler;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.StartPosition;
-import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +41,6 @@ public class Detective extends Player {
   @Override
   public String toString() {
     return "Detective: " + super.toString() + ", " + nummer;
-  }
-
-  @Override
-  public void ziehe(final Zug zug) {
-    zieheAuf(zug.getZiel());
-    consumeTicket(zug.getTicket());
   }
 
   public static class Builder {

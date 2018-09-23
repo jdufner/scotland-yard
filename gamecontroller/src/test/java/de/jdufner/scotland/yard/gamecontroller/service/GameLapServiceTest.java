@@ -16,36 +16,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.scotland.yard.detectives;
+package de.jdufner.scotland.yard.gamecontroller.service;
 
 import de.jdufner.scotland.yard.common.DetectiveService;
-import de.jdufner.scotland.yard.common.PlayerInfo;
-import de.jdufner.scotland.yard.common.Tickets;
-import de.jdufner.scotland.yard.common.move.Move;
-import de.jdufner.scotland.yard.common.position.Position;
-import de.jdufner.scotland.yard.common.position.StartPosition;
-import org.springframework.stereotype.Service;
+import de.jdufner.scotland.yard.common.MrxService;
+import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-/**
- * @author Jürgen Dufner
- * @since 1.0
- */
-@Service
-public class DetectiveServiceImpl implements DetectiveService {
+import static org.mockito.Mockito.mock;
 
-  @Override
-  public void initialize(PlayerInfo playerInfo, StartPosition startPosition, Tickets tickets) {
+@RunWith(MockitoJUnitRunner.class)
+public class GameLapServiceTest {
 
-  }
+  @InjectMocks
+  private GameLapService gameLapService;
 
-  @Override
-  public Move nextMove(PlayerInfo playerInfo) {
-    return null;
-  }
+  @Mock
+  private MrxService mrxService;
 
-  @Override
-  public Move nextMove(PlayerInfo playerInfo, Position positionOfMrx) {
-    return null;
+  @Mock
+  private DetectiveService detectiveService;
+
+  @Mock
+  private SpielbrettService spielbrettService;
+
+  @Test
+  public void whenNextLap_expect() {
+    // arrange
+    Game game = mock(Game.class);
+
+    // act
+    //gameLapService.nextLap(game);
+
+    // assert
   }
 
 }
