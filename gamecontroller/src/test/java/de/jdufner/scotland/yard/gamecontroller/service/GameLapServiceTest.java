@@ -50,7 +50,7 @@ public class GameLapServiceTest {
     Game game = mock(Game.class);
 
     // act
-    //gameLapService.nextLap(game);
+    gameLapService.nextLap(game);
 
     // assert
   }

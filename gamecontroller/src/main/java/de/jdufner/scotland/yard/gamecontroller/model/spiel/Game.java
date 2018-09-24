@@ -96,4 +96,27 @@ public class Game {
     return detektives;
   }
 
+  public static class Builder {
+
+    private Mrx mrx;
+    private List<Detective> detectives;
+    private int currentLap = 1;
+
+    public Builder() {
+
+    }
+
+    public Builder withCurrentLap(int currentLap) {
+      this.currentLap = currentLap;
+      return this;
+    }
+
+    public Game build() {
+      Game game = new Game(mrx, detectives);
+      game.currentLap = currentLap;
+      return game;
+    }
+
+  }
+
 }
