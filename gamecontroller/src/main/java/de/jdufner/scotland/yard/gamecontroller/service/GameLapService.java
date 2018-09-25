@@ -96,8 +96,8 @@ public class GameLapService {
   }
 
   private void checkStartPosition(Move move, Player player) {
-    if (player.getCurrentPosition().equals(move.getStart())) {
-      throw new RuntimeException(format("Move of Mr. X starts from the from position. " +
+    if (!player.getCurrentPosition().equals(move.getStart())) {
+      throw new RuntimeException(format("Move of Mr. X starts not the from position. " +
           "Expected position=%s, but was=%s", player.getCurrentPosition(), move.getStart()));
     }
   }

@@ -20,12 +20,17 @@ package de.jdufner.scotland.yard.gamecontroller.service;
 
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
+import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.position.Position;
+import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameLapServiceTest {
@@ -46,6 +51,8 @@ public class GameLapServiceTest {
   public void whenNextLap_expect() {
     // arrange
     Game game = Game.Builder.newGame().build();
+    when(mrxService.nextMove()).thenReturn(new Move(game.getMrx().getPlayerInfo(), game.getMrx().getCurrentPosition(), new Position(1), new TaxiTicket(1)));
+    //when(detectiveService.nextMove()).thenReturn(new Move(game.getMrx().getPlayerInfo(), game.getMrx().getCurrentPosition(), new Position(1), new TaxiTicket(1)));
 
     // act
     gameLapService.nextLap(game);

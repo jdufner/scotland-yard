@@ -53,7 +53,7 @@ public class Mrx extends Player {
 
     public static Builder defaultMrx() {
       return new Builder()
-          .withStartpositionAsInt(9)
+          .withStartpositionAsInt(13)
           .withPlayerInfo(PlayerInfo.Builder.newMrx().build())
           .withTickets(Tickets.Builder.defaultMrxTickets().build());
     }
