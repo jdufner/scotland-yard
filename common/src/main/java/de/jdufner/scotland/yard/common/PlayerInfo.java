@@ -19,6 +19,7 @@
 package de.jdufner.scotland.yard.common;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class PlayerInfo {
 
@@ -65,5 +66,41 @@ public class PlayerInfo {
     public String toString() {
       return uuid;
     }
+  }
+
+  public static class Builder {
+
+    public static Builder newMrx() {
+      return new Builder()
+          .withType(Type.MRX)
+          .withId(UUID.randomUUID().toString());
+    }
+
+    public static Builder newDetective() {
+      return new Builder()
+          .withType(Type.DETECTIVE)
+          .withId(UUID.randomUUID().toString());
+    }
+
+    private Type type;
+    private Id id;
+
+    public Builder() {
+    }
+
+    public Builder withType(final Type type) {
+      this.type = type;
+      return this;
+    }
+
+    public Builder withId(final String idAsString) {
+      this.id = new Id(idAsString);
+      return this;
+    }
+
+    public PlayerInfo build() {
+      return new PlayerInfo(type, id);
+    }
+
   }
 }

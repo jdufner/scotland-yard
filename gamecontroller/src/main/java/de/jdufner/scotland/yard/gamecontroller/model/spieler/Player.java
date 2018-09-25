@@ -88,4 +88,47 @@ public abstract class Player {
     return playerInfo;
   }
 
+  public static class Builder {
+
+    public static Builder defaultDetective() {
+      return new Builder()
+          .withNumber(1)
+          .withStartpositionAsInt(13)
+          .withPlayerInfo(PlayerInfo.Builder.newDetective().build())
+          .withTickets(Tickets.Builder.defaultDetectiveTickets().build());
+    }
+
+    private int number;
+    private StartPosition startPosition;
+    private PlayerInfo playerInfo;
+    private Tickets tickets;
+
+    public Builder() {
+    }
+
+    public Builder withNumber(final int number) {
+      this.number = number;
+      return this;
+    }
+
+    public Builder withStartpositionAsInt(final int startpositionAsInt) {
+      this.startPosition = new StartPosition(startpositionAsInt);
+      return this;
+    }
+
+    public Builder withPlayerInfo(final PlayerInfo playerInfo) {
+      this.playerInfo = playerInfo;
+      return this;
+    }
+
+    public Builder withTickets(final Tickets tickets) {
+      this.tickets = tickets;
+      return this;
+    }
+
+    public Detective build() {
+      return new Detective(number, playerInfo, startPosition, tickets);
+    }
+
+  }
 }

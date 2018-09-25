@@ -18,9 +18,12 @@
 
 package de.jdufner.scotland.yard.common;
 
+import de.jdufner.scotland.yard.common.ticket.BlackTicket;
+import de.jdufner.scotland.yard.common.ticket.BusTicket;
 import de.jdufner.scotland.yard.common.ticket.DoppelzugTicket;
+import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
-
+import de.jdufner.scotland.yard.common.ticket.UndergroundTicket;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,7 +36,15 @@ import java.util.List;
 public class Tickets {
 
   // TODO [jdufner, 2018-09-23] Is it better to use a Map?
-  private final List<Ticket> tickets = new LinkedList<>();
+  private List<Ticket> tickets;
+
+  public Tickets() {
+    tickets = new LinkedList<>();
+  }
+
+  public Tickets(final List<Ticket> tickets) {
+    this.tickets = tickets;
+  }
 
   // TODO [jdufner, 2018-09-23] Replace by constructor parameter
   public void add(Ticket newTicket) {
@@ -64,6 +75,40 @@ public class Tickets {
           return true;
         })
         .anyMatch(ticket -> true);
+  }
+
+  public static class Builder {
+
+    public static Builder defaultMrxTickets() {
+      return new Builder()
+          .withTicket(new TaxiTicket(2))
+          .withTicket(new BusTicket(2))
+          .withTicket(new UndergroundTicket(2))
+          .withTicket(new BlackTicket(2))
+          .withTicket(new DoppelzugTicket(2));
+    }
+
+    public static Builder defaultDetectiveTickets() {
+      return new Builder()
+          .withTicket(new TaxiTicket(4))
+          .withTicket(new BusTicket(4))
+          .withTicket(new UndergroundTicket(4));
+    }
+
+    private List<Ticket> tickets = new LinkedList<>();
+
+    public Builder() {
+    }
+
+    public Builder withTicket(final Ticket ticket) {
+      this.tickets.add(ticket);
+      return this;
+    }
+
+    public Tickets build() {
+      return new Tickets(tickets);
+    }
+
   }
 
 }

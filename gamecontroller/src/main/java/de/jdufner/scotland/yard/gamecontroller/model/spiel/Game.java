@@ -21,11 +21,11 @@ package de.jdufner.scotland.yard.gamecontroller.model.spiel;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Player;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * The Game represents the status of the board.
@@ -98,16 +98,36 @@ public class Game {
 
   public static class Builder {
 
+    public static Builder newGame() {
+      return new Builder()
+          .withCurrentLap(1)
+          .withMrx(Mrx.Builder.defaultMrx().build())
+          .withDetective(Detective.Builder.defaultDetective().build())
+          .withDetective(Detective.Builder.defaultDetective().build());
+    }
+
     private Mrx mrx;
-    private List<Detective> detectives;
+    private List<Detective> detectives = new LinkedList<>();
     private int currentLap = 1;
 
     public Builder() {
-
     }
 
     public Builder withCurrentLap(int currentLap) {
       this.currentLap = currentLap;
+      return this;
+    }
+
+    public Builder withMrx(Mrx mrx) {
+      this.mrx = mrx;
+      return this;
+    }
+
+    public Builder withDetective(Detective detective) {
+      if (this.detectives == null) {
+        this.detectives = new LinkedList<>();
+      }
+      this.detectives.add(detective);
       return this;
     }
 

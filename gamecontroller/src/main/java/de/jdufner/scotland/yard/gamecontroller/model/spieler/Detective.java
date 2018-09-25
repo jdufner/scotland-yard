@@ -22,9 +22,6 @@ import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Jürgen Dufner
  * @since 1.0
@@ -43,24 +40,7 @@ public class Detective extends Player {
     return "Detective: " + super.toString() + ", " + nummer;
   }
 
-  public static class Builder {
-
-    private List<Detective> detectives = new ArrayList<>();
-
-    public Builder(final int... startpositionAsInts) {
-      int nummer = 0;
-      for (final int startpositionAsInt : startpositionAsInts) {
-        detectives.add(new Detective(nummer++, new PlayerInfo(PlayerInfo.Type.DETECTIVE, new PlayerInfo.Id("1")), new StartPosition(startpositionAsInt), new Tickets()));
-      }
-    }
-
-    public List<Detective> build() {
-      return detectives;
-    }
-
-  }
-
-  private class Nummer {
+  private static class Nummer {
     private final int value;
 
     private Nummer(final int value) {
@@ -71,6 +51,47 @@ public class Detective extends Player {
     public String toString() {
       return "Nummer: " + value;
     }
+  }
+
+  public static class Builder {
+
+
+    public static Builder defaultDetective() {
+      return null;
+    }
+
+    private Nummer nummer;
+    private StartPosition startPosition;
+    private PlayerInfo playerInfo;
+    private Tickets tickets;
+
+    public Builder() {
+    }
+
+    public Builder withNummer(final int nummerAsInt) {
+      this.nummer = new Nummer(nummerAsInt);
+      return this;
+    }
+
+    public Builder withStartpositionAsInt(final int startpositionAsInt) {
+      this.startPosition = new StartPosition(startpositionAsInt);
+      return this;
+    }
+
+    public Builder withPlayerInfo(final PlayerInfo playerInfo) {
+      this.playerInfo = playerInfo;
+      return this;
+    }
+
+    public Builder withTickets(final Tickets tickets) {
+      this.tickets = tickets;
+      return this;
+    }
+
+    public Detective build() {
+      return new Detective(nummer.value, playerInfo, startPosition, tickets);
+    }
+
   }
 
 }

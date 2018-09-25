@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 
@@ -38,8 +39,12 @@ public class GameTest {
   @Test
   public void testConstructor() {
     // arrange
-    final Mrx mrX = new Mrx.Builder(13).build();
-    final List<Detective> detectives = new Detective.Builder(26, 29, 34, 50).build();
+    final Mrx mrX = Mrx.Builder.defaultMrx().withStartpositionAsInt(13).build();
+    final List<Detective> detectives = new ArrayList<>();
+    detectives.add(Detective.Builder.defaultDetective().withStartpositionAsInt(26).build());
+    detectives.add(Detective.Builder.defaultDetective().withStartpositionAsInt(29).build());
+    detectives.add(Detective.Builder.defaultDetective().withStartpositionAsInt(34).build());
+    detectives.add(Detective.Builder.defaultDetective().withStartpositionAsInt(50).build());
 
     // act
     game = new Game(mrX, detectives);
@@ -55,8 +60,12 @@ public class GameTest {
   public void
   testIsBeendet_whenEinundzwanzigRundenGespielt_expectSpielBeendet() {
     // arrange
-    final Mrx mrX = new Mrx.Builder(13).build();
-    final List<Detective> detectives = new Detective.Builder(26, 29, 34, 50).build();
+    final Mrx mrX = Mrx.Builder.defaultMrx().withStartpositionAsInt(13).build();
+    final List<Detective> detectives = new ArrayList<>();
+    detectives.add(Detective.Builder.defaultDetective().withStartpositionAsInt(26).build());
+    detectives.add(Detective.Builder.defaultDetective().withStartpositionAsInt(29).build());
+    detectives.add(Detective.Builder.defaultDetective().withStartpositionAsInt(34).build());
+    detectives.add(Detective.Builder.defaultDetective().withStartpositionAsInt(50).build());
     game = new Game(mrX, detectives);
 
     // act

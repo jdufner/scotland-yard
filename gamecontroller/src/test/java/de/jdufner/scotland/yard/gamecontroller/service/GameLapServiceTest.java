@@ -27,8 +27,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static org.mockito.Mockito.mock;
-
 @RunWith(MockitoJUnitRunner.class)
 public class GameLapServiceTest {
 
@@ -47,7 +45,7 @@ public class GameLapServiceTest {
   @Test
   public void whenNextLap_expect() {
     // arrange
-    Game game = mock(Game.class);
+    Game game = Game.Builder.newGame().build();
 
     // act
     gameLapService.nextLap(game);

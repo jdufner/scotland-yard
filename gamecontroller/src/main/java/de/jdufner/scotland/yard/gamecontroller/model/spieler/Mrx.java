@@ -51,14 +51,37 @@ public class Mrx extends Player {
 
   public static class Builder {
 
-    private Mrx mrX;
+    public static Builder defaultMrx() {
+      return new Builder()
+          .withStartpositionAsInt(9)
+          .withPlayerInfo(PlayerInfo.Builder.newMrx().build())
+          .withTickets(Tickets.Builder.defaultMrxTickets().build());
+    }
 
-    public Builder(final int startpositionAsInt) {
-      mrX = new Mrx(new PlayerInfo(PlayerInfo.Type.MRX, new PlayerInfo.Id("1")), new StartPosition(startpositionAsInt), new Tickets());
+    private StartPosition startPosition;
+    private PlayerInfo playerInfo;
+    private Tickets tickets;
+
+    public Builder() {
+    }
+
+    public Builder withStartpositionAsInt(final int startpositionAsInt) {
+      this.startPosition = new StartPosition(startpositionAsInt);
+      return this;
+    }
+
+    public Builder withPlayerInfo(final PlayerInfo playerInfo) {
+      this.playerInfo = playerInfo;
+      return this;
+    }
+
+    public Builder withTickets(final Tickets tickets) {
+      this.tickets = tickets;
+      return this;
     }
 
     public Mrx build() {
-      return mrX;
+      return new Mrx(playerInfo, startPosition, tickets);
     }
 
   }
