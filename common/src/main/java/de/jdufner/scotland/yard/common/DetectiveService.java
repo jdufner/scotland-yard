@@ -35,5 +35,7 @@ public interface DetectiveService {
 
   Move nextMove(PlayerInfo playerInfo);
 
+  // TODO [jdufner, 2018-09-26] Create a separate method to set the position of Mr. X.
+  @Deprecated
   Move nextMove(PlayerInfo playerInfo, Position positionOfMrx);
 }

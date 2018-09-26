@@ -92,7 +92,7 @@ public class Game {
     return mrx;
   }
 
-  public List<Detective> getDetektives() {
+  public List<Detective> getDetectives() {
     return detektives;
   }
 
@@ -102,8 +102,10 @@ public class Game {
       return new Builder()
           .withCurrentLap(1)
           .withMrx(Mrx.Builder.defaultMrx().build())
-          .withDetective(Detective.Builder.defaultDetective().build())
-          .withDetective(Detective.Builder.defaultDetective().build());
+          .withDetective(Detective.Builder.defaultDetective().withNummer(1).withStartpositionAsInt(26).build())
+          .withDetective(Detective.Builder.defaultDetective().withNummer(2).withStartpositionAsInt(29).build())
+          .withDetective(Detective.Builder.defaultDetective().withNummer(3).withStartpositionAsInt(34).build())
+          .withDetective(Detective.Builder.defaultDetective().withNummer(4).withStartpositionAsInt(50).build());
     }
 
     private Mrx mrx;

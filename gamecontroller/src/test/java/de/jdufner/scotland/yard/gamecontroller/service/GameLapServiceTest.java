@@ -18,19 +18,20 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
+import static org.mockito.Mockito.when;
+
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameLapServiceTest {
@@ -51,13 +52,42 @@ public class GameLapServiceTest {
   public void whenNextLap_expect() {
     // arrange
     Game game = Game.Builder.newGame().build();
-    when(mrxService.nextMove()).thenReturn(new Move(game.getMrx().getPlayerInfo(), game.getMrx().getCurrentPosition(), new Position(1), new TaxiTicket(1)));
-    //when(detectiveService.nextMove()).thenReturn(new Move(game.getMrx().getPlayerInfo(), game.getMrx().getCurrentPosition(), new Position(1), new TaxiTicket(1)));
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            game.getMrx().getCurrentPosition(),
+            new Position(1),
+            new TaxiTicket(1)));
+    when(detectiveService.nextMove(game.getDetectives().get(0).getPlayerInfo())).thenReturn(
+        new Move(
+            game.getDetectives().get(0).getPlayerInfo(),
+            game.getDetectives().get(0).getCurrentPosition(),
+            new Position(27),
+            new TaxiTicket(1)));
+    when(detectiveService.nextMove(game.getDetectives().get(1).getPlayerInfo())).thenReturn(
+        new Move(
+            game.getDetectives().get(1).getPlayerInfo(),
+            game.getDetectives().get(1).getCurrentPosition(),
+            new Position(30),
+            new TaxiTicket(1)));
+    when(detectiveService.nextMove(game.getDetectives().get(2).getPlayerInfo())).thenReturn(
+        new Move(
+            game.getDetectives().get(2).getPlayerInfo(),
+            game.getDetectives().get(2).getCurrentPosition(),
+            new Position(35),
+            new TaxiTicket(1)));
+    when(detectiveService.nextMove(game.getDetectives().get(3).getPlayerInfo())).thenReturn(
+        new Move(
+            game.getDetectives().get(3).getPlayerInfo(),
+            game.getDetectives().get(3).getCurrentPosition(),
+            new Position(51),
+            new TaxiTicket(1)));
 
     // act
     gameLapService.nextLap(game);
 
     // assert
+    Assertions.assertThat(game.isFinished()).isFalse();
   }
 
 }
