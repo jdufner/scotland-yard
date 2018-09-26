@@ -35,7 +35,6 @@ public class DetectiveServiceImpl implements DetectiveService {
 
   @Override
   public void initialize(PlayerInfo playerInfo, StartPosition startPosition, Tickets tickets) {
-
   }
 
   @Override
@@ -44,8 +43,7 @@ public class DetectiveServiceImpl implements DetectiveService {
   }
 
   @Override
-  public Move nextMove(PlayerInfo playerInfo, Position positionOfMrx) {
-    return null;
+  public void showMrx(PlayerInfo playerInfo, Position currentPosition) {
   }
 
 }

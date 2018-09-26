@@ -98,9 +98,16 @@ public class Game {
 
   public static class Builder {
 
-    public static Builder newGame() {
+    public static Builder newGameWithOneDetective() {
       return new Builder()
-          .withCurrentLap(1)
+          .withCurrentLap(0)
+          .withMrx(Mrx.Builder.defaultMrx().build())
+          .withDetective(Detective.Builder.defaultDetective().withNummer(1).withStartpositionAsInt(26).build());
+    }
+
+    public static Builder newGameWithFourDetectives() {
+      return new Builder()
+          .withCurrentLap(0)
           .withMrx(Mrx.Builder.defaultMrx().build())
           .withDetective(Detective.Builder.defaultDetective().withNummer(1).withStartpositionAsInt(26).build())
           .withDetective(Detective.Builder.defaultDetective().withNummer(2).withStartpositionAsInt(29).build())

@@ -90,11 +90,9 @@ public class GameLapService {
   private Move doMoveDetective(Game game, Detective detective) {
     Move move;
     if (Arrays.asList(auftauchen).contains(game.getCurrentLap())) {
-      move = detectiveService.nextMove(detective.getPlayerInfo(), game.getMrx().getCurrentPosition());
-    } else {
-      move = detectiveService.nextMove(detective.getPlayerInfo());
+      detectiveService.showMrx(detective.getPlayerInfo(), game.getMrx().getCurrentPosition());
     }
-    return move;
+    return detectiveService.nextMove(detective.getPlayerInfo());
   }
 
   private void checkStartPosition(Move move, Player player) {

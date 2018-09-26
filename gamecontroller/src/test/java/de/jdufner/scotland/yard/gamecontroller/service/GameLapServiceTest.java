@@ -18,15 +18,19 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
+import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -49,9 +53,9 @@ public class GameLapServiceTest {
   private SpielbrettService spielbrettService;
 
   @Test
-  public void whenNextLap_expect() {
+  public void whenNextLap_expectPlayerServicesHaveBeenCalled() {
     // arrange
-    Game game = Game.Builder.newGame().build();
+    Game game = Game.Builder.newGameWithFourDetectives().build();
     when(mrxService.nextMove()).thenReturn(
         new Move(
             game.getMrx().getPlayerInfo(),
@@ -87,7 +91,72 @@ public class GameLapServiceTest {
     gameLapService.nextLap(game);
 
     // assert
-    Assertions.assertThat(game.isFinished()).isFalse();
+    verify(mrxService).nextMove();
+    verify(detectiveService, times(4)).nextMove(any(PlayerInfo.class));
+    verify(spielbrettService, times(5)).isMoveValid(any(Move.class));
+    assertThat(game.isFinished()).isFalse();
+  }
+
+  @Test
+  public void whenNextLap_expectDetectivehaseCaughtMrx() {
+    // arrange
+    Game game = Game.Builder.newGameWithOneDetective().build();
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            game.getMrx().getCurrentPosition(),
+            new Position(1),
+            new TaxiTicket(1)));
+    when(detectiveService.nextMove(game.getDetectives().get(0).getPlayerInfo())).thenReturn(
+        new Move(
+            game.getDetectives().get(0).getPlayerInfo(),
+            game.getDetectives().get(0).getCurrentPosition(),
+            new Position(1),
+            new TaxiTicket(1)));
+
+    // act
+    gameLapService.nextLap(game);
+
+    // assert
+    verify(mrxService).nextMove();
+    verify(detectiveService).nextMove(any(PlayerInfo.class));
+    assertThat(game.isFinished()).isTrue();
+  }
+
+  @Test(expected = RuntimeException.class)
+  public void whenNextLap_expectMrxStartsFromWrongPosition() {
+    // arrange
+    Game game = Game.Builder.newGameWithOneDetective().build();
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            new Position(1),
+            game.getMrx().getCurrentPosition(),
+            new TaxiTicket(1)));
+
+    // act
+    gameLapService.nextLap(game);
+  }
+
+  @Test(expected = RuntimeException.class)
+  public void whenNextLap_expectDetectiveStartsFromWrongPosition() {
+    // arrange
+    Game game = Game.Builder.newGameWithOneDetective().build();
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            game.getMrx().getCurrentPosition(),
+            new Position(1),
+            new TaxiTicket(1)));
+    when(detectiveService.nextMove(game.getDetectives().get(0).getPlayerInfo())).thenReturn(
+        new Move(
+            game.getDetectives().get(0).getPlayerInfo(),
+            new Position(1),
+            game.getDetectives().get(0).getCurrentPosition(),
+            new TaxiTicket(1)));
+
+    // act
+    gameLapService.nextLap(game);
   }
 
 }
