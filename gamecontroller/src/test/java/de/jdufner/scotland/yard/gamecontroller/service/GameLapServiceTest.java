@@ -86,6 +86,7 @@ public class GameLapServiceTest {
             game.getDetectives().get(3).getCurrentPosition(),
             new Position(51),
             new TaxiTicket(1)));
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
@@ -98,7 +99,7 @@ public class GameLapServiceTest {
   }
 
   @Test
-  public void whenNextLap_expectDetectivehaseCaughtMrx() {
+  public void whenNextLap_expectDetectiveHasCaughtMrx() {
     // arrange
     Game game = Game.Builder.newGameWithOneDetective().build();
     when(mrxService.nextMove()).thenReturn(
@@ -113,6 +114,7 @@ public class GameLapServiceTest {
             game.getDetectives().get(0).getCurrentPosition(),
             new Position(1),
             new TaxiTicket(1)));
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
@@ -154,6 +156,131 @@ public class GameLapServiceTest {
             new Position(1),
             game.getDetectives().get(0).getCurrentPosition(),
             new TaxiTicket(1)));
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+
+    // act
+    gameLapService.nextLap(game);
+  }
+
+  @Test(expected = RuntimeException.class)
+  public void whenNextLap_expectMrxMustNotMoveToADetective() {
+    // arrange
+    Game game = Game.Builder.newGameWithOneDetective().build();
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            game.getMrx().getCurrentPosition(),
+            game.getDetectives().get(0).getCurrentPosition(),
+            new TaxiTicket(1)));
+
+    // act
+    gameLapService.nextLap(game);
+  }
+
+  @Test
+  public void whenNextLapCheckIfMoveIsValid_expectAllPlayersHaveDoneAnAllowedMoveOnTheBoard() {
+    // arrange
+    Game game = Game.Builder.newGameWithOneDetective().build();
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            game.getMrx().getCurrentPosition(),
+            new Position(14),
+            new TaxiTicket(1)));
+    when(detectiveService.nextMove(game.getDetectives().get(0).getPlayerInfo())).thenReturn(
+        new Move(
+            game.getDetectives().get(0).getPlayerInfo(),
+            game.getDetectives().get(0).getCurrentPosition(),
+            new Position(27),
+            new TaxiTicket(1)));
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+
+    // act
+    gameLapService.nextLap(game);
+
+    // assert
+    verify(spielbrettService, times(2)).isMoveValid(any(Move.class));
+    assertThat(game.getMrx().getCurrentPosition()).isEqualTo(new Position(14));
+    assertThat(game.getDetectives().get(0).getCurrentPosition()).isEqualTo(new Position(27));
+  }
+
+  @Test(expected = RuntimeException.class)
+  public void whenNextLapCheckIfMoveIsValid_expectMrxHasHaveDoneAnNotAllowedMoveOnTheBoard() {
+    // arrange
+    Game game = Game.Builder.newGameWithOneDetective().build();
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            game.getMrx().getCurrentPosition(),
+            new Position(14),
+            new TaxiTicket(1)));
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(false);
+
+    // act
+    gameLapService.nextLap(game);
+  }
+
+  @Test(expected = RuntimeException.class)
+  public void whenNextLapCheckIfMoveIsValid_expectDetectiveHasDoneAnNotAllowedMoveOnTheBoard() {
+    // arrange
+    Game game = Game.Builder.newGameWithOneDetective().build();
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            game.getMrx().getCurrentPosition(),
+            new Position(14),
+            new TaxiTicket(1)));
+    when(detectiveService.nextMove(game.getDetectives().get(0).getPlayerInfo())).thenReturn(
+        new Move(
+            game.getDetectives().get(0).getPlayerInfo(),
+            game.getDetectives().get(0).getCurrentPosition(),
+            new Position(27),
+            new TaxiTicket(1)));
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true, false);
+
+    // act
+    gameLapService.nextLap(game);
+  }
+
+  @Test(expected = RuntimeException.class)
+  public void whenNextLapCheckIfDetectiveMovesToAnotherDetective_expectDetectiveMovesToAnotherDetectivesPosition() {
+    // arrange
+    Game game = Game.Builder.newGameWithFourDetectives().build();
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            game.getMrx().getCurrentPosition(),
+            new Position(1),
+            new TaxiTicket(1)));
+    when(detectiveService.nextMove(game.getDetectives().get(0).getPlayerInfo())).thenReturn(
+        new Move(
+            game.getDetectives().get(0).getPlayerInfo(),
+            game.getDetectives().get(0).getCurrentPosition(),
+            game.getDetectives().get(1).getCurrentPosition(),
+            new TaxiTicket(1)));
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+
+    // act
+    gameLapService.nextLap(game);
+  }
+
+  @Test
+  public void whenNextLapCheckIfPlayerHasEnoughTickets_expectMrxHasNotEnoughTickets() {
+    // arrange
+    Game game = Game.Builder.newGameWithOneDetective().build();
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            game.getMrx().getCurrentPosition(),
+            new Position(14),
+            new TaxiTicket(1)));
+    when(detectiveService.nextMove(game.getDetectives().get(0).getPlayerInfo())).thenReturn(
+        new Move(
+            game.getDetectives().get(0).getPlayerInfo(),
+            game.getDetectives().get(0).getCurrentPosition(),
+            new Position(27),
+            new TaxiTicket(1)));
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true, false);
 
     // act
     gameLapService.nextLap(game);

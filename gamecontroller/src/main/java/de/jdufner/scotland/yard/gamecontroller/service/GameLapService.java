@@ -67,9 +67,9 @@ public class GameLapService {
     Move move = mrxService.nextMove();
     checkStartPosition(move, game.getMrx());
     checkIsMoveValid(move);
+    checkIsMrxMovedToADetective(game);
     checkHasEnoughTickets(move, game.getMrx());
     game.getMrx().move(move);
-    checkIsMrxCaughtByDetectives();
   }
 
   private void moveDetectives(Game game) {
@@ -84,11 +84,10 @@ public class GameLapService {
     checkHasEnoughTickets(move, detective);
     detective.move(move);
     handOverTicket(move, game.getMrx());
-    checkIsMrxCaughtByDetectives();
+//    checkIsMrxMovedToADetective(game);
   }
 
   private Move doMoveDetective(Game game, Detective detective) {
-    Move move;
     if (Arrays.asList(auftauchen).contains(game.getCurrentLap())) {
       detectiveService.showMrx(detective.getPlayerInfo(), game.getMrx().getCurrentPosition());
     }
@@ -103,7 +102,10 @@ public class GameLapService {
   }
 
   private void checkIsMoveValid(Move move) {
-    spielbrettService.isMoveValid(move);
+    if (!spielbrettService.isMoveValid(move)) {
+      throw new RuntimeException(format("It isn't allowed to move from %s to %s by %s",
+          move.getStart(), move.getEnd(), move.getTicket()));
+    }
   }
 
   private void checkEndPosition(Move move, List<Detective> detectives) {
@@ -112,8 +114,8 @@ public class GameLapService {
 
   private void checkEndPosition(Move move, Player player) {
     if (player.getCurrentPosition().equals(move.getEnd())) {
-      throw new RuntimeException(format("Move of player %s not allowed, arrival field %s is in use.",
-          player.getPlayerInfo(), move.getEnd()));
+      throw new RuntimeException(format("Move of current player isn't allowed, arrival field %s is in use by %s.",
+          move.getEnd(), player.getPlayerInfo()));
     }
   }
 
@@ -125,8 +127,11 @@ public class GameLapService {
     mrx.addTicket(move.getTicket());
   }
 
-  private void checkIsMrxCaughtByDetectives() {
-
+  private void checkIsMrxMovedToADetective(Game game) {
+    if (game.haveDetectivesCatchedMrx()) {
+      throw new RuntimeException(format("Illegal Move, %s must not move to a current position of a %s",
+          game.getMrx(), game.getDetectives()));
+    }
   }
 
 }

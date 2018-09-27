@@ -239,7 +239,7 @@ public class SpielbrettService {
     verschiebeSpieler(game.getPlayers());
   }
 
-  public void isMoveValid(Move move) {
-
+  public boolean isMoveValid(Move move) {
+    return true;
   }
 }

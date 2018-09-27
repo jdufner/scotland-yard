@@ -69,14 +69,14 @@ public class Game {
     return currentLap;
   }
 
-  private boolean didDetectivesCatchMrx() {
+  public boolean haveDetectivesCatchedMrx() {
     return detektives.stream().anyMatch(detective ->
         detective.getCurrentPosition().equals(mrx.getCurrentPosition())
     );
   }
 
   public boolean isFinished() {
-    return areAllLapsDone() || didDetectivesCatchMrx();
+    return areAllLapsDone() || haveDetectivesCatchedMrx();
   }
 
   private boolean areAllLapsDone() {

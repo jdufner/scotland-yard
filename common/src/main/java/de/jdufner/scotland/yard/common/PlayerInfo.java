@@ -41,6 +41,14 @@ public class PlayerInfo {
 
   public enum Type {MRX, DETECTIVE;}
 
+  @Override
+  public String toString() {
+    return "PlayerInfo{" +
+        "type=" + type +
+        ", id=" + id +
+        '}';
+  }
+
   public static class Id {
 
     private String uuid;
