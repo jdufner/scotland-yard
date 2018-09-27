@@ -69,10 +69,8 @@ public abstract class Player {
     track.add(naechstePosition);
   }
 
-  public void consumeTicket(final Ticket verbrauchtesTicket) {
-    tickets.getTickets().stream()
-        .filter(ticket -> ticket.getClass().equals(verbrauchtesTicket.getClass()))
-        .forEach(ticket -> ticket.consumeOne());
+  public void consumeTicket(final Ticket consumedTicket) {
+    tickets.consume(consumedTicket);
   }
 
   public Tickets getTickets() {

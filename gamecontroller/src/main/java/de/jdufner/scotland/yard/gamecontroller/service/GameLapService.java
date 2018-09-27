@@ -18,8 +18,6 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
-import static java.lang.String.format;
-
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.move.Move;
@@ -27,11 +25,14 @@ import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Player;
-import java.util.Arrays;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static java.lang.String.format;
+import static java.util.Arrays.asList;
 
 /**
  * @author Jürgen Dufner
@@ -67,9 +68,9 @@ public class GameLapService {
     Move move = mrxService.nextMove();
     checkStartPosition(move, game.getMrx());
     checkIsMoveValid(move);
-    checkIsMrxMovedToADetective(game);
     checkHasEnoughTickets(move, game.getMrx());
     game.getMrx().move(move);
+    checkHasMrxBeenMovedToADetective(game);
   }
 
   private void moveDetectives(Game game) {
@@ -84,11 +85,10 @@ public class GameLapService {
     checkHasEnoughTickets(move, detective);
     detective.move(move);
     handOverTicket(move, game.getMrx());
-//    checkIsMrxMovedToADetective(game);
   }
 
   private Move doMoveDetective(Game game, Detective detective) {
-    if (Arrays.asList(auftauchen).contains(game.getCurrentLap())) {
+    if (asList(auftauchen).contains(game.getCurrentLap())) {
       detectiveService.showMrx(detective.getPlayerInfo(), game.getMrx().getCurrentPosition());
     }
     return detectiveService.nextMove(detective.getPlayerInfo());
@@ -120,14 +120,17 @@ public class GameLapService {
   }
 
   private void checkHasEnoughTickets(Move move, Player player) {
-    player.getTickets().contains(move.getTicket());
+    if (!player.getTickets().contains(move.getTicket())) {
+      throw new RuntimeException(format("Player %s hasn't enough Tickets %s",
+          player.getPlayerInfo(), move.getTicket()));
+    }
   }
 
   private void handOverTicket(Move move, Mrx mrx) {
     mrx.addTicket(move.getTicket());
   }
 
-  private void checkIsMrxMovedToADetective(Game game) {
+  private void checkHasMrxBeenMovedToADetective(Game game) {
     if (game.haveDetectivesCatchedMrx()) {
       throw new RuntimeException(format("Illegal Move, %s must not move to a current position of a %s",
           game.getMrx(), game.getDetectives()));

@@ -18,24 +18,29 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
+import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
+import de.jdufner.scotland.yard.common.ticket.BlackTicket;
 import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
+import de.jdufner.scotland.yard.common.ticket.UndergroundTicket;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
+import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameLapServiceTest {
@@ -45,15 +50,13 @@ public class GameLapServiceTest {
 
   @Mock
   private MrxService mrxService;
-
   @Mock
   private DetectiveService detectiveService;
-
   @Mock
   private SpielbrettService spielbrettService;
 
   @Test
-  public void whenNextLap_expectPlayerServicesHaveBeenCalled() {
+  public void testNextLap_whenGameAndMovesAreValid_expectPlayerServicesHaveBeenCalled() {
     // arrange
     Game game = Game.Builder.newGameWithFourDetectives().build();
     when(mrxService.nextMove()).thenReturn(
@@ -99,7 +102,7 @@ public class GameLapServiceTest {
   }
 
   @Test
-  public void whenNextLap_expectDetectiveHasCaughtMrx() {
+  public void testNextLap_whenDetectiveCatchesMrx_expectDetectiveHasCaughtMrx() {
     // arrange
     Game game = Game.Builder.newGameWithOneDetective().build();
     when(mrxService.nextMove()).thenReturn(
@@ -126,7 +129,7 @@ public class GameLapServiceTest {
   }
 
   @Test(expected = RuntimeException.class)
-  public void whenNextLap_expectMrxStartsFromWrongPosition() {
+  public void testNextLap_whenMrxStartsFromWrongPosition_expectException() {
     // arrange
     Game game = Game.Builder.newGameWithOneDetective().build();
     when(mrxService.nextMove()).thenReturn(
@@ -141,7 +144,7 @@ public class GameLapServiceTest {
   }
 
   @Test(expected = RuntimeException.class)
-  public void whenNextLap_expectDetectiveStartsFromWrongPosition() {
+  public void testNextLap_whenDetectiveStartsFromWrongPosition_expectException() {
     // arrange
     Game game = Game.Builder.newGameWithOneDetective().build();
     when(mrxService.nextMove()).thenReturn(
@@ -163,7 +166,7 @@ public class GameLapServiceTest {
   }
 
   @Test(expected = RuntimeException.class)
-  public void whenNextLap_expectMrxMustNotMoveToADetective() {
+  public void testNextLap_whenMrxMovesToDetective_expectException() {
     // arrange
     Game game = Game.Builder.newGameWithOneDetective().build();
     when(mrxService.nextMove()).thenReturn(
@@ -172,13 +175,14 @@ public class GameLapServiceTest {
             game.getMrx().getCurrentPosition(),
             game.getDetectives().get(0).getCurrentPosition(),
             new TaxiTicket(1)));
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
   }
 
   @Test
-  public void whenNextLapCheckIfMoveIsValid_expectAllPlayersHaveDoneAnAllowedMoveOnTheBoard() {
+  public void testNextLap_whenMoveIsValid_expectAllPlayersHaveDoneAnAllowedMoveOnTheBoard() {
     // arrange
     Game game = Game.Builder.newGameWithOneDetective().build();
     when(mrxService.nextMove()).thenReturn(
@@ -205,7 +209,7 @@ public class GameLapServiceTest {
   }
 
   @Test(expected = RuntimeException.class)
-  public void whenNextLapCheckIfMoveIsValid_expectMrxHasHaveDoneAnNotAllowedMoveOnTheBoard() {
+  public void testNextLap_whenMrxMoveIsInvalid_expectException() {
     // arrange
     Game game = Game.Builder.newGameWithOneDetective().build();
     when(mrxService.nextMove()).thenReturn(
@@ -221,7 +225,7 @@ public class GameLapServiceTest {
   }
 
   @Test(expected = RuntimeException.class)
-  public void whenNextLapCheckIfMoveIsValid_expectDetectiveHasDoneAnNotAllowedMoveOnTheBoard() {
+  public void testNextLap_whenDetectivesMoveIsInvalid_expectException() {
     // arrange
     Game game = Game.Builder.newGameWithOneDetective().build();
     when(mrxService.nextMove()).thenReturn(
@@ -243,7 +247,7 @@ public class GameLapServiceTest {
   }
 
   @Test(expected = RuntimeException.class)
-  public void whenNextLapCheckIfDetectiveMovesToAnotherDetective_expectDetectiveMovesToAnotherDetectivesPosition() {
+  public void testNextLap_whenDetectiveMovesToAnotherDetective_expectException() {
     // arrange
     Game game = Game.Builder.newGameWithFourDetectives().build();
     when(mrxService.nextMove()).thenReturn(
@@ -264,15 +268,72 @@ public class GameLapServiceTest {
     gameLapService.nextLap(game);
   }
 
-  @Test
-  public void whenNextLapCheckIfPlayerHasEnoughTickets_expectMrxHasNotEnoughTickets() {
+  @Test(expected = RuntimeException.class)
+  public void testNextLap_whenMrxHasNotEnoughTickets_expectException() {
     // arrange
-    Game game = Game.Builder.newGameWithOneDetective().build();
+    Game game = new Game.Builder()
+        .withCurrentLap(0)
+        .withMrx(new Mrx.Builder()
+            .withPlayerInfo(PlayerInfo.Builder.newMrx().build())
+            .withStartpositionAsInt(13)
+            .withTickets(new Tickets.Builder()
+                .withTicket(new BlackTicket(1))
+                .build())
+            .build())
+        .withDetective(Detective.Builder.defaultDetective().withNummer(1).withStartpositionAsInt(26).build())
+        .build();
     when(mrxService.nextMove()).thenReturn(
         new Move(
             game.getMrx().getPlayerInfo(),
             game.getMrx().getCurrentPosition(),
             new Position(14),
+            new TaxiTicket(1)));
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+
+    // act
+    gameLapService.nextLap(game);
+  }
+
+  @Test(expected = RuntimeException.class)
+  public void testNextLap_whenDetectiveHasNotEnoughTickets_expectException() {
+    // arrange
+    Game game = new Game.Builder()
+        .withCurrentLap(0)
+        .withMrx(Mrx.Builder.defaultMrx().build())
+        .withDetective(new Detective.Builder()
+            .withNummer(1)
+            .withStartpositionAsInt(26)
+            .withTickets(new Tickets.Builder()
+                .withTicket(new UndergroundTicket(1))
+                .build())
+            .build())
+        .build();
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            game.getMrx().getCurrentPosition(),
+            new Position(14),
+            new TaxiTicket(1)));
+    when(detectiveService.nextMove(any(PlayerInfo.class))).thenReturn(
+        new Move(
+            game.getDetectives().get(0).getPlayerInfo(),
+            game.getDetectives().get(0).getCurrentPosition(),
+            new Position(27),
+            new TaxiTicket(1)));
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+
+    // act
+    gameLapService.nextLap(game);
+  }
+
+  @Test
+  public void testNextLap_whenDetectiveUsedTicket_expectMrxGotDetectivesTicket() {
+    Game game = Game.Builder.newGameWithOneDetective().build();
+    when(mrxService.nextMove()).thenReturn(
+        new Move(
+            game.getMrx().getPlayerInfo(),
+            game.getMrx().getCurrentPosition(),
+            new Position(1),
             new TaxiTicket(1)));
     when(detectiveService.nextMove(game.getDetectives().get(0).getPlayerInfo())).thenReturn(
         new Move(
@@ -280,10 +341,13 @@ public class GameLapServiceTest {
             game.getDetectives().get(0).getCurrentPosition(),
             new Position(27),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true, false);
+    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
-  }
 
+    // assert
+    assertThat(game.getMrx().getTickets().getTickets()).contains(new TaxiTicket(2));
+    assertThat(game.getDetectives().get(0).getTickets().getTickets()).contains(new TaxiTicket(3));
+  }
 }

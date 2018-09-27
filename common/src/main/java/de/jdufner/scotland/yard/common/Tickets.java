@@ -24,6 +24,7 @@ import de.jdufner.scotland.yard.common.ticket.DoppelzugTicket;
 import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
 import de.jdufner.scotland.yard.common.ticket.UndergroundTicket;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,6 +63,12 @@ public class Tickets {
 
   public List<Ticket> getTickets() {
     return tickets;
+  }
+
+  public void consume(final Ticket consumedTicket) {
+    tickets.stream()
+        .filter(ticket -> ticket.getClass().equals(consumedTicket.getClass()))
+        .forEach(ticket -> ticket.consumeOne());
   }
 
   public boolean contains(final Ticket searchTicket) {
