@@ -302,6 +302,7 @@ public class GameLapServiceTest {
         .withMrx(Mrx.Builder.defaultMrx().build())
         .withDetective(new Detective.Builder()
             .withNummer(1)
+            .withPlayerInfo(PlayerInfo.Builder.newDetective().build())
             .withStartpositionAsInt(26)
             .withTickets(new Tickets.Builder()
                 .withTicket(new UndergroundTicket(1))

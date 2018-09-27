@@ -59,8 +59,8 @@ public class Detective extends Player {
     public static Builder defaultDetective() {
       return new Builder()
           .withNummer(1)
-          .withStartpositionAsInt(26)
           .withPlayerInfo(PlayerInfo.Builder.newDetective().build())
+          .withStartpositionAsInt(26)
           .withTickets(Tickets.Builder.defaultDetectiveTickets().build());
     }
 
