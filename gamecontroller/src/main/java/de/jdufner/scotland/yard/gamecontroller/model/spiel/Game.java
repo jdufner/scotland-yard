@@ -42,6 +42,7 @@ public class Game {
 
   private static final Logger LOG = LoggerFactory.getLogger(Game.class);
 
+  // TODO [jdufner, 2018-09-28] Is this the right place?
   private static final int TOTAL_LAPS = 21;
 
   private final Mrx mrx;

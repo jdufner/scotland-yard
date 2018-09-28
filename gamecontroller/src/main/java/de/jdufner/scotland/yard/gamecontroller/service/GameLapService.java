@@ -18,6 +18,9 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
+import static java.lang.String.format;
+import static java.util.Arrays.asList;
+
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.move.Move;
@@ -25,14 +28,11 @@ import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Player;
+import java.util.Collections;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-import static java.lang.String.format;
-import static java.util.Arrays.asList;
 
 /**
  * @author Jürgen Dufner
@@ -42,7 +42,7 @@ import static java.util.Arrays.asList;
 public class GameLapService {
 
   // TODO [jdufner, 2018-09-19] Is this the right place?
-  private static final int[] auftauchen = {3, 8, 13, 18};
+  private static final List<Integer> auftauchen = Collections.unmodifiableList(asList(3, 8, 13, 18));
 
   private static final Logger LOG = LoggerFactory.getLogger(GameLapService.class);
 
@@ -58,7 +58,7 @@ public class GameLapService {
     this.spielbrettService = spielbrettService;
   }
 
-  public void nextLap(final Game game) {
+  void nextLap(final Game game) {
     game.nextLap();
     moveMrx(game);
     moveDetectives(game);
@@ -88,7 +88,7 @@ public class GameLapService {
   }
 
   private Move doMoveDetective(Game game, Detective detective) {
-    if (asList(auftauchen).contains(game.getCurrentLap())) {
+    if (auftauchen.contains(game.getCurrentLap())) {
       detectiveService.showMrx(detective.getPlayerInfo(), game.getMrx().getCurrentPosition());
     }
     return detectiveService.nextMove(detective.getPlayerInfo());
@@ -96,14 +96,14 @@ public class GameLapService {
 
   private void checkStartPosition(Move move, Player player) {
     if (!player.getCurrentPosition().equals(move.getStart())) {
-      throw new RuntimeException(format("Move of player %s starts not the from its position. " +
+      throw new WrongStartPositionException(format("Move of player %s starts not the from its position. " +
           "Expected position=%s, but was=%s", player.getPlayerInfo(), player.getCurrentPosition(), move.getStart()));
     }
   }
 
   private void checkIsMoveValid(Move move) {
     if (!spielbrettService.isMoveValid(move)) {
-      throw new RuntimeException(format("It isn't allowed to move from %s to %s by %s",
+      throw new InvalidMoveException(format("It isn't allowed to move from %s to %s by %s",
           move.getStart(), move.getEnd(), move.getTicket()));
     }
   }
@@ -114,14 +114,14 @@ public class GameLapService {
 
   private void checkEndPosition(Move move, Player player) {
     if (player.getCurrentPosition().equals(move.getEnd())) {
-      throw new RuntimeException(format("Move of current player isn't allowed, arrival field %s is in use by %s.",
+      throw new PositionInUseException(format("Move of current player isn't allowed, arrival field %s is in use by %s.",
           move.getEnd(), player.getPlayerInfo()));
     }
   }
 
   private void checkHasEnoughTickets(Move move, Player player) {
     if (!player.getTickets().contains(move.getTicket())) {
-      throw new RuntimeException(format("Player %s hasn't enough Tickets %s",
+      throw new OutOfTicketsException(format("Player %s hasn't enough Tickets %s",
           player.getPlayerInfo(), move.getTicket()));
     }
   }
@@ -132,7 +132,7 @@ public class GameLapService {
 
   private void checkHasMrxBeenMovedToADetective(Game game) {
     if (game.haveDetectivesCatchedMrx()) {
-      throw new RuntimeException(format("Illegal Move, %s must not move to a current position of a %s",
+      throw new PositionInUseException(format("Illegal Move, %s must not move to a current position of a %s",
           game.getMrx(), game.getDetectives()));
     }
   }
