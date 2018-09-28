@@ -14,7 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller;
@@ -38,15 +37,5 @@ public class App {
   public static void main(final String[] args) {
     SpringApplication.run(App.class, args);
   }
-
-// TODO: Löschen
-//  @Bean
-//  CommandLineRunner initialize(final PositionRepository positionRepository) {
-//    return args -> {
-//      positionRepository.deleteAll();
-//      Position p = new Position(12345);
-//      positionRepository.save(p);
-//    };
-//  }
 
 }
