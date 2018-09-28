@@ -19,8 +19,8 @@
 package de.jdufner.scotland.yard.gamecontroller.spiel;
 
 import de.jdufner.scotland.yard.common.position.StartPosition;
+import de.jdufner.scotland.yard.gamecontroller.service.BoardService;
 import de.jdufner.scotland.yard.gamecontroller.service.GameInitializationService;
-import de.jdufner.scotland.yard.gamecontroller.service.SpielbrettService;
 import de.jdufner.scotland.yard.gamecontroller.service.StartPositionService;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,13 +35,13 @@ import static org.mockito.Mockito.when;
 public class GameInitializationServiceCT {
 
   private GameInitializationService gameInitializationService;
-  private SpielbrettService spielbrettService;
+  private BoardService boardService;
   private StartPositionService startPositionService;
 
   @Before
   public void setUp() {
     startPositionService = mock(StartPositionService.class);
-    spielbrettService = mock(SpielbrettService.class);
+    boardService = mock(BoardService.class);
 //    spielService = new SpielService(new MrXService(spielbrettService, startpositionService), new DetektivService(spielbrettService, startpositionService));
   }
 

@@ -44,7 +44,7 @@ public class PlayerServiceTest {
   private TestPlayerService spielerService;
 
   @Mock
-  private SpielbrettService spielbrettService;
+  private BoardService boardService;
   @Mock
   private StartPositionService startPositionService;
 
@@ -57,14 +57,14 @@ public class PlayerServiceTest {
 
     // assert
     verify(spielerService).ermittleNächstenZug(any(Game.class), any(Player.class));
-    verify(spielbrettService).verschiebeSpieler(any(Player.class));
+    verify(boardService).verschiebeSpieler(any(Player.class));
   }
 
   private static class TestPlayerService extends SpielerService {
 
-    public TestPlayerService(final SpielbrettService spielbrettService,
+    public TestPlayerService(final BoardService boardService,
                              final StartPositionService startPositionService) {
-      super(spielbrettService, startPositionService);
+      super(boardService, startPositionService);
     }
 
     @Override

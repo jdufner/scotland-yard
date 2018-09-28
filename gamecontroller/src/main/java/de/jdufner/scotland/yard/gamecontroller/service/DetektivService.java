@@ -35,15 +35,15 @@ public class DetektivService extends SpielerService<Detective> {
 
   private static final Logger LOG = LoggerFactory.getLogger(DetektivService.class);
 
-  public DetektivService(final SpielbrettService spielbrettService,
+  public DetektivService(final BoardService boardService,
                          final StartPositionService startPositionService) {
-    super(spielbrettService, startPositionService);
+    super(boardService, startPositionService);
   }
 
   @Override
   protected Zug ermittleNächstenZug(final Game game, final Detective spieler) {
     if (game.getCurrentLap() < 3) {
-      return new Zug(spielbrettService.findeWegZuUndergroundInAnzahlZuegen(spieler,
+      return new Zug(boardService.findeWegZuUndergroundInAnzahlZuegen(spieler,
           3 - game.getCurrentLap()), null);
     }
 

@@ -14,15 +14,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.service;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.move.Move;
@@ -37,21 +31,49 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
 @RunWith(MockitoJUnitRunner.class)
-public class SpielbrettServiceTest {
+public class BoardServiceTest {
 
   @InjectMocks
-  public SpielbrettService spielbrettService;
+  public BoardService boardService;
 
   @Mock
   public GraphDatabaseService graphDatabaseService;
 
   @Test
-  public void testIsMoveValid_when_expect() {
+  public void testIsMoveValid_whenPathExists_expectTrue() {
+    // arrange
+    Move move = new Move(
+        PlayerInfo.Builder.newMrx().build(),
+        new Position(13),
+        new Position(14),
+        new TaxiTicket(1)
+    );
+    when(graphDatabaseService.beginTx()).thenReturn(mock(Transaction.class));
+    Result result = mock(Result.class);
+    when(graphDatabaseService.execute(anyString())).thenReturn(result);
+    when(result.hasNext()).thenReturn(true);
+
+    // act
+    boolean valid = boardService.isMoveValid(move);
+
+    // assert
+    assertThat(valid).isTrue();
+    verify(graphDatabaseService).execute(anyString());
+  }
+
+  @Test
+  public void testIsMoveValid_whenPathNotExists_expectFalse() {
     // arrange
     Move move = new Move(
         PlayerInfo.Builder.newMrx().build(),
@@ -63,9 +85,10 @@ public class SpielbrettServiceTest {
     when(graphDatabaseService.execute(anyString())).thenReturn(mock(Result.class));
 
     // act
-    spielbrettService.isMoveValid(move);
+    boolean valid = boardService.isMoveValid(move);
 
     // assert
+    assertThat(valid).isFalse();
     verify(graphDatabaseService).execute(anyString());
   }
 

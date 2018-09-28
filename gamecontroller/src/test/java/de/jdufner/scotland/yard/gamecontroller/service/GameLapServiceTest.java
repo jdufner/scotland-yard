@@ -18,12 +18,6 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
@@ -42,6 +36,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 @RunWith(MockitoJUnitRunner.class)
 public class GameLapServiceTest {
 
@@ -53,7 +53,7 @@ public class GameLapServiceTest {
   @Mock
   private DetectiveService detectiveService;
   @Mock
-  private SpielbrettService spielbrettService;
+  private BoardService boardService;
 
   @Test
   public void testNextLap_whenGameAndMovesAreValid_expectPlayerServicesHaveBeenCalled() {
@@ -89,7 +89,7 @@ public class GameLapServiceTest {
             game.getDetectives().get(3).getCurrentPosition(),
             new Position(51),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
@@ -97,7 +97,7 @@ public class GameLapServiceTest {
     // assert
     verify(mrxService).nextMove();
     verify(detectiveService, times(4)).nextMove(any(PlayerInfo.class));
-    verify(spielbrettService, times(5)).isMoveValid(any(Move.class));
+    verify(boardService, times(5)).isMoveValid(any(Move.class));
     assertThat(game.isFinished()).isFalse();
   }
 
@@ -117,7 +117,7 @@ public class GameLapServiceTest {
             game.getDetectives().get(0).getCurrentPosition(),
             new Position(1),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
@@ -146,7 +146,7 @@ public class GameLapServiceTest {
             game.getDetectives().get(0).getCurrentPosition(),
             new Position(27),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
@@ -188,7 +188,7 @@ public class GameLapServiceTest {
             new Position(1),
             game.getDetectives().get(0).getCurrentPosition(),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
@@ -204,7 +204,7 @@ public class GameLapServiceTest {
             game.getMrx().getCurrentPosition(),
             game.getDetectives().get(0).getCurrentPosition(),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
@@ -226,13 +226,13 @@ public class GameLapServiceTest {
             game.getDetectives().get(0).getCurrentPosition(),
             new Position(27),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
 
     // assert
-    verify(spielbrettService, times(2)).isMoveValid(any(Move.class));
+    verify(boardService, times(2)).isMoveValid(any(Move.class));
     assertThat(game.getMrx().getCurrentPosition()).isEqualTo(new Position(14));
     assertThat(game.getDetectives().get(0).getCurrentPosition()).isEqualTo(new Position(27));
   }
@@ -247,7 +247,7 @@ public class GameLapServiceTest {
             game.getMrx().getCurrentPosition(),
             new Position(14),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(false);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(false);
 
     // act
     gameLapService.nextLap(game);
@@ -269,7 +269,7 @@ public class GameLapServiceTest {
             game.getDetectives().get(0).getCurrentPosition(),
             new Position(27),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true, false);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(true, false);
 
     // act
     gameLapService.nextLap(game);
@@ -291,7 +291,7 @@ public class GameLapServiceTest {
             game.getDetectives().get(0).getCurrentPosition(),
             game.getDetectives().get(1).getCurrentPosition(),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
@@ -317,7 +317,7 @@ public class GameLapServiceTest {
             game.getMrx().getCurrentPosition(),
             new Position(14),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
@@ -350,7 +350,7 @@ public class GameLapServiceTest {
             game.getDetectives().get(0).getCurrentPosition(),
             new Position(27),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);
@@ -371,7 +371,7 @@ public class GameLapServiceTest {
             game.getDetectives().get(0).getCurrentPosition(),
             new Position(27),
             new TaxiTicket(1)));
-    when(spielbrettService.isMoveValid(any(Move.class))).thenReturn(true);
+    when(boardService.isMoveValid(any(Move.class))).thenReturn(true);
 
     // act
     gameLapService.nextLap(game);

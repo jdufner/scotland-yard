@@ -18,9 +18,6 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
-import static java.lang.String.format;
-import static java.util.Arrays.asList;
-
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.move.Move;
@@ -28,11 +25,15 @@ import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Player;
-import java.util.Collections;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+
+import static java.lang.String.format;
+import static java.util.Arrays.asList;
 
 /**
  * @author Jürgen Dufner
@@ -48,14 +49,14 @@ public class GameLapService {
 
   private final MrxService mrxService;
   private final DetectiveService detectiveService;
-  private final SpielbrettService spielbrettService;
+  private final BoardService boardService;
 
   public GameLapService(final MrxService mrxService,
                         final DetectiveService detectiveService,
-                        final SpielbrettService spielbrettService) {
+                        final BoardService boardService) {
     this.mrxService = mrxService;
     this.detectiveService = detectiveService;
-    this.spielbrettService = spielbrettService;
+    this.boardService = boardService;
   }
 
   void nextLap(final Game game) {
@@ -102,7 +103,7 @@ public class GameLapService {
   }
 
   private void checkIsMoveValid(Move move) {
-    if (!spielbrettService.isMoveValid(move)) {
+    if (!boardService.isMoveValid(move)) {
       throw new InvalidMoveException(format("It isn't allowed to move from %s to %s by %s",
           move.getStart(), move.getEnd(), move.getTicket()));
     }

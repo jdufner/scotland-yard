@@ -14,7 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.service;
@@ -22,10 +21,11 @@ package de.jdufner.scotland.yard.gamecontroller.service;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Player;
 import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * @author Jürgen Dufner
@@ -35,12 +35,12 @@ public abstract class SpielerService<T extends Player> {
 
   private static final Logger LOG = LoggerFactory.getLogger(SpielerService.class);
 
-  protected final SpielbrettService spielbrettService;
+  protected final BoardService boardService;
   protected final StartPositionService startPositionService;
 
-  public SpielerService(final SpielbrettService spielbrettService,
+  public SpielerService(final BoardService boardService,
                         final StartPositionService startPositionService) {
-    this.spielbrettService = spielbrettService;
+    this.boardService = boardService;
     this.startPositionService = startPositionService;
   }
 
@@ -54,7 +54,7 @@ public abstract class SpielerService<T extends Player> {
     LOG.debug("Führe Zug {} für Player {} durch.", game.getCurrentLap(), spieler);
     Zug zug = ermittleNächstenZug(game, spieler);
     spieler.ziehe(zug);
-    spielbrettService.verschiebeSpieler(spieler);
+    boardService.verschiebeSpieler(spieler);
     // Mrx soll sich zeigen, wenn es ein relevanter Spielzug ist
   }
 

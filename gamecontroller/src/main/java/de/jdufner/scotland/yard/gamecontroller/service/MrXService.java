@@ -42,15 +42,15 @@ public class MrXService extends SpielerService<Mrx> {
 
   private static final Logger LOG = LoggerFactory.getLogger(MrXService.class);
 
-  public MrXService(final SpielbrettService spielbrettService,
+  public MrXService(final BoardService boardService,
                     final StartPositionService startPositionService) {
-    super(spielbrettService, startPositionService);
+    super(boardService, startPositionService);
   }
 
   @Override
   protected Zug ermittleNächstenZug(final Game game, final Mrx spieler) {
     // Welche Verkehrsmittel kann Mrx nutzen?
-    final Position position = spielbrettService.findeNachbarAmWeitestenEntferntVonDetektiven();
+    final Position position = boardService.findeNachbarAmWeitestenEntferntVonDetektiven();
     return new Zug(position, new TaxiTicket(1));
   }
 
