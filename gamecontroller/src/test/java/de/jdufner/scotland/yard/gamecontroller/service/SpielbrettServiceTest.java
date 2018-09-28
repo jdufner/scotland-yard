@@ -14,48 +14,59 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
 
-import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
-import org.junit.Ignore;
+import de.jdufner.scotland.yard.common.PlayerInfo;
+import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.position.Position;
+import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Result;
+import org.neo4j.graphdb.Transaction;
 
+/**
+ * @author Jürgen Dufner
+ * @since 1.0
+ */
 @RunWith(MockitoJUnitRunner.class)
-public class GamecontrollerServiceTest {
+public class SpielbrettServiceTest {
 
   @InjectMocks
-  private GamecontrollerService gamecontrollerService;
+  public SpielbrettService spielbrettService;
 
   @Mock
-  private GameInitializationService gameInitializationService;
-  @Mock
-  private GameLapService gameLapService;
+  public GraphDatabaseService graphDatabaseService;
 
   @Test
-  @Ignore
-  public void whenStartsSpiel_expectSpielEndsAfterThreeLaps() {
+  public void testIsMoveValid_when_expect() {
     // arrange
-    Game game = mock(Game.class);
-    when(gameInitializationService.initializeGame()).thenReturn(game);
-    when(game.isFinished()).thenReturn(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE);
+    Move move = new Move(
+        PlayerInfo.Builder.newMrx().build(),
+        new Position(13),
+        new Position(14),
+        new TaxiTicket(1)
+    );
+    when(graphDatabaseService.beginTx()).thenReturn(mock(Transaction.class));
+    when(graphDatabaseService.execute(anyString())).thenReturn(mock(Result.class));
 
     // act
-    gamecontrollerService.startGame();
+    spielbrettService.isMoveValid(move);
 
     // assert
-    verify(gameLapService, times(2)).nextLap(any(Game.class));
+    verify(graphDatabaseService).execute(anyString());
   }
 
 }

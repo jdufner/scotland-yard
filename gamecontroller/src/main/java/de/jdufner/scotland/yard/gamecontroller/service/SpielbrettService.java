@@ -23,13 +23,6 @@ import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Weg;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Player;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Result;
-import org.neo4j.graphdb.Transaction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,6 +31,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Result;
+import org.neo4j.graphdb.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 /**
  * Dieser Service führt alle Zugriffe auf das darunterliegende Spielbrett, sprich Graphen aus.
@@ -240,6 +239,16 @@ public class SpielbrettService {
   }
 
   public boolean isMoveValid(Move move) {
-    return true;
+    try (final Transaction tx = graphDatabaseService.beginTx()) {
+      final Result result = graphDatabaseService.execute("MATCH " +
+          "(n:Node " + move.getStart().asNodeAttribute() + ")-[" + move.getTicket().asRelation() + "]-(m:Node " + move.getEnd().asNodeAttribute() + ") " +
+          "RETURN n.number, m.number");
+      if (result.hasNext()) {
+        return true;
+      }
+      tx.success();
+    }
+    return false;
   }
+
 }

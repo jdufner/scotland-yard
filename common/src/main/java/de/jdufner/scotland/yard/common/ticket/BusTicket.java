@@ -33,4 +33,8 @@ public class BusTicket extends Ticket {
     return "BusTicket: " + getAnzahl();
   }
 
+  @Override
+  public String getRelationName() {
+    return "BUS";
+  }
 }

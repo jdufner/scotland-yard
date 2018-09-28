@@ -24,6 +24,8 @@ package de.jdufner.scotland.yard.common.ticket;
  */
 public class TaxiTicket extends Ticket {
 
+  private static final String RELATION_NAME = "TAXI";
+
   public TaxiTicket(final int anzahl) {
     super(anzahl);
   }
@@ -31,6 +33,11 @@ public class TaxiTicket extends Ticket {
   @Override
   public String toString() {
     return "TaxiTicket: " + getAnzahl();
+  }
+
+  @Override
+  public String getRelationName() {
+    return RELATION_NAME;
   }
 
 }

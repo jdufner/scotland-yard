@@ -55,6 +55,11 @@ public class TicketTest {
     public TestTicket(int anzahl) {
       super(anzahl);
     }
+
+    @Override
+    public String getRelationName() {
+      return "Test";
+    }
   }
 
 }

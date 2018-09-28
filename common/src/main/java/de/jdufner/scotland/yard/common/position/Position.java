@@ -25,8 +25,6 @@ package de.jdufner.scotland.yard.common.position;
  */
 public class Position {
 
-  private Long id;
-
   private int position;
 
   private Position() {
@@ -56,6 +54,10 @@ public class Position {
   @Override
   public String toString() {
     return "Position: " + String.valueOf(position);
+  }
+
+  public String asNodeAttribute() {
+    return "{number:" + position + "}";
   }
 
 }

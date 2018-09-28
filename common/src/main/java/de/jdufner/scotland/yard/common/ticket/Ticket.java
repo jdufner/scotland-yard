@@ -70,4 +70,10 @@ public abstract class Ticket {
     return anzahl;
   }
 
+  public abstract String getRelationName();
+
+  public String asRelation() {
+    return ":" + getRelationName();
+  }
+
 }

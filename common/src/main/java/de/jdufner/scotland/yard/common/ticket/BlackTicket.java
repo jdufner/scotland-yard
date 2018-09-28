@@ -34,4 +34,8 @@ public class BlackTicket extends Ticket {
     return "BlackTicket: " + getAnzahl();
   }
 
+  @Override
+  public String getRelationName() {
+    return "BLACKTICKET";
+  }
 }

@@ -33,4 +33,8 @@ public class UndergroundTicket extends Ticket {
     return "UndergroundTicket: " + getAnzahl();
   }
 
+  @Override
+  public String getRelationName() {
+    return "UNDERGROUND";
+  }
 }

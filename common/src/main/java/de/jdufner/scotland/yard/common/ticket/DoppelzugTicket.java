@@ -63,4 +63,8 @@ public class DoppelzugTicket extends Ticket {
     return "DoppelzugTicket: " + getAnzahl();
   }
 
+  @Override
+  public String getRelationName() {
+    return "DOPPELZUG";
+  }
 }
