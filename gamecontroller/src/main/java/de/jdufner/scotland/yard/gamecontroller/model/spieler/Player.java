@@ -24,7 +24,6 @@ import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
-import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,10 +58,6 @@ public abstract class Player {
 
   public Position getCurrentPosition() {
     return track.get(track.size() - 1);
-  }
-
-  @Deprecated
-  public void ziehe(final Zug zug) {
   }
 
   private void moveTo(final Position naechstePosition) {

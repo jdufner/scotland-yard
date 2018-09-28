@@ -22,7 +22,6 @@ import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
-import de.jdufner.scotland.yard.gamecontroller.model.zug.Zug;
 
 /**
  * @author Jürgen Dufner
@@ -37,12 +36,6 @@ public class Mrx extends Player {
   @Override
   public String toString() {
     return "Mr. X: " + super.toString();
-  }
-
-  @Override
-  public void ziehe(final Zug zug) {
-//    moveTo(zug.getZiel());
-//    consumeTicket(zug.getTicket());
   }
 
   public void addTicket(Ticket ticket) {
