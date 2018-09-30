@@ -14,31 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
-package de.jdufner.scotland.yard.gamecontroller.service;
+package de.jdufner.scotland.yard.gamecontroller.config;
 
-import javax.annotation.PreDestroy;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.springframework.stereotype.Component;
+import de.jdufner.scotland.yard.gameboard.config.Neo4jConfig;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
-/**
- * @author Jürgen Dufner
- * @since 1.0
- */
-@Component
-public class TerminateBean {
-
-  private final GraphDatabaseService graphDatabaseService;
-
-  public TerminateBean(final GraphDatabaseService graphDatabaseService) {
-    this.graphDatabaseService = graphDatabaseService;
-  }
-
-  @PreDestroy
-  public void shutdown() {
-    graphDatabaseService.shutdown();
-  }
-
+@Configuration
+@Import(Neo4jConfig.class)
+public class BoardConfig {
 }

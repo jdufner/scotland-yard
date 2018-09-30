@@ -16,24 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.scotland.yard.gamecontroller;
+package de.jdufner.scotland.yard.gameboard.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PreDestroy;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-@SpringBootApplication
-public class App {
+@Component
+public class TerminateBean {
 
-  private final static Logger LOG = LoggerFactory.getLogger(App.class);
+  private final GraphDatabaseService graphDatabaseService;
 
-  public static void main(final String[] args) {
-    SpringApplication.run(App.class, args);
+  public TerminateBean(final GraphDatabaseService graphDatabaseService) {
+    this.graphDatabaseService = graphDatabaseService;
+  }
+
+  @PreDestroy
+  public void shutdown() {
+    graphDatabaseService.shutdown();
   }
 
 }

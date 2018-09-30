@@ -22,6 +22,7 @@ import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
+import de.jdufner.scotland.yard.gameboard.service.BoardService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;

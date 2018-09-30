@@ -19,7 +19,7 @@
 package de.jdufner.scotland.yard.gamecontroller.spiel;
 
 import de.jdufner.scotland.yard.common.position.StartPosition;
-import de.jdufner.scotland.yard.gamecontroller.service.BoardService;
+import de.jdufner.scotland.yard.gameboard.service.BoardService;
 import de.jdufner.scotland.yard.gamecontroller.service.GameInitializationService;
 import de.jdufner.scotland.yard.gamecontroller.service.StartPositionService;
 import org.junit.Before;
