@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.scotland.yard.gamecontroller.service;
+package de.jdufner.scotland.yard.gameboard.service;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
@@ -66,16 +66,16 @@ public class InitializationBean {
       );
 
       graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
-          ".type=\"BusTicket\" create (n)-[:BUS]->(m) return n, m");
+          ".type=\"Bus\" create (n)-[:BUS]->(m) return n, m");
 
       graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
-          ".type=\"TaxiTicket\" create (n)-[:TAXI]->(m) return n, m");
+          ".type=\"Taxi\" create (n)-[:TAXI]->(m) return n, m");
 
       graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
           ".type=\"Ship\" create (n)-[:SHIP]->(m) return n, m");
 
       graphDatabaseService.execute("match (n:Node)-[r:RELATION]->(m:Node) where r" +
-          ".type=\"UndergroundTicket\" create (n)-[:UNDERGROUND]->(m) return n, m");
+          ".type=\"Underground\" create (n)-[:UNDERGROUND]->(m) return n, m");
 
       graphDatabaseService.execute("match (:Node)-[r:RELATION]->(:Node) delete r");
 
