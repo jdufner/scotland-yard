@@ -19,12 +19,17 @@
 package de.jdufner.scotland.yard.gameboard.service;
 
 import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.position.Position;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Dieser Service führt alle Zugriffe auf das darunterliegende Spielbrett, sprich Graphen aus.
@@ -42,42 +47,6 @@ public class BoardService {
   public BoardService(final GraphDatabaseService graphDatabaseService) {
     this.graphDatabaseService = graphDatabaseService;
   }
-
-//  public void verschiebeSpieler(final Player player) {
-//    entferneSpieler(player);
-//    setzeSpieler(player);
-//  }
-
-//  public void verschiebeSpieler(final Collection<Player> players) {
-//    entferneSpieler(players);
-//    setzeSpieler(players);
-//  }
-
-//  private void entferneSpieler(final Collection<Player> players) {
-//    players.forEach(this::entferneSpieler);
-//  }
-
-//  private void entferneSpieler(final Player player) {
-//    LOG.debug("Entferne Label {} an Position {}.", player, player.getCurrentPosition().getPosition());
-//    try (final Transaction tx = graphDatabaseService.beginTx()) {
-//      graphDatabaseService.execute("MATCH (n:" + player.name() + ") WHERE n.number = " +
-//          player.getCurrentPosition().getPosition() + " REMOVE n:" + player.name());
-//      tx.success();
-//    }
-//  }
-
-//  private void setzeSpieler(final Collection<Player> players) {
-//    players.forEach(this::setzeSpieler);
-//  }
-
-//  private void setzeSpieler(final Player player) {
-//    LOG.debug("Setze Label {} an Position {}.", player, player.getCurrentPosition().getPosition());
-//    try (final Transaction tx = graphDatabaseService.beginTx()) {
-//      graphDatabaseService.execute("MATCH (n:Node) WHERE n.number = " + player.getCurrentPosition
-//          ().getPosition() + " SET n:" + player.name());
-//      tx.success();
-//    }
-//  }
 
 //  public void ermittleKuerzesteDistanzenZwischenJeweilsAllenKnoten(final Game game) {
 //    try (final Transaction tx = graphDatabaseService.beginTx()) {
@@ -198,11 +167,26 @@ public class BoardService {
 //    return null;
 //  }
 
-//  public void aktualisiereSpielbrett(final Game game) {
-//    LOG.info(new Object() {
-//    }.getClass().getEnclosingMethod().getName());
-//    verschiebeSpieler(game.getPlayers());
-//  }
+  public List<Move> findAllPossibleMoves(Position position) {
+    List<Move> possibleMoves = new ArrayList<>();
+    try (final Transaction tx = graphDatabaseService.beginTx()) {
+      final Result result = graphDatabaseService.execute("MATCH " +
+          "(n:Node " + position.asNodeAttribute() + ")-[r]-(m:Node) " +
+          "RETURN n.number, type(r), m.number");
+      while (result.hasNext()) {
+        Map<String, Object> objectMap = result.next();
+        possibleMoves.add(new Move(
+            null,
+            new Position(Integer.parseInt(objectMap.get("n.number").toString())),
+            new Position(Integer.parseInt(objectMap.get("m.number").toString())),
+            null
+        ));
+      }
+      tx.success();
+      return possibleMoves;
+    }
+    //return emptyList();
+  }
 
   public boolean isMoveValid(Move move) {
     try (final Transaction tx = graphDatabaseService.beginTx()) {

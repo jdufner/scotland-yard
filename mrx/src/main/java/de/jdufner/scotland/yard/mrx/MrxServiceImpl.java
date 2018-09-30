@@ -23,6 +23,7 @@ import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
+import de.jdufner.scotland.yard.gameboard.service.BoardService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,12 +33,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class MrxServiceImpl implements MrxService {
 
+  private final BoardService boardService;
+
+  private Position currentPosition;
+  private Tickets tickets;
+
+  public MrxServiceImpl(final BoardService boardService) {
+    this.boardService = boardService;
+  }
+
   @Override
   public void initialize(final PlayerInfo playerInfo, final Position position, final Tickets tickets) {
+    this.currentPosition = position;
+    this.tickets = tickets;
   }
 
   @Override
   public Move nextMove() {
+    boardService.findAllPossibleMoves(currentPosition);
     return null;
   }
 
