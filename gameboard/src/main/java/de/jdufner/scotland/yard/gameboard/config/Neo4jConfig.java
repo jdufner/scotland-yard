@@ -17,7 +17,7 @@
  *
  */
 
-package de.jdufner.scotland.yard.gamecontroller.config;
+package de.jdufner.scotland.yard.gameboard.config;
 
 import java.io.File;
 import java.util.HashMap;

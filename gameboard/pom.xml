@@ -29,4 +29,12 @@
 
   <artifactId>gameboard</artifactId>
 
+  <dependencies>
+    <dependency>
+      <groupId>de.jdufner.scotland-yard</groupId>
+      <artifactId>common</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+
 </project>
