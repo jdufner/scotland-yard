@@ -48,9 +48,9 @@ public class GamecontrollerService {
   @PostConstruct
   public void startGame() {
     final Game game = gameInitializationService.initializeGame();
-//    while (!game.isFinished()) {
-//      gameLapService.nextLap(game);
-//    }
+    while (!game.isFinished()) {
+      gameLapService.nextLap(game);
+    }
   }
 
 }

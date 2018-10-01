@@ -18,12 +18,19 @@
 
 package de.jdufner.scotland.yard.mrx;
 
+import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
+
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
+import de.jdufner.scotland.yard.common.ticket.Ticket;
 import de.jdufner.scotland.yard.gameboard.service.BoardService;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,8 +42,11 @@ public class MrxServiceImpl implements MrxService {
 
   private final BoardService boardService;
 
-  private Position currentPosition;
+  private PlayerInfo playerInfo;
+  private List<Position> track = new LinkedList<>();
   private Tickets tickets;
+
+  private Random random = new Random();
 
   public MrxServiceImpl(final BoardService boardService) {
     this.boardService = boardService;
@@ -44,14 +54,33 @@ public class MrxServiceImpl implements MrxService {
 
   @Override
   public void initialize(final PlayerInfo playerInfo, final Position position, final Tickets tickets) {
-    this.currentPosition = position;
+    this.playerInfo = playerInfo;
+    track.add(position);
     this.tickets = tickets;
   }
 
   @Override
   public Move nextMove() {
-    boardService.findAllPossibleMoves(currentPosition);
-    return null;
+    final List<Move> allPossibleMoves = boardService.findAllPossibleMoves(getCurrentPosition());
+    final List<Move> allAllowedMoves = allPossibleMoves.stream()
+        .filter(possibleMove -> tickets.contains(possibleMove.getTicket()))
+        .collect(toList());
+    if (allAllowedMoves.size() <= 0) {
+      throw new RuntimeException(format("No Tickets %s remaining to do a legal move %s!",
+          tickets, allPossibleMoves));
+    }
+    final Move move = allAllowedMoves.get(random.nextInt(allPossibleMoves.size()));
+    track.add(move.getEnd());
+    return move;
+  }
+
+  @Override
+  public void giveTicket(Ticket ticket) {
+    tickets.add(ticket);
+  }
+
+  private Position getCurrentPosition() {
+    return track.get(track.size() - 1);
   }
 
 }

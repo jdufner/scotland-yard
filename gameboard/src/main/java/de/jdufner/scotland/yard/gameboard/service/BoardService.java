@@ -20,6 +20,7 @@ package de.jdufner.scotland.yard.gameboard.service;
 
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
+import de.jdufner.scotland.yard.common.ticket.Ticket;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
@@ -179,7 +180,7 @@ public class BoardService {
             null,
             new Position(Integer.parseInt(objectMap.get("n.number").toString())),
             new Position(Integer.parseInt(objectMap.get("m.number").toString())),
-            null
+            Ticket.Factory.create(objectMap.get("type(r)").toString())
         ));
       }
       tx.success();

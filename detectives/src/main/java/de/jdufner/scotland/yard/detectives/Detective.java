@@ -14,41 +14,42 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
-package de.jdufner.scotland.yard.common;
+package de.jdufner.scotland.yard.detectives;
 
-import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.PlayerInfo;
+import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.position.Position;
-import de.jdufner.scotland.yard.common.ticket.Ticket;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * This interface has to be implemented by the game logic, that represents Mr X.
- *
  * @author Jürgen Dufner
  * @since 1.0
  */
-public interface MrxService {
+public class Detective {
 
-  // tag::initializeMethod[]
-  /**
-   * Sets Mr.X to the start position and gives him the tickets to use the public traffic.
-   *
-   * This method is called by the game controller.
-   *
-   * @param position
-   * @param tickets
-   */
-  void initialize(final PlayerInfo playerInfo, final Position position, final Tickets tickets); // <1>
-  // end::initializeMethod[]
+  private final PlayerInfo playerInfo;
+  private final List<Position> track = new LinkedList<>();
+  private final Tickets tickets;
 
-  /**
-   * Asks Mr. X. to do the next move.
-   *
-   * This method is called by the game controller.
-   */
-  Move nextMove();
+  Detective(PlayerInfo playerInfo, Position position, Tickets tickets) {
+    this.playerInfo = playerInfo;
+    track.add(position);
+    this.tickets = tickets;
+  }
 
-  void giveTicket(Ticket ticket);
+  public Position getCurrentPosition() {
+    return track.get(track.size() - 1);
+  }
 
+  public void moveTo(Position position) {
+    track.add(position);
+  }
+
+  public Tickets getTickets() {
+    return tickets;
+  }
 }
