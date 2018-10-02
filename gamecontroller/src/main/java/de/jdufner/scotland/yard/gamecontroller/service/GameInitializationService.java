@@ -26,13 +26,14 @@ import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 /**
  * The {@link GameInitializationService} creates a {@link Game} containing the {@link de.jdufner.scotland.yard.gamecontroller.model.spieler.Player},
@@ -91,6 +92,7 @@ public class GameInitializationService {
     final PlayerInfo playerInfo = playerInfoService.getDetectivePlayerInfo();
     final Detective detective = new Detective(number, playerInfo, startPosition, detectiveTickets);
     detectiveService.initialize(playerInfo, startPosition, detectiveTickets);
+    mrxService.setDetectivesPosition(playerInfo, startPosition);
     // TODO [jdufner, 2018-09-20] When and how will be set the players on the board?
     return detective;
   }

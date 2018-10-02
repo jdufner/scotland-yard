@@ -18,20 +18,21 @@
 
 package de.jdufner.scotland.yard.detectives;
 
-import static java.lang.String.format;
-
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.gameboard.service.BoardService;
+import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
+
+import static java.lang.String.format;
 
 /**
  * @author Jürgen Dufner
@@ -56,6 +57,10 @@ public class DetectiveServiceImpl implements DetectiveService {
 
   @Override
   public Move nextMove(PlayerInfo playerInfo) {
+    return arbitraryMove(playerInfo);
+  }
+
+  private Move arbitraryMove(PlayerInfo playerInfo) {
     final List<Move> allPossibleMoves = boardService.findAllPossibleMoves(detectiveMap.get(playerInfo).getCurrentPosition());
     List<Move> allAllowedMoves = allPossibleMoves.stream()
         .filter(possibleMove -> detectiveMap.get(playerInfo).getTickets().contains(possibleMove.getTicket()))

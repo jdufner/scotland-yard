@@ -49,6 +49,21 @@ public interface MrxService {
    */
   Move nextMove();
 
+  /**
+   * Gives Mr. X a Ticket.
+   * <p>
+   * Usually after a detective has moved he gives the consumed ticket to Mr. X.
+   *
+   * @param ticket The consumed ticket of a detective is a new ticket for Mr. X.
+   */
   void giveTicket(Ticket ticket);
+
+  /**
+   * Informs Mr. X about the current position of a detective.
+   *
+   * @param playerInfo The ID of an detective.
+   * @param position   The current position of an detective.
+   */
+  void setDetectivesPosition(PlayerInfo playerInfo, Position position);
 
 }

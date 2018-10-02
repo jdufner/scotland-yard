@@ -26,6 +26,7 @@ import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.BlackTicket;
 import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
+import de.jdufner.scotland.yard.common.ticket.Ticket;
 import de.jdufner.scotland.yard.common.ticket.UndergroundTicket;
 import de.jdufner.scotland.yard.gameboard.service.BoardService;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
@@ -98,6 +99,8 @@ public class GameLapServiceTest {
     // assert
     verify(mrxService).nextMove();
     verify(detectiveService, times(4)).nextMove(any(PlayerInfo.class));
+    verify(mrxService, times(4)).giveTicket(any(Ticket.class));
+    verify(mrxService, times(4)).setDetectivesPosition(any(PlayerInfo.class), any(Position.class));
     verify(boardService, times(5)).isMoveValid(any(Move.class));
     assertThat(game.isFinished()).isFalse();
   }

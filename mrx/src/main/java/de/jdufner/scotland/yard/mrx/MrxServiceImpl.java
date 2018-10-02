@@ -18,9 +18,6 @@
 
 package de.jdufner.scotland.yard.mrx;
 
-import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
-
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
@@ -28,10 +25,17 @@ import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
 import de.jdufner.scotland.yard.gameboard.service.BoardService;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import org.springframework.stereotype.Service;
+
+import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Jürgen Dufner
@@ -45,6 +49,7 @@ public class MrxServiceImpl implements MrxService {
   private PlayerInfo playerInfo;
   private List<Position> track = new LinkedList<>();
   private Tickets tickets;
+  private Map<PlayerInfo, Collection<Position>> detectivesPosition = new HashMap<>();
 
   private Random random = new Random();
 
@@ -61,6 +66,10 @@ public class MrxServiceImpl implements MrxService {
 
   @Override
   public Move nextMove() {
+    return arbitraryMove();
+  }
+
+  private Move arbitraryMove() {
     final List<Move> allPossibleMoves = boardService.findAllPossibleMoves(getCurrentPosition());
     final List<Move> allAllowedMoves = allPossibleMoves.stream()
         .filter(possibleMove -> tickets.contains(possibleMove.getTicket()))
@@ -75,8 +84,13 @@ public class MrxServiceImpl implements MrxService {
   }
 
   @Override
-  public void giveTicket(Ticket ticket) {
+  public void giveTicket(final Ticket ticket) {
     tickets.add(ticket);
+  }
+
+  @Override
+  public void setDetectivesPosition(final PlayerInfo playerInfo, final Position position) {
+    detectivesPosition.computeIfAbsent(playerInfo, playerInfo1 -> new LinkedList<>()).add(position);
   }
 
   private Position getCurrentPosition() {
