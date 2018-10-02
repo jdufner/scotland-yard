@@ -30,7 +30,7 @@ public class UndergroundTicket extends Ticket {
 
   @Override
   public String toString() {
-    return "UndergroundTicket: " + getAnzahl();
+    return "UndergroundTicket{anzahl=" + getAnzahl() + "}";
   }
 
   @Override

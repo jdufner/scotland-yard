@@ -47,8 +47,12 @@ public abstract class Player {
 
   @Override
   public String toString() {
-    return "{" + getCurrentPosition() +
-        ", Tickets: " + tickets + "}";
+    return "{" +
+        "playerInfo=" + playerInfo +
+        ", startPosition=" + startPosition +
+        ", tickets=" + tickets +
+        ", track=" + track +
+        '}';
   }
 
   public String name() {

@@ -30,12 +30,13 @@ public class BlackTicket extends Ticket {
   }
 
   @Override
-  public String toString() {
-    return "BlackTicket: " + getAnzahl();
-  }
-
-  @Override
   public String getRelationName() {
     return "BLACKTICKET";
   }
+
+  @Override
+  public String toString() {
+    return "BlackTicket{anzahl=" + getAnzahl() + "}";
+  }
+
 }

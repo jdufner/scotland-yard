@@ -30,7 +30,7 @@ public class BusTicket extends Ticket {
 
   @Override
   public String toString() {
-    return "BusTicket: " + getAnzahl();
+    return "BusTicket{anzahl=" + getAnzahl() + "}";
   }
 
   @Override

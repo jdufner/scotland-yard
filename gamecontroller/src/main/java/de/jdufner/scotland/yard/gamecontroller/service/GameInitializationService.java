@@ -38,7 +38,7 @@ import org.springframework.stereotype.Service;
  * The {@link GameInitializationService} creates a {@link Game} containing the {@link de.jdufner.scotland.yard.gamecontroller.model.spieler.Player},
  * in detail one {@link Mrx} and up to four {@link Detective}s.
  *
- * Each player has a {@link StartPosition} and a certain number of {@link de.jdufner.scotland.yard.common.ticket.Ticket}s.
+ * Each player has a {@link Position} and a certain number of {@link de.jdufner.scotland.yard.common.ticket.Ticket}s.
  *
  * @author Jürgen Dufner
  * @since 1.0
@@ -70,9 +70,12 @@ public class GameInitializationService {
   }
 
   public Game initializeGame() {
+    LOG.debug("initialize game");
     Mrx mrx = initializeMrx();
     List<Detective> detectives = initializeDetectives();
-    return new Game(mrx, detectives);
+    Game game = new Game(mrx, detectives);
+    LOG.debug("game {} initialized", game);
+    return game;
   }
 
   private List<Detective> initializeDetectives() {

@@ -37,9 +37,11 @@ public class Detective extends Player {
 
   @Override
   public String toString() {
-    return "Detective: " + super.toString() + ", " + nummer;
+    return "Detective=" + super.toString();
   }
 
+  // TODO [jdufner, 2018-10-02] Remove class Nummer.
+  @Deprecated
   private static class Nummer {
     private final int value;
 

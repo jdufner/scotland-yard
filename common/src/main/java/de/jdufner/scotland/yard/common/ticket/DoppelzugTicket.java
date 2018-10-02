@@ -60,7 +60,7 @@ public class DoppelzugTicket extends Ticket {
 
   @Override
   public String toString() {
-    return "DoppelzugTicket: " + getAnzahl();
+    return "DoppelzugTicket{anzahl=" + getAnzahl() + "}";
   }
 
   @Override

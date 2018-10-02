@@ -118,4 +118,10 @@ public class Tickets {
 
   }
 
+  @Override
+  public String toString() {
+    return "Tickets{" +
+        "tickets=" + tickets +
+        '}';
+  }
 }

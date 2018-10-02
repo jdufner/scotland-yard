@@ -35,7 +35,7 @@ public class Mrx extends Player {
 
   @Override
   public String toString() {
-    return "Mr. X: " + super.toString();
+    return "Mr. X=" + super.toString();
   }
 
   public void addTicket(Ticket ticket) {

@@ -64,7 +64,7 @@ public class DetectiveServiceImpl implements DetectiveService {
       throw new RuntimeException(format("No Tickets %s remaining for detective %s to do a legal move %s!",
           detectiveMap.get(playerInfo).getTickets(), playerInfo, allPossibleMoves));
     }
-    final Move move = allAllowedMoves.get(random.nextInt(allPossibleMoves.size()));
+    final Move move = allAllowedMoves.get(random.nextInt(allAllowedMoves.size()));
     detectiveMap.get(playerInfo).moveTo(move.getEnd());
     return move;
   }
