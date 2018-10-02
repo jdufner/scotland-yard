@@ -21,7 +21,7 @@ package de.jdufner.scotland.yard.gamecontroller.service;
 
 import static java.util.Arrays.asList;
 
-import de.jdufner.scotland.yard.common.position.StartPosition;
+import de.jdufner.scotland.yard.common.position.Position;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -45,11 +45,11 @@ public class StartPositionService {
     freiePositionen.addAll(asList(startpositionen));
   }
 
-  public StartPosition zieheFreieStartPosition() {
+  public Position zieheFreieStartPosition() {
     assert freiePositionen.size() > 0 :
         "Es existiert keine freie StartPosition mehr! Es können maximal " + startpositionen.length +
             " Startpositionen gezogen werden.";
-    return new StartPosition(
+    return new Position(
         freiePositionen.remove((int) (Math.random() * freiePositionen.size())));
   }
 

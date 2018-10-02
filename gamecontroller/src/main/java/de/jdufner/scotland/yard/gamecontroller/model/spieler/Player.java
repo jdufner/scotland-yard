@@ -22,7 +22,6 @@ import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
-import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
 
 import java.util.ArrayList;
@@ -35,11 +34,11 @@ import java.util.List;
 public abstract class Player {
 
   final PlayerInfo playerInfo;
-  final StartPosition startPosition;
+  final Position startPosition;
   final Tickets tickets;
   final List<Position> track = new ArrayList();
 
-  Player(final PlayerInfo playerInfo, final StartPosition startPosition, final Tickets tickets) {
+  Player(final PlayerInfo playerInfo, final Position startPosition, final Tickets tickets) {
     this.playerInfo = playerInfo;
     this.startPosition = startPosition;
     this.tickets = tickets;
@@ -92,7 +91,7 @@ public abstract class Player {
     }
 
     private int number;
-    private StartPosition startPosition;
+    private Position startPosition;
     private PlayerInfo playerInfo;
     private Tickets tickets;
 
@@ -105,7 +104,7 @@ public abstract class Player {
     }
 
     public Builder withStartpositionAsInt(final int startpositionAsInt) {
-      this.startPosition = new StartPosition(startpositionAsInt);
+      this.startPosition = new Position(startpositionAsInt);
       return this;
     }
 

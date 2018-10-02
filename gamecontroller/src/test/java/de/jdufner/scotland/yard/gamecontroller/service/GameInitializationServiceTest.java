@@ -18,11 +18,16 @@
 
 package de.jdufner.scotland.yard.gamecontroller.service;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
-import de.jdufner.scotland.yard.common.position.StartPosition;
+import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -33,11 +38,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * @author Jürgen Dufner
@@ -81,11 +81,11 @@ public class GameInitializationServiceTest {
     Tickets detectiveTickets4 = mock(Tickets.class);
     when(startTicketService.getDetectiveTickets()).thenReturn(detectiveTickets1, detectiveTickets2, detectiveTickets3, detectiveTickets4);
 
-    StartPosition mrxStartPosition = mock(StartPosition.class);
-    StartPosition detectiveStartPosition1 = mock(StartPosition.class);
-    StartPosition detectiveStartPosition2 = mock(StartPosition.class);
-    StartPosition detectiveStartPosition3 = mock(StartPosition.class);
-    StartPosition detectiveStartPosition4 = mock(StartPosition.class);
+    Position mrxStartPosition = mock(Position.class);
+    Position detectiveStartPosition1 = mock(Position.class);
+    Position detectiveStartPosition2 = mock(Position.class);
+    Position detectiveStartPosition3 = mock(Position.class);
+    Position detectiveStartPosition4 = mock(Position.class);
     when(startPositionService.zieheFreieStartPosition()).thenReturn(mrxStartPosition, detectiveStartPosition1, detectiveStartPosition2, detectiveStartPosition3, detectiveStartPosition4);
 
     // act

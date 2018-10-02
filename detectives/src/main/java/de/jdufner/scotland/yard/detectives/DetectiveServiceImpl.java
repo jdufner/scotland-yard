@@ -25,7 +25,6 @@ import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
-import de.jdufner.scotland.yard.common.position.StartPosition;
 import de.jdufner.scotland.yard.gameboard.service.BoardService;
 import java.util.HashMap;
 import java.util.List;
@@ -51,8 +50,8 @@ public class DetectiveServiceImpl implements DetectiveService {
   }
 
   @Override
-  public void initialize(PlayerInfo playerInfo, StartPosition startPosition, Tickets tickets) {
-    detectiveMap.put(playerInfo, new Detective(playerInfo, startPosition, tickets));
+  public void initialize(PlayerInfo playerInfo, Position Position, Tickets tickets) {
+    detectiveMap.put(playerInfo, new Detective(playerInfo, Position, tickets));
   }
 
   @Override

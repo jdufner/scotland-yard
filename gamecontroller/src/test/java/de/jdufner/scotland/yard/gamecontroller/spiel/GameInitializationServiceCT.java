@@ -18,15 +18,15 @@
 
 package de.jdufner.scotland.yard.gamecontroller.spiel;
 
-import de.jdufner.scotland.yard.common.position.StartPosition;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.gameboard.service.BoardService;
 import de.jdufner.scotland.yard.gamecontroller.service.GameInitializationService;
 import de.jdufner.scotland.yard.gamecontroller.service.StartPositionService;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * @author Jürgen Dufner
@@ -48,11 +48,11 @@ public class GameInitializationServiceCT {
   @Test
   public void testErzeugeSpiel_whenErzeugt_expectFuenfSpielerNichtBeendet() {
     // arrange
-    when(startPositionService.zieheFreieStartPosition()).thenReturn(new StartPosition(1))
-        .thenReturn(new StartPosition(2))
-        .thenReturn(new StartPosition(3))
-        .thenReturn(new StartPosition(4))
-        .thenReturn(new StartPosition(5));
+    when(startPositionService.zieheFreieStartPosition()).thenReturn(new Position(1))
+        .thenReturn(new Position(2))
+        .thenReturn(new Position(3))
+        .thenReturn(new Position(4))
+        .thenReturn(new Position(5));
 
     // act
 //    Game spiel = spielService.initializeGame();
@@ -65,11 +65,11 @@ public class GameInitializationServiceCT {
   @Test
   public void testErzeugeSpiel_whenErzeugt_expectFuenfSpielerBeendet() {
     // arrange
-    when(startPositionService.zieheFreieStartPosition()).thenReturn(new StartPosition(1))
-        .thenReturn(new StartPosition(1))
-        .thenReturn(new StartPosition(2))
-        .thenReturn(new StartPosition(3))
-        .thenReturn(new StartPosition(4));
+    when(startPositionService.zieheFreieStartPosition()).thenReturn(new Position(1))
+        .thenReturn(new Position(1))
+        .thenReturn(new Position(2))
+        .thenReturn(new Position(3))
+        .thenReturn(new Position(4));
 
     // act
 //    Game spiel = spielService.initializeGame();

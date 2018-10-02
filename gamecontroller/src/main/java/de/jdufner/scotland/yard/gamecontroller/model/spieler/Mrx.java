@@ -20,7 +20,7 @@ package de.jdufner.scotland.yard.gamecontroller.model.spieler;
 
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
-import de.jdufner.scotland.yard.common.position.StartPosition;
+import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
 
 /**
@@ -29,7 +29,7 @@ import de.jdufner.scotland.yard.common.ticket.Ticket;
  */
 public class Mrx extends Player {
 
-  public Mrx(final PlayerInfo playerInfo, final StartPosition startPosition, final Tickets tickets) {
+  public Mrx(final PlayerInfo playerInfo, final Position startPosition, final Tickets tickets) {
     super(playerInfo, startPosition, tickets);
   }
 
@@ -51,7 +51,7 @@ public class Mrx extends Player {
           .withTickets(Tickets.Builder.defaultMrxTickets().build());
     }
 
-    private StartPosition startPosition;
+    private Position startPosition;
     private PlayerInfo playerInfo;
     private Tickets tickets;
 
@@ -59,7 +59,7 @@ public class Mrx extends Player {
     }
 
     public Builder withStartpositionAsInt(final int startpositionAsInt) {
-      this.startPosition = new StartPosition(startpositionAsInt);
+      this.startPosition = new Position(startpositionAsInt);
       return this;
     }
 

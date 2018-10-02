@@ -21,7 +21,6 @@ package de.jdufner.scotland.yard.common;
 
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
-import de.jdufner.scotland.yard.common.position.StartPosition;
 
 /**
  * This interface has to be implemented by the gamelogic of the detectives.
@@ -31,7 +30,7 @@ import de.jdufner.scotland.yard.common.position.StartPosition;
  */
 public interface DetectiveService {
 
-  void initialize(final PlayerInfo playerInfo, final StartPosition startPosition, final Tickets tickets);
+  void initialize(final PlayerInfo playerInfo, final Position position, final Tickets tickets);
 
   Move nextMove(PlayerInfo playerInfo);
 
