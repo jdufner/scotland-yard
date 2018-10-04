@@ -14,53 +14,57 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
  */
 
 package de.jdufner.scotland.yard.mrx;
 
-import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
-import org.springframework.stereotype.Service;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-@Service
-public class MrxServiceImpl implements MrxService {
+public class MrxGameStatus {
 
-  private final MrxMove mrxMove;
+  private final PlayerInfo playerInfo;
+  private final List<Position> track = new LinkedList<>();
+  private final Tickets tickets;
+  private final Map<PlayerInfo, Collection<Position>> detectivesPosition = new HashMap<>();
 
-  private MrxGameStatus mrxGameStatus;
-
-  public MrxServiceImpl(final MrxMove mrxMove) {
-    this.mrxMove = mrxMove;
+  MrxGameStatus(final PlayerInfo playerInfo, final Position position, final Tickets tickets) {
+    this.playerInfo = playerInfo;
+    this.track.add(position);
+    this.tickets = tickets;
   }
 
-  @Override
-  public void initialize(final PlayerInfo playerInfo, final Position position, final Tickets tickets) {
-    this.mrxGameStatus = new MrxGameStatus(playerInfo, position, tickets);
+  void giveTicket(final Ticket ticket) {
+    tickets.add(ticket);
   }
 
-  @Override
-  public void setDetectivesPosition(final PlayerInfo playerInfo, final Position position) {
-    mrxGameStatus.setDetectivesPosition(playerInfo, position);
+  void setDetectivesPosition(final PlayerInfo playerInfo, final Position position) {
+    detectivesPosition.computeIfAbsent(playerInfo, playerInfo1 -> new LinkedList<>()).add(position);
   }
 
-  @Override
-  public void giveTicket(final Ticket ticket) {
-    mrxGameStatus.giveTicket(ticket);
+  Position getCurrentPosition() {
+    return track.get(track.size() - 1);
   }
 
-  @Override
-  public Move nextMove() {
-    Move move = mrxMove.nextMove(mrxGameStatus);
-    mrxGameStatus.doMove(move);
-    return move;
+  Tickets getTickets() {
+    return tickets;
+  }
+
+  public void doMove(Move move) {
+    track.add(move.getEnd());
   }
 
 }
