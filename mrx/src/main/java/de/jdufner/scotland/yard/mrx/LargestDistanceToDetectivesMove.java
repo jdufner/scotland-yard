@@ -18,42 +18,25 @@
 
 package de.jdufner.scotland.yard.mrx;
 
-import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
-
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.gameboard.service.BoardService;
-import java.util.List;
-import java.util.Random;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-/**
- * @author Jürgen Dufner
- * @since 1.0
- */
+@Primary
 @Service
-public class ArbitraryMove implements MrxMove {
+public class LargestDistanceToDetectivesMove implements MrxMove {
 
   private final BoardService boardService;
 
-  private Random random = new Random();
-
-  public ArbitraryMove(final BoardService boardService) {
+  public LargestDistanceToDetectivesMove(final BoardService boardService) {
     this.boardService = boardService;
   }
 
   @Override
-  public Move nextMove(final MrxGameStatus mrxGameStatus) {
-    final List<Move> allPossibleMoves = boardService.findAllPossibleMoves(mrxGameStatus.getMrxPosition());
-    final List<Move> allAllowedMoves = allPossibleMoves.stream()
-        .filter(possibleMove -> mrxGameStatus.getTickets().contains(possibleMove.getTicket()))
-        .collect(toList());
-    if (allAllowedMoves.size() <= 0) {
-      throw new RuntimeException(format("No Tickets %s remaining to do a legal move %s!",
-          mrxGameStatus.getTickets(), allPossibleMoves));
-    }
-    final Move move = allAllowedMoves.get(random.nextInt(allPossibleMoves.size()));
-    return move;
+  public Move nextMove(MrxGameStatus mrxGameStatus) {
+    boardService.findPositionsNextToMrxFarAwayFromDetectives(mrxGameStatus.getMrxPosition(), mrxGameStatus.getDetectivesPosition());
+    return null;
   }
 
 }

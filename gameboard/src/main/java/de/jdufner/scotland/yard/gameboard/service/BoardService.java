@@ -21,16 +21,15 @@ package de.jdufner.scotland.yard.gameboard.service;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Dieser Service führt alle Zugriffe auf das darunterliegende Spielbrett, sprich Graphen aus.
@@ -202,4 +201,7 @@ public class BoardService {
     return false;
   }
 
+  public List<Position> findPositionsNextToMrxFarAwayFromDetectives(Position mrxPosition, List<Position> detectivesPosition) {
+    return null;
+  }
 }

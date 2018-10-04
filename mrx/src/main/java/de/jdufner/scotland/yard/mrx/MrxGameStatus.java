@@ -14,17 +14,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.mrx;
+
+import static java.util.stream.Collectors.toList;
 
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,9 +37,10 @@ import java.util.Map;
 public class MrxGameStatus {
 
   private final PlayerInfo playerInfo;
+  // No lap counter required, because lap is equal to track.size()
   private final List<Position> track = new LinkedList<>();
   private final Tickets tickets;
-  private final Map<PlayerInfo, Collection<Position>> detectivesPosition = new HashMap<>();
+  private final Map<PlayerInfo, List<Position>> detectivesPosition = new HashMap<>();
 
   MrxGameStatus(final PlayerInfo playerInfo, final Position position, final Tickets tickets) {
     this.playerInfo = playerInfo;
@@ -55,7 +56,7 @@ public class MrxGameStatus {
     detectivesPosition.computeIfAbsent(playerInfo, playerInfo1 -> new LinkedList<>()).add(position);
   }
 
-  Position getCurrentPosition() {
+  Position getMrxPosition() {
     return track.get(track.size() - 1);
   }
 
@@ -63,8 +64,15 @@ public class MrxGameStatus {
     return tickets;
   }
 
-  public void doMove(Move move) {
+  void doMove(Move move) {
     track.add(move.getEnd());
+  }
+
+  List<Position> getDetectivesPosition() {
+    final List<Position> collect = detectivesPosition.values().stream()
+        .map(positions -> positions.get(positions.size() - 1))
+        .collect(toList());
+    return collect;
   }
 
 }
