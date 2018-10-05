@@ -19,9 +19,12 @@
 package de.jdufner.scotland.yard.gameboard.service;
 
 import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.move.Path;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
+import de.jdufner.scotland.yard.gameboard.model.Route;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -64,21 +67,31 @@ public class BoardService {
 //    }
 //  }
 
-//  public Position findeNachbarAmWeitestenEntferntVonDetektiven() {
-//    final List<Weg> wege = new ArrayList<>();
-//    try (final Transaction tx = graphDatabaseService.beginTx()) {
-//      Result result = graphDatabaseService.execute("MATCH (n:MRX)-[:TAXI|BUS|UNDERGROUND]-" +
-//          "(m:Node), p=shortestPath((m)-[:TAXI|BUS|UNDERGROUND*1..]-(d:DETEKTIV)) RETURN n" +
-//          ".number, m.number, d.number, length(p) ORDER BY m.number, d.number asc, length(p) desc");
-//
-//      while (result.hasNext()) {
-//        wege.add(buildWeg(result.next(), "m.number", "d.number", "length(p)"));
-//      }
-//      tx.success();
-//    }
-//    LOG.debug("Alle Wege von den Nachbarn zu allen Detektiven");
-//    LOG.debug("{}", wege);
-//
+  private Route buildRoute(final Map<String, Object> row, final String start, final String ende,
+                           final String length) {
+    return new Route(new Position(Integer.parseInt(row.get(start).toString())),
+        new Position(Integer.parseInt(row.get(ende).toString())),
+        Integer.parseInt(row.get(length).toString()));
+  }
+
+
+  public Position findPositionsNextToMrxFarAwayFromDetectives(final Position mrxPosition, final List<Position> detectivesPosition) {
+    final List<Route> routes = new ArrayList<>();
+    try (final Transaction tx = graphDatabaseService.beginTx()) {
+      Result result = graphDatabaseService.execute("MATCH (n:Node)-[:TAXI|BUS|UNDERGROUND]-" +
+          "(m:Node), p=shortestPath((m)-[:TAXI|BUS|UNDERGROUND*1..]-(d:DETEKTIV)) " +
+          "WHERE n.number=" + mrxPosition.getPosition() +
+          "RETURN n.number, m.number, d.number, length(p) " +
+          "ORDER BY m.number, d.number asc, length(p) desc");
+
+      while (result.hasNext()) {
+        routes.add(buildRoute(result.next(), "m.number", "d.number", "length(p)"));
+      }
+      tx.success();
+    }
+    LOG.debug("Alle Wege von den Nachbarn zu allen Detektiven");
+    LOG.debug("{}", routes);
+
 //    Map<Position, Optional<Weg>> nachbar2KuerzesteDistanzZumNaechstenDetektiv = wege.stream()
 //        .collect(Collectors.groupingBy(Weg::getStart,
 //            Collectors.minBy(Comparator.comparing(Weg::getLaenge))));
@@ -114,34 +127,35 @@ public class BoardService {
 //    LOG.debug("{}", position);
 //
 //    return position;
-//  }
+    return null;
+  }
 
-//  private Weg buildWeg(final Map<String, Object> row, final String start, final String ende,
-//                       final String laenge) {
-//    return new Weg(new Position(Integer.parseInt(row.get(start).toString())),
-//        new Position(Integer.parseInt(row.get(ende).toString())),
-//        Integer.parseInt(row.get(laenge).toString()));
-//  }
+  private Path buildPath(final Map<String, Object> row, final String start, final String ende,
+                        final String type) {
+    return new Path(new Position(Integer.parseInt(row.get(start).toString())),
+        new Position(Integer.parseInt(row.get(ende).toString())),
+        Ticket.Factory.create(type));
+  }
 
-//  public Position findeWegZuUndergroundInAnzahlZuegen(final Player player,
+//  public Position findeWegZuUndergroundInAnzahlZuegen(final Position start,
 //                                                      final int anzahlZuege) {
 //    assert anzahlZuege > 0 : "Anzahl der Züge muss größer als 0 sein.";
 //    assert anzahlZuege < 3 : "Anzahl der Züge muss kleiner als 3 sein.";
 //
-//    final List<Weg> wege = new ArrayList<>();
+//    final List<Path> pathes = new ArrayList<>();
 //    try (final Transaction tx = graphDatabaseService.beginTx()) {
-//      final Result result = graphDatabaseService.execute("MATCH (n:Node)-[]-(m:Node) " +
-//          "WHERE n.number=" + player.getCurrentPosition().getPosition() + " " +
-//          "RETURN n.number, m.number, 1 as laenge");
+//      final Result result = graphDatabaseService.execute("MATCH (n:Node)-[r]-(m:Node) " +
+//          "WHERE n.number=" + start.getPosition() + " " +
+//          "RETURN n.number, r.type, m.number, 1 as laenge");
 //      while (result.hasNext()) {
-//        wege.add(buildWeg(result.next(), "n.number", "m.number", "laenge"));
+//        pathes.add(buildWeg(result.next(), "n.number", "m.number", "r.type"));
 //      }
 //      tx.success();
 //    }
 //
-//    LOG.debug("{}", wege);
+//    LOG.debug("{}", pathes);
 //
-//    return wege.get((int) (Math.random() * wege.size())).getEnde();
+//    return pathes.get((int) (Math.random() * pathes.size())).getEnd();
 //  }
 
 //  public Position findeKuerzestenWegZuMrX(final Player player,
@@ -158,14 +172,14 @@ public class BoardService {
 //    return null;
 //  }
 
-//  private List<Position> ermittleMoeglichePositionenVonMrX(
-//      final Position letzteBekanntePositionVonMrX,
-//      final int anzahlVergangeneRundenSeitSichMrXGezeigthat) {
-//    if (anzahlVergangeneRundenSeitSichMrXGezeigthat == 0) {
-//      return Collections.singletonList(letzteBekanntePositionVonMrX);
-//    }
-//    return null;
-//  }
+  private List<Position> ermittleMoeglichePositionenVonMrX(
+      final Position letzteBekanntePositionVonMrX,
+      final int anzahlVergangeneRundenSeitSichMrXGezeigthat) {
+    if (anzahlVergangeneRundenSeitSichMrXGezeigthat == 0) {
+      return Collections.singletonList(letzteBekanntePositionVonMrX);
+    }
+    return null;
+  }
 
   public List<Move> findAllPossibleMoves(Position position) {
     List<Move> possibleMoves = new ArrayList<>();
@@ -201,7 +215,4 @@ public class BoardService {
     return false;
   }
 
-  public List<Position> findPositionsNextToMrxFarAwayFromDetectives(Position mrxPosition, List<Position> detectivesPosition) {
-    return null;
-  }
 }
