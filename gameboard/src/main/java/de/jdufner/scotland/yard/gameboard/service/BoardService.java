@@ -18,18 +18,25 @@
 
 package de.jdufner.scotland.yard.gameboard.service;
 
+import static java.util.Collections.singletonList;
+import static java.util.Collections.unmodifiableList;
+
 import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.move.Path;
 import de.jdufner.scotland.yard.common.position.Position;
+import de.jdufner.scotland.yard.common.ticket.Ticket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Dieser Service führt alle Zugriffe auf das darunterliegende Spielbrett, sprich Graphen aus.
@@ -64,21 +71,23 @@ public class BoardService {
 //    }
 //  }
 
-//  public Position findeNachbarAmWeitestenEntferntVonDetektiven() {
-//    final List<Weg> wege = new ArrayList<>();
-//    try (final Transaction tx = graphDatabaseService.beginTx()) {
-//      Result result = graphDatabaseService.execute("MATCH (n:MRX)-[:TAXI|BUS|UNDERGROUND]-" +
-//          "(m:Node), p=shortestPath((m)-[:TAXI|BUS|UNDERGROUND*1..]-(d:DETEKTIV)) RETURN n" +
-//          ".number, m.number, d.number, length(p) ORDER BY m.number, d.number asc, length(p) desc");
-//
-//      while (result.hasNext()) {
-//        wege.add(buildWeg(result.next(), "m.number", "d.number", "length(p)"));
-//      }
-//      tx.success();
-//    }
-//    LOG.debug("Alle Wege von den Nachbarn zu allen Detektiven");
-//    LOG.debug("{}", wege);
-//
+  public Position findPositionsNextToMrxFarAwayFromDetectives(final Position mrxPosition, final List<Position> detectivesPosition) {
+    final List<Path> paths = new ArrayList<>();
+    try (final Transaction tx = graphDatabaseService.beginTx()) {
+      Result result = graphDatabaseService.execute("MATCH (n:Node)-[:TAXI|BUS|UNDERGROUND]-" +
+          "(m:Node), p=shortestPath((m)-[:TAXI|BUS|UNDERGROUND*1..]-(d:DETEKTIV)) " +
+          "WHERE n.number=" + mrxPosition.getPosition() +
+          "RETURN n.number, m.number, d.number, length(p) " +
+          "ORDER BY m.number, d.number asc, length(p) desc");
+
+      while (result.hasNext()) {
+        paths.add(buildPath(result.next(), "m.number", "d.number", "length(p)"));
+      }
+      tx.success();
+    }
+    LOG.debug("Alle Wege von den Nachbarn zu allen Detektiven");
+    LOG.debug("{}", paths);
+
 //    Map<Position, Optional<Weg>> nachbar2KuerzesteDistanzZumNaechstenDetektiv = wege.stream()
 //        .collect(Collectors.groupingBy(Weg::getStart,
 //            Collectors.minBy(Comparator.comparing(Weg::getLaenge))));
@@ -114,34 +123,35 @@ public class BoardService {
 //    LOG.debug("{}", position);
 //
 //    return position;
-//  }
+    return null;
+  }
 
-//  private Weg buildWeg(final Map<String, Object> row, final String start, final String ende,
-//                       final String laenge) {
-//    return new Weg(new Position(Integer.parseInt(row.get(start).toString())),
-//        new Position(Integer.parseInt(row.get(ende).toString())),
-//        Integer.parseInt(row.get(laenge).toString()));
-//  }
+  private Path buildPath(final Map<String, Object> row, final String start, final String ende,
+                         final String type) {
+    return new Path(new Position(Integer.parseInt(row.get(start).toString())),
+        new Position(Integer.parseInt(row.get(ende).toString())),
+        Ticket.Factory.create(type));
+  }
 
-//  public Position findeWegZuUndergroundInAnzahlZuegen(final Player player,
+//  public Position findeWegZuUndergroundInAnzahlZuegen(final Position start,
 //                                                      final int anzahlZuege) {
 //    assert anzahlZuege > 0 : "Anzahl der Züge muss größer als 0 sein.";
 //    assert anzahlZuege < 3 : "Anzahl der Züge muss kleiner als 3 sein.";
 //
-//    final List<Weg> wege = new ArrayList<>();
+//    final List<Path> pathes = new ArrayList<>();
 //    try (final Transaction tx = graphDatabaseService.beginTx()) {
-//      final Result result = graphDatabaseService.execute("MATCH (n:Node)-[]-(m:Node) " +
-//          "WHERE n.number=" + player.getCurrentPosition().getPosition() + " " +
-//          "RETURN n.number, m.number, 1 as laenge");
+//      final Result result = graphDatabaseService.execute("MATCH (n:Node)-[r]-(m:Node) " +
+//          "WHERE n.number=" + start.getPosition() + " " +
+//          "RETURN n.number, r.type, m.number, 1 as laenge");
 //      while (result.hasNext()) {
-//        wege.add(buildWeg(result.next(), "n.number", "m.number", "laenge"));
+//        pathes.add(buildWeg(result.next(), "n.number", "m.number", "r.type"));
 //      }
 //      tx.success();
 //    }
 //
-//    LOG.debug("{}", wege);
+//    LOG.debug("{}", pathes);
 //
-//    return wege.get((int) (Math.random() * wege.size())).getEnde();
+//    return pathes.get((int) (Math.random() * pathes.size())).getEnd();
 //  }
 
 //  public Position findeKuerzestenWegZuMrX(final Player player,
@@ -152,40 +162,89 @@ public class BoardService {
 //    assert anzahlVergangeneRundenSeitSichMrXGezeigthat <= 5 :
 //        "Anzahl der Runden muss kleiner oder gleich als 5 sein.";
 //
-//    ermittleMoeglichePositionenVonMrX(letzteBekanntePositionVonMrX,
+//    determinePossiblePositionsByTickets(letzteBekanntePositionVonMrX,
 //        anzahlVergangeneRundenSeitSichMrXGezeigthat);
 //
 //    return null;
 //  }
 
-//  private List<Position> ermittleMoeglichePositionenVonMrX(
-//      final Position letzteBekanntePositionVonMrX,
-//      final int anzahlVergangeneRundenSeitSichMrXGezeigthat) {
-//    if (anzahlVergangeneRundenSeitSichMrXGezeigthat == 0) {
-//      return Collections.singletonList(letzteBekanntePositionVonMrX);
-//    }
-//    return null;
-//  }
+  public List<Position> determinePossiblePositionsByTickets(
+      final Position position,
+      final Ticket... tickets) {
+    if (tickets == null || tickets.length == 0) {
+      return singletonList(position);
+    }
 
-  public List<Move> findAllPossibleMoves(Position position) {
-    List<Move> possibleMoves = new ArrayList<>();
+    Set<Position> positions = IntStream.range(0, tickets.length)
+        .mapToObj(i -> determinePositions(position, i + 1, tickets))
+        .flatMap(List::stream)
+        .collect(Collectors.toSet());
+
+//    Set<Position> positions = new HashSet<>();
+//    for (int i = 0; i < tickets.length; i++) {
+//      positions.addAll(determinePositions(position, i + 1, tickets));
+//    }
+
+    return new ArrayList<>(positions);
+  }
+
+  private List<Position> determinePositions(final Position position,
+                                            final int index, final Ticket... tickets) {
+    final List<Position> positions = new ArrayList<>();
+    try (final Transaction tx = graphDatabaseService.beginTx()) {
+      final Result result = graphDatabaseService.execute("MATCH " +
+          "(n:Node " + position.asNodeAttribute() + ")" + buildRelation(index, tickets) + "(m:Node) " +
+          "RETURN m.number");
+      while (result.hasNext()) {
+        final Map<String, Object> objectMap = result.next();
+        positions.add(new Position(Integer.parseInt(objectMap.get("m.number").toString())));
+      }
+      tx.success();
+    } finally {
+      return unmodifiableList(positions);
+    }
+  }
+
+  private String buildRelation(final int index, final Ticket... tickets) {
+    String relation = IntStream.range(0, index)
+        .mapToObj(i -> {
+          if (i + 1 < index) {
+            return "-[" + tickets[i].asRelation() + "]-()";
+          } else {
+            return "-[" + tickets[i].asRelation() + "]-";
+          }
+        })
+        .collect(Collectors.joining());
+
+//    String relation = "";
+//    for (int i = 0; i < index; i++) {
+//      relation += "-[" + tickets[i].asRelation() + "]-";
+//      if (i + 1 < index) {
+//        relation += "()";
+//      }
+//    }
+
+    return relation;
+  }
+
+  public List<Path> findAllPathes(final Position position) {
+    final List<Path> possiblePathes = new ArrayList<>();
     try (final Transaction tx = graphDatabaseService.beginTx()) {
       final Result result = graphDatabaseService.execute("MATCH " +
           "(n:Node " + position.asNodeAttribute() + ")-[r]-(m:Node) " +
           "RETURN n.number, type(r), m.number");
       while (result.hasNext()) {
         Map<String, Object> objectMap = result.next();
-        possibleMoves.add(new Move(
-            null,
+        possiblePathes.add(new Path(
             new Position(Integer.parseInt(objectMap.get("n.number").toString())),
             new Position(Integer.parseInt(objectMap.get("m.number").toString())),
-            null
+            Ticket.Factory.create(objectMap.get("type(r)").toString())
         ));
       }
       tx.success();
-      return possibleMoves;
+    } finally {
+      return unmodifiableList(possiblePathes);
     }
-    //return emptyList();
   }
 
   public boolean isMoveValid(Move move) {

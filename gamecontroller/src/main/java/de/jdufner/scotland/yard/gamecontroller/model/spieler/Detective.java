@@ -20,7 +20,7 @@ package de.jdufner.scotland.yard.gamecontroller.model.spieler;
 
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
-import de.jdufner.scotland.yard.common.position.StartPosition;
+import de.jdufner.scotland.yard.common.position.Position;
 
 /**
  * @author Jürgen Dufner
@@ -30,16 +30,18 @@ public class Detective extends Player {
 
   private final Nummer nummer;
 
-  public Detective(final int nummer, final PlayerInfo playerInfo, final StartPosition startPosition, final Tickets tickets) {
+  public Detective(final int nummer, final PlayerInfo playerInfo, final Position startPosition, final Tickets tickets) {
     super(playerInfo, startPosition, tickets);
     this.nummer = new Nummer(nummer);
   }
 
   @Override
   public String toString() {
-    return "Detective: " + super.toString() + ", " + nummer;
+    return "Detective=" + super.toString();
   }
 
+  // TODO [jdufner, 2018-10-02] Remove class Nummer.
+  @Deprecated
   private static class Nummer {
     private final int value;
 
@@ -65,7 +67,7 @@ public class Detective extends Player {
     }
 
     private Nummer nummer;
-    private StartPosition startPosition;
+    private Position startPosition;
     private PlayerInfo playerInfo;
     private Tickets tickets;
 
@@ -78,7 +80,7 @@ public class Detective extends Player {
     }
 
     public Builder withStartpositionAsInt(final int startpositionAsInt) {
-      this.startPosition = new StartPosition(startpositionAsInt);
+      this.startPosition = new Position(startpositionAsInt);
       return this;
     }
 

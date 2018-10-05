@@ -22,7 +22,7 @@ import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
-import de.jdufner.scotland.yard.common.position.StartPosition;
+import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -81,11 +81,11 @@ public class GameInitializationServiceTest {
     Tickets detectiveTickets4 = mock(Tickets.class);
     when(startTicketService.getDetectiveTickets()).thenReturn(detectiveTickets1, detectiveTickets2, detectiveTickets3, detectiveTickets4);
 
-    StartPosition mrxStartPosition = mock(StartPosition.class);
-    StartPosition detectiveStartPosition1 = mock(StartPosition.class);
-    StartPosition detectiveStartPosition2 = mock(StartPosition.class);
-    StartPosition detectiveStartPosition3 = mock(StartPosition.class);
-    StartPosition detectiveStartPosition4 = mock(StartPosition.class);
+    Position mrxStartPosition = mock(Position.class);
+    Position detectiveStartPosition1 = mock(Position.class);
+    Position detectiveStartPosition2 = mock(Position.class);
+    Position detectiveStartPosition3 = mock(Position.class);
+    Position detectiveStartPosition4 = mock(Position.class);
     when(startPositionService.zieheFreieStartPosition()).thenReturn(mrxStartPosition, detectiveStartPosition1, detectiveStartPosition2, detectiveStartPosition3, detectiveStartPosition4);
 
     // act
@@ -99,11 +99,15 @@ public class GameInitializationServiceTest {
     verify(startPositionService, times(5)).zieheFreieStartPosition();
     Assertions.assertThat(game.getPlayers().size()).isEqualTo(5);
     verify(mrxService).initialize(mrxPlayerInfo, mrxStartPosition, mrxTickets);
-    InOrder inOrder = Mockito.inOrder(detectiveService, detectiveService, detectiveService, detectiveService);
+    InOrder inOrder = Mockito.inOrder(detectiveService, mrxService);
     inOrder.verify(detectiveService).initialize(detectivePlayerInfo1, detectiveStartPosition1, detectiveTickets1);
+    inOrder.verify(mrxService).setDetectivesPosition(detectivePlayerInfo1, detectiveStartPosition1);
     inOrder.verify(detectiveService).initialize(detectivePlayerInfo2, detectiveStartPosition2, detectiveTickets2);
+    inOrder.verify(mrxService).setDetectivesPosition(detectivePlayerInfo2, detectiveStartPosition2);
     inOrder.verify(detectiveService).initialize(detectivePlayerInfo3, detectiveStartPosition3, detectiveTickets3);
+    inOrder.verify(mrxService).setDetectivesPosition(detectivePlayerInfo3, detectiveStartPosition3);
     inOrder.verify(detectiveService).initialize(detectivePlayerInfo4, detectiveStartPosition4, detectiveTickets4);
+    inOrder.verify(mrxService).setDetectivesPosition(detectivePlayerInfo4, detectiveStartPosition4);
   }
 
 }

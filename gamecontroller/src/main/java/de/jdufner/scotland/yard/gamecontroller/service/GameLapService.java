@@ -67,7 +67,7 @@ public class GameLapService {
   }
 
   private void moveMrx(final Game game) {
-    Move move = mrxService.nextMove();
+    Move move = determineMrxMove();
     checkStartPosition(move, game.getMrx());
     checkIsMoveValid(move);
     checkHasEnoughTickets(move, game.getMrx());
@@ -75,21 +75,30 @@ public class GameLapService {
     checkHasMrxBeenMovedToADetective(game);
   }
 
+  private Move determineMrxMove() {
+    return mrxService.nextMove();
+  }
+
   private void moveDetectives(Game game) {
     game.getDetectives().forEach(detektiv -> moveDetective(game, detektiv));
   }
 
   private void moveDetective(final Game game, final Detective detective) {
-    Move move = doMoveDetective(game, detective);
+    Move move = determineDetectivesMove(game, detective);
     checkStartPosition(move, detective);
     checkIsMoveValid(move);
     checkEndPosition(move, game.getDetectives());
     checkHasEnoughTickets(move, detective);
-    detective.move(move);
+    moveDetective(move, detective);
     handOverTicket(move, game.getMrx());
   }
 
-  private Move doMoveDetective(Game game, Detective detective) {
+  private void moveDetective(Move move, Detective detective) {
+    detective.move(move);
+    mrxService.setDetectivesPosition(detective.getPlayerInfo(), move.getEnd());
+  }
+
+  private Move determineDetectivesMove(Game game, Detective detective) {
     if (auftauchen.contains(game.getCurrentLap())) {
       detectiveService.showMrx(detective.getPlayerInfo(), game.getMrx().getCurrentPosition());
     }
@@ -130,6 +139,7 @@ public class GameLapService {
 
   private void handOverTicket(Move move, Mrx mrx) {
     mrx.addTicket(move.getTicket());
+    mrxService.giveTicket(move.getTicket());
   }
 
   private void checkHasMrxBeenMovedToADetective(Game game) {

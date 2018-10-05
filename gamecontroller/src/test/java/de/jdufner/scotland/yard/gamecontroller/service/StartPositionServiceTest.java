@@ -21,7 +21,7 @@ package de.jdufner.scotland.yard.gamecontroller.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.jdufner.scotland.yard.common.position.StartPosition;
+import de.jdufner.scotland.yard.common.position.Position;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -38,8 +38,8 @@ public class StartPositionServiceTest {
     // arrange
 
     // act
-    StartPosition startPosition1 = underTest.zieheFreieStartPosition();
-    StartPosition startPosition2 = underTest.zieheFreieStartPosition();
+    Position startPosition1 = underTest.zieheFreieStartPosition();
+    Position startPosition2 = underTest.zieheFreieStartPosition();
 
     // assert
     assertThat(startPosition1).isNotEqualTo(startPosition2);

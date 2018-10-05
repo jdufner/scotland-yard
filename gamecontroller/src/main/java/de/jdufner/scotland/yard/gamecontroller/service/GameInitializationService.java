@@ -22,7 +22,7 @@ import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.MrxService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
-import de.jdufner.scotland.yard.common.position.StartPosition;
+import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.gamecontroller.model.spiel.Game;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Detective;
 import de.jdufner.scotland.yard.gamecontroller.model.spieler.Mrx;
@@ -39,7 +39,7 @@ import java.util.stream.IntStream;
  * The {@link GameInitializationService} creates a {@link Game} containing the {@link de.jdufner.scotland.yard.gamecontroller.model.spieler.Player},
  * in detail one {@link Mrx} and up to four {@link Detective}s.
  *
- * Each player has a {@link StartPosition} and a certain number of {@link de.jdufner.scotland.yard.common.ticket.Ticket}s.
+ * Each player has a {@link Position} and a certain number of {@link de.jdufner.scotland.yard.common.ticket.Ticket}s.
  *
  * @author Jürgen Dufner
  * @since 1.0
@@ -71,9 +71,12 @@ public class GameInitializationService {
   }
 
   public Game initializeGame() {
+    LOG.debug("initialize game");
     Mrx mrx = initializeMrx();
     List<Detective> detectives = initializeDetectives();
-    return new Game(mrx, detectives);
+    Game game = new Game(mrx, detectives);
+    LOG.debug("game {} initialized", game);
+    return game;
   }
 
   private List<Detective> initializeDetectives() {
@@ -84,18 +87,19 @@ public class GameInitializationService {
   }
 
   private Detective initializeDetective(final int number) {
-    final StartPosition startPosition = startPositionService.zieheFreieStartPosition();
+    final Position startPosition = startPositionService.zieheFreieStartPosition();
     final Tickets detectiveTickets = startTicketService.getDetectiveTickets();
     final PlayerInfo playerInfo = playerInfoService.getDetectivePlayerInfo();
     final Detective detective = new Detective(number, playerInfo, startPosition, detectiveTickets);
     detectiveService.initialize(playerInfo, startPosition, detectiveTickets);
+    mrxService.setDetectivesPosition(playerInfo, startPosition);
     // TODO [jdufner, 2018-09-20] When and how will be set the players on the board?
     return detective;
   }
 
   private Mrx initializeMrx() {
     final PlayerInfo playerInfo = playerInfoService.getMrxPlayerInfo();
-    final StartPosition startPosition = startPositionService.zieheFreieStartPosition();
+    final Position startPosition = startPositionService.zieheFreieStartPosition();
     final Tickets mrxTickets = startTicketService.getMrxTickets();
     final Mrx mrx = new Mrx(playerInfo, startPosition, mrxTickets);
     mrxService.initialize(playerInfo, startPosition, mrxTickets);

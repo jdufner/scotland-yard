@@ -23,7 +23,7 @@ import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.position.Position;
-import de.jdufner.scotland.yard.gameboard.service.BoardService;
+import de.jdufner.scotland.yard.common.ticket.Ticket;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,25 +33,34 @@ import org.springframework.stereotype.Service;
 @Service
 public class MrxServiceImpl implements MrxService {
 
-  private final BoardService boardService;
+  private final MrxMove mrxMove;
 
-  private Position currentPosition;
-  private Tickets tickets;
+  private MrxGameStatus mrxGameStatus;
 
-  public MrxServiceImpl(final BoardService boardService) {
-    this.boardService = boardService;
+  public MrxServiceImpl(final MrxMove mrxMove) {
+    this.mrxMove = mrxMove;
   }
 
   @Override
   public void initialize(final PlayerInfo playerInfo, final Position position, final Tickets tickets) {
-    this.currentPosition = position;
-    this.tickets = tickets;
+    this.mrxGameStatus = new MrxGameStatus(playerInfo, position, tickets);
+  }
+
+  @Override
+  public void setDetectivesPosition(final PlayerInfo playerInfo, final Position position) {
+    mrxGameStatus.setDetectivesPosition(playerInfo, position);
+  }
+
+  @Override
+  public void giveTicket(final Ticket ticket) {
+    mrxGameStatus.giveTicket(ticket);
   }
 
   @Override
   public Move nextMove() {
-    boardService.findAllPossibleMoves(currentPosition);
-    return null;
+    Move move = mrxMove.nextMove(mrxGameStatus);
+    mrxGameStatus.doMove(move);
+    return move;
   }
 
 }

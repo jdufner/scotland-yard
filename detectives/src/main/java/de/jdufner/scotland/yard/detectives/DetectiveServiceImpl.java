@@ -18,12 +18,20 @@
 
 package de.jdufner.scotland.yard.detectives;
 
+import static java.lang.String.format;
+
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.move.Path;
 import de.jdufner.scotland.yard.common.position.Position;
-import de.jdufner.scotland.yard.common.position.StartPosition;
+import de.jdufner.scotland.yard.gameboard.service.BoardService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,13 +41,38 @@ import org.springframework.stereotype.Service;
 @Service
 public class DetectiveServiceImpl implements DetectiveService {
 
+  private final BoardService boardService;
+
+  private Map<PlayerInfo, Detective> detectiveMap = new HashMap<>();
+  private Random random = new Random();
+
+  public DetectiveServiceImpl(BoardService boardService) {
+    this.boardService = boardService;
+  }
+
   @Override
-  public void initialize(PlayerInfo playerInfo, StartPosition startPosition, Tickets tickets) {
+  public void initialize(PlayerInfo playerInfo, Position Position, Tickets tickets) {
+    detectiveMap.put(playerInfo, new Detective(playerInfo, Position, tickets));
   }
 
   @Override
   public Move nextMove(PlayerInfo playerInfo) {
-    return null;
+    return arbitraryMove(playerInfo);
+  }
+
+  private Move arbitraryMove(PlayerInfo playerInfo) {
+    final List<Path> allPossiblePathes = boardService.findAllPathes(detectiveMap.get(playerInfo).getCurrentPosition());
+    List<Path> allAllowedPathes = allPossiblePathes.stream()
+        .filter(possibleMove -> detectiveMap.get(playerInfo).getTickets().contains(possibleMove.getTicket()))
+        .collect(Collectors.toList());
+    if (allAllowedPathes.size() <= 0) {
+      throw new RuntimeException(format("No Tickets %s remaining for detective %s to do a legal move %s!",
+          detectiveMap.get(playerInfo).getTickets(), playerInfo, allPossiblePathes));
+    }
+    final Path path = allAllowedPathes.get(random.nextInt(allAllowedPathes.size()));
+    final Move move = new Move(playerInfo, path);
+    detectiveMap.get(playerInfo).moveTo(path.getEnd());
+    return move;
   }
 
   @Override

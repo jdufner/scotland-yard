@@ -47,6 +47,7 @@ public class Game {
 
   private final Mrx mrx;
   private final List<Detective> detektives;
+  // TODO [jdufner, 2018-10-02] Remove attribute players, it's redundante.
   private final List<Player> players = new ArrayList<>();
 
   private int currentLap;
@@ -84,17 +85,21 @@ public class Game {
     return currentLap >= TOTAL_LAPS;
   }
 
-  @Override
-  public String toString() {
-    return "Player: {" + players.toString() + "}";
-  }
-
   public Mrx getMrx() {
     return mrx;
   }
 
   public List<Detective> getDetectives() {
     return detektives;
+  }
+
+  @Override
+  public String toString() {
+    return "Game{" +
+        "mrx=" + mrx +
+        ", detektives=" + detektives +
+        ", currentLap=" + currentLap +
+        '}';
   }
 
   public static class Builder {

@@ -18,42 +18,59 @@
 
 package de.jdufner.scotland.yard.common.move;
 
-import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
+import java.util.Objects;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class Move {
+public class Path {
 
-  private final PlayerInfo playerInfo;
-  private final Path path;
+  private final Position start;
+  private final Position end;
+  private final Ticket ticket;
 
-  public Move(final PlayerInfo playerInfo, final Position start, final Position end, final Ticket ticket) {
-    this(playerInfo, new Path(start, end, ticket));
-  }
-
-  public Move(final PlayerInfo playerInfo, final Path path) {
-    this.playerInfo = playerInfo;
-    this.path = path;
-  }
-
-  public PlayerInfo getPlayerInfo() {
-    return playerInfo;
+  public Path(final Position start, final Position end, final Ticket ticket) {
+    this.start = start;
+    this.end = end;
+    this.ticket = ticket;
   }
 
   public Position getStart() {
-    return path.getStart();
+    return start;
   }
 
   public Position getEnd() {
-    return path.getEnd();
+    return end;
   }
 
   public Ticket getTicket() {
-    return path.getTicket();
+    return ticket;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Path path = (Path) o;
+    return Objects.equals(start, path.start) &&
+        Objects.equals(end, path.end) &&
+        Objects.equals(ticket, path.ticket);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(start, end, ticket);
+  }
+
+  @Override
+  public String toString() {
+    return "Path{" +
+        "start=" + start +
+        ", end=" + end +
+        ", ticket=" + ticket +
+        '}';
+  }
 }

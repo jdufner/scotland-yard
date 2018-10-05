@@ -16,23 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.jdufner.scotland.yard.common;
-
+package de.jdufner.scotland.yard.mrx;
 
 import de.jdufner.scotland.yard.common.move.Move;
-import de.jdufner.scotland.yard.common.position.Position;
+import de.jdufner.scotland.yard.gameboard.service.BoardService;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
-/**
- * This interface has to be implemented by the gamelogic of the detectives.
- *
- * @author Jürgen Dufner
- * @since 1.0
- */
-public interface DetectiveService {
+@Primary
+@Service
+public class LargestDistanceToDetectivesMove implements MrxMove {
 
-  void initialize(final PlayerInfo playerInfo, final Position position, final Tickets tickets);
+  private final BoardService boardService;
 
-  Move nextMove(PlayerInfo playerInfo);
+  public LargestDistanceToDetectivesMove(final BoardService boardService) {
+    this.boardService = boardService;
+  }
 
-  void showMrx(PlayerInfo playerInfo, Position currentPosition);
+  @Override
+  public Move nextMove(MrxGameStatus mrxGameStatus) {
+    boardService.findPositionsNextToMrxFarAwayFromDetectives(mrxGameStatus.getMrxPosition(), mrxGameStatus.getDetectivesPosition());
+    return null;
+  }
+
 }

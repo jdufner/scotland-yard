@@ -17,16 +17,16 @@
  *
  */
 
-package de.jdufner.scotland.yard.common.position;
+package de.jdufner.scotland.yard.mrx;
+
+import de.jdufner.scotland.yard.common.move.Move;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class StartPosition extends Position {
+public interface MrxMove {
 
-  public StartPosition(int position) {
-    super(position);
-  }
+  Move nextMove(MrxGameStatus mrxGameStatus);
 
 }

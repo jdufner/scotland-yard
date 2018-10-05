@@ -53,7 +53,9 @@ public class Position {
 
   @Override
   public String toString() {
-    return "Position: " + String.valueOf(position);
+    return "Position{" +
+        "position=" + position +
+        '}';
   }
 
   public String asNodeAttribute() {

@@ -18,6 +18,8 @@
 
 package de.jdufner.scotland.yard.common.ticket;
 
+import static java.lang.String.format;
+
 /**
  * Superklasse für alle Ticket: TaxiTicket, BusTicket, UndergroundTicket und Blackticket.
  * <p>
@@ -74,6 +76,25 @@ public abstract class Ticket {
 
   public String asRelation() {
     return ":" + getRelationName();
+  }
+
+  public static class Factory {
+
+    public static Ticket create(String type) {
+      if (type.equalsIgnoreCase("taxi")) {
+        return new TaxiTicket(1);
+      }
+      if (type.equalsIgnoreCase("bus")) {
+        return new BusTicket(1);
+      }
+      if (type.equalsIgnoreCase("underground")) {
+        return new UndergroundTicket(1);
+      }
+      if (type.equalsIgnoreCase("ship")) {
+        return new BlackTicket(1);
+      }
+      throw new RuntimeException(format("Tickettype hasn't been found for %s", type));
+    }
   }
 
 }

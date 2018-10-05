@@ -17,27 +17,39 @@
  *
  */
 
-package de.jdufner.scotland.yard.common.position;
+package de.jdufner.scotland.yard.detectives;
 
-import static org.junit.Assert.*;
-
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import de.jdufner.scotland.yard.common.PlayerInfo;
+import de.jdufner.scotland.yard.common.Tickets;
+import de.jdufner.scotland.yard.common.position.Position;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Jürgen Dufner
  * @since 1.0
  */
-public class StartPositionTest {
+public class Detective {
 
-  @Test
-  public void whenStartPositionIsX_expectEqualsToX() {
-    // arrange
-    int value = 1;
-    StartPosition startPosition = new StartPosition(value);
+  private final PlayerInfo playerInfo;
+  private final List<Position> track = new LinkedList<>();
+  private final Tickets tickets;
 
-    // act + assert
-    Assertions.assertThat(startPosition).isEqualTo(new StartPosition(value));
+  Detective(PlayerInfo playerInfo, Position position, Tickets tickets) {
+    this.playerInfo = playerInfo;
+    track.add(position);
+    this.tickets = tickets;
   }
 
+  public Position getCurrentPosition() {
+    return track.get(track.size() - 1);
+  }
+
+  public void moveTo(Position position) {
+    track.add(position);
+  }
+
+  public Tickets getTickets() {
+    return tickets;
+  }
 }

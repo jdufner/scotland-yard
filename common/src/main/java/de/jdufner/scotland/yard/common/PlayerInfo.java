@@ -42,6 +42,20 @@ public class PlayerInfo {
   public enum Type {MRX, DETECTIVE;}
 
   @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    PlayerInfo that = (PlayerInfo) o;
+    return type == that.type &&
+        Objects.equals(id, that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(type, id);
+  }
+
+  @Override
   public String toString() {
     return "PlayerInfo{" +
         "type=" + type +
