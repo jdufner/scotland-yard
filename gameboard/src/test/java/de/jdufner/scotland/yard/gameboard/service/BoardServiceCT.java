@@ -14,7 +14,6 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.gameboard.service;
@@ -23,9 +22,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.move.Path;
 import de.jdufner.scotland.yard.common.position.Position;
+import de.jdufner.scotland.yard.common.ticket.BusTicket;
 import de.jdufner.scotland.yard.common.ticket.TaxiTicket;
+import de.jdufner.scotland.yard.common.ticket.UndergroundTicket;
 import de.jdufner.scotland.yard.gameboard.config.Neo4jConfig;
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -41,7 +44,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Neo4jConfig.class)
 @TestPropertySource(properties = {"neo4j.database.directory=./neo4j-data", "neo4j.dbms.directories.import=../../src/main/resources"})
-//@TestPropertySource(properties = {"neo4j.database.directory=../neo4j-data"})
 public class BoardServiceCT {
 
   @Autowired
@@ -71,9 +73,84 @@ public class BoardServiceCT {
     assertThat(valid).isFalse();
   }
 
+  @Test
+  public void testFindAllPossiblePathes_whenStart13_expect10Pathes() {
+    // arrange
+    Position position = new Position(13);
+
+    // act
+    List<Path> allPossiblePathes = boardService.findAllPathes(position);
+
+    // assert
+    assertThat(allPossiblePathes)
+        .containsExactlyInAnyOrder(
+            new Path(new Position(13), new Position(4), new TaxiTicket(1)),
+            new Path(new Position(13), new Position(14), new BusTicket(1)),
+            new Path(new Position(13), new Position(14), new TaxiTicket(1)),
+            new Path(new Position(13), new Position(23), new BusTicket(1)),
+            new Path(new Position(13), new Position(23), new TaxiTicket(1)),
+            new Path(new Position(13), new Position(24), new TaxiTicket(1)),
+            new Path(new Position(13), new Position(46), new UndergroundTicket(1)),
+            new Path(new Position(13), new Position(52), new BusTicket(1)),
+            new Path(new Position(13), new Position(67), new UndergroundTicket(1)),
+            new Path(new Position(13), new Position(89), new UndergroundTicket(1))
+        )
+    ;
+  }
+
+  @Test
+  public void testDeterminePossiblePositionsByTickets_whenNoTicket_expectStartPosition() {
+    // arrange
+    Position position = new Position(13);
+
+    // act
+    List<Position> positions = boardService.determinePossiblePositionsByTickets(position, null);
+
+    // assert
+    assertThat(positions).containsExactly(position);
+  }
+
+  @Test
+  public void testDeterminePossiblePositionsByTickets_whenOneTaxiTicket_expectPositions() {
+    // arrange
+    Position position = new Position(13);
+
+    // act
+    List<Position> positions = boardService.determinePossiblePositionsByTickets(position, new TaxiTicket(1));
+
+    // assert
+    assertThat(positions).containsExactlyInAnyOrder(
+        new Position(4), new Position(14), new Position(23), new Position(24));
+  }
+
+  @Test
+  public void testDeterminePossiblePositionsByTickets_whenTwoTaxiTickets_expectPositions() {
+    // arrange
+    Position position = new Position(13);
+
+    // act
+    List<Position> positions = boardService.determinePossiblePositionsByTickets(position, new TaxiTicket(1), new TaxiTicket(1));
+
+    // assert
+    assertThat(positions).containsExactlyInAnyOrder(
+        new Position(3), new Position(4), new Position(12), new Position(14), new Position(15),
+        new Position(22), new Position(23), new Position(24), new Position(25), new Position(37),
+        new Position(38));
+  }
+
+  @Test
+  public void testDeterminePossiblePositionsByTickets_whenUndergroundAndTaxiTickets_expectPositions() {
+    // arrange
+    Position position = new Position(13);
+
+    // act
+    List<Position> positions = boardService.determinePossiblePositionsByTickets(position, new UndergroundTicket(1), new TaxiTicket(1));
+
+    // assert
+    assertThat(positions).containsExactlyInAnyOrder(
+        new Position(33), new Position(45), new Position(46), new Position(47), new Position(51),
+        new Position(61), new Position(66), new Position(67), new Position(68), new Position(71),
+        new Position(84), new Position(88), new Position(89), new Position(105));
+  }
+
 }
-
-
-
-
-

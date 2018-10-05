@@ -18,15 +18,19 @@
 
 package de.jdufner.scotland.yard.gameboard.service;
 
+import static java.util.Collections.singletonList;
+import static java.util.Collections.unmodifiableList;
+
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.move.Path;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
-import de.jdufner.scotland.yard.gameboard.model.Route;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
@@ -67,16 +71,8 @@ public class BoardService {
 //    }
 //  }
 
-  private Route buildRoute(final Map<String, Object> row, final String start, final String ende,
-                           final String length) {
-    return new Route(new Position(Integer.parseInt(row.get(start).toString())),
-        new Position(Integer.parseInt(row.get(ende).toString())),
-        Integer.parseInt(row.get(length).toString()));
-  }
-
-
   public Position findPositionsNextToMrxFarAwayFromDetectives(final Position mrxPosition, final List<Position> detectivesPosition) {
-    final List<Route> routes = new ArrayList<>();
+    final List<Path> paths = new ArrayList<>();
     try (final Transaction tx = graphDatabaseService.beginTx()) {
       Result result = graphDatabaseService.execute("MATCH (n:Node)-[:TAXI|BUS|UNDERGROUND]-" +
           "(m:Node), p=shortestPath((m)-[:TAXI|BUS|UNDERGROUND*1..]-(d:DETEKTIV)) " +
@@ -85,12 +81,12 @@ public class BoardService {
           "ORDER BY m.number, d.number asc, length(p) desc");
 
       while (result.hasNext()) {
-        routes.add(buildRoute(result.next(), "m.number", "d.number", "length(p)"));
+        paths.add(buildPath(result.next(), "m.number", "d.number", "length(p)"));
       }
       tx.success();
     }
     LOG.debug("Alle Wege von den Nachbarn zu allen Detektiven");
-    LOG.debug("{}", routes);
+    LOG.debug("{}", paths);
 
 //    Map<Position, Optional<Weg>> nachbar2KuerzesteDistanzZumNaechstenDetektiv = wege.stream()
 //        .collect(Collectors.groupingBy(Weg::getStart,
@@ -131,7 +127,7 @@ public class BoardService {
   }
 
   private Path buildPath(final Map<String, Object> row, final String start, final String ende,
-                        final String type) {
+                         final String type) {
     return new Path(new Position(Integer.parseInt(row.get(start).toString())),
         new Position(Integer.parseInt(row.get(ende).toString())),
         Ticket.Factory.create(type));
@@ -166,40 +162,89 @@ public class BoardService {
 //    assert anzahlVergangeneRundenSeitSichMrXGezeigthat <= 5 :
 //        "Anzahl der Runden muss kleiner oder gleich als 5 sein.";
 //
-//    ermittleMoeglichePositionenVonMrX(letzteBekanntePositionVonMrX,
+//    determinePossiblePositionsByTickets(letzteBekanntePositionVonMrX,
 //        anzahlVergangeneRundenSeitSichMrXGezeigthat);
 //
 //    return null;
 //  }
 
-  private List<Position> ermittleMoeglichePositionenVonMrX(
-      final Position letzteBekanntePositionVonMrX,
-      final int anzahlVergangeneRundenSeitSichMrXGezeigthat) {
-    if (anzahlVergangeneRundenSeitSichMrXGezeigthat == 0) {
-      return Collections.singletonList(letzteBekanntePositionVonMrX);
+  public List<Position> determinePossiblePositionsByTickets(
+      final Position position,
+      final Ticket... tickets) {
+    if (tickets == null || tickets.length == 0) {
+      return singletonList(position);
     }
-    return null;
+
+    Set<Position> positions = IntStream.range(0, tickets.length)
+        .mapToObj(i -> determinePositions(position, i + 1, tickets))
+        .flatMap(List::stream)
+        .collect(Collectors.toSet());
+
+//    Set<Position> positions = new HashSet<>();
+//    for (int i = 0; i < tickets.length; i++) {
+//      positions.addAll(determinePositions(position, i + 1, tickets));
+//    }
+
+    return new ArrayList<>(positions);
   }
 
-  public List<Move> findAllPossibleMoves(Position position) {
-    List<Move> possibleMoves = new ArrayList<>();
+  private List<Position> determinePositions(final Position position,
+                                            final int index, final Ticket... tickets) {
+    final List<Position> positions = new ArrayList<>();
+    try (final Transaction tx = graphDatabaseService.beginTx()) {
+      final Result result = graphDatabaseService.execute("MATCH " +
+          "(n:Node " + position.asNodeAttribute() + ")" + buildRelation(index, tickets) + "(m:Node) " +
+          "RETURN m.number");
+      while (result.hasNext()) {
+        final Map<String, Object> objectMap = result.next();
+        positions.add(new Position(Integer.parseInt(objectMap.get("m.number").toString())));
+      }
+      tx.success();
+    } finally {
+      return unmodifiableList(positions);
+    }
+  }
+
+  private String buildRelation(final int index, final Ticket... tickets) {
+    String relation = IntStream.range(0, index)
+        .mapToObj(i -> {
+          if (i + 1 < index) {
+            return "-[" + tickets[i].asRelation() + "]-()";
+          } else {
+            return "-[" + tickets[i].asRelation() + "]-";
+          }
+        })
+        .collect(Collectors.joining());
+
+//    String relation = "";
+//    for (int i = 0; i < index; i++) {
+//      relation += "-[" + tickets[i].asRelation() + "]-";
+//      if (i + 1 < index) {
+//        relation += "()";
+//      }
+//    }
+
+    return relation;
+  }
+
+  public List<Path> findAllPathes(final Position position) {
+    final List<Path> possiblePathes = new ArrayList<>();
     try (final Transaction tx = graphDatabaseService.beginTx()) {
       final Result result = graphDatabaseService.execute("MATCH " +
           "(n:Node " + position.asNodeAttribute() + ")-[r]-(m:Node) " +
           "RETURN n.number, type(r), m.number");
       while (result.hasNext()) {
         Map<String, Object> objectMap = result.next();
-        possibleMoves.add(new Move(
-            null,
+        possiblePathes.add(new Path(
             new Position(Integer.parseInt(objectMap.get("n.number").toString())),
             new Position(Integer.parseInt(objectMap.get("m.number").toString())),
             Ticket.Factory.create(objectMap.get("type(r)").toString())
         ));
       }
       tx.success();
-      return possibleMoves;
+    } finally {
+      return unmodifiableList(possiblePathes);
     }
-    //return emptyList();
   }
 
   public boolean isMoveValid(Move move) {

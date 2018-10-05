@@ -18,21 +18,21 @@
 
 package de.jdufner.scotland.yard.detectives;
 
+import static java.lang.String.format;
+
 import de.jdufner.scotland.yard.common.DetectiveService;
 import de.jdufner.scotland.yard.common.PlayerInfo;
 import de.jdufner.scotland.yard.common.Tickets;
 import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.move.Path;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.gameboard.service.BoardService;
-import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
-
-import static java.lang.String.format;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Jürgen Dufner
@@ -61,16 +61,17 @@ public class DetectiveServiceImpl implements DetectiveService {
   }
 
   private Move arbitraryMove(PlayerInfo playerInfo) {
-    final List<Move> allPossibleMoves = boardService.findAllPossibleMoves(detectiveMap.get(playerInfo).getCurrentPosition());
-    List<Move> allAllowedMoves = allPossibleMoves.stream()
+    final List<Path> allPossiblePathes = boardService.findAllPathes(detectiveMap.get(playerInfo).getCurrentPosition());
+    List<Path> allAllowedPathes = allPossiblePathes.stream()
         .filter(possibleMove -> detectiveMap.get(playerInfo).getTickets().contains(possibleMove.getTicket()))
         .collect(Collectors.toList());
-    if (allAllowedMoves.size() <= 0) {
+    if (allAllowedPathes.size() <= 0) {
       throw new RuntimeException(format("No Tickets %s remaining for detective %s to do a legal move %s!",
-          detectiveMap.get(playerInfo).getTickets(), playerInfo, allPossibleMoves));
+          detectiveMap.get(playerInfo).getTickets(), playerInfo, allPossiblePathes));
     }
-    final Move move = allAllowedMoves.get(random.nextInt(allAllowedMoves.size()));
-    detectiveMap.get(playerInfo).moveTo(move.getEnd());
+    final Path path = allAllowedPathes.get(random.nextInt(allAllowedPathes.size()));
+    final Move move = new Move(playerInfo, path);
+    detectiveMap.get(playerInfo).moveTo(path.getEnd());
     return move;
   }
 

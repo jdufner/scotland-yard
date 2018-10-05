@@ -22,6 +22,7 @@ import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 
 import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.move.Path;
 import de.jdufner.scotland.yard.gameboard.service.BoardService;
 import java.util.List;
 import java.util.Random;
@@ -44,15 +45,16 @@ public class ArbitraryMove implements MrxMove {
 
   @Override
   public Move nextMove(final MrxGameStatus mrxGameStatus) {
-    final List<Move> allPossibleMoves = boardService.findAllPossibleMoves(mrxGameStatus.getMrxPosition());
-    final List<Move> allAllowedMoves = allPossibleMoves.stream()
+    final List<Path> allPossiblePathes = boardService.findAllPathes(mrxGameStatus.getMrxPosition());
+    final List<Path> allAllowedPathes = allPossiblePathes.stream()
         .filter(possibleMove -> mrxGameStatus.getTickets().contains(possibleMove.getTicket()))
         .collect(toList());
-    if (allAllowedMoves.size() <= 0) {
+    if (allAllowedPathes.size() <= 0) {
       throw new RuntimeException(format("No Tickets %s remaining to do a legal move %s!",
-          mrxGameStatus.getTickets(), allPossibleMoves));
+          mrxGameStatus.getTickets(), allPossiblePathes));
     }
-    final Move move = allAllowedMoves.get(random.nextInt(allPossibleMoves.size()));
+    final Path path = allAllowedPathes.get(random.nextInt(allPossiblePathes.size()));
+    final Move move = new Move(mrxGameStatus.getPlayerInfo(), path);
     return move;
   }
 

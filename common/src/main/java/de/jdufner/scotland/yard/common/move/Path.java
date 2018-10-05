@@ -14,13 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 package de.jdufner.scotland.yard.common.move;
 
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
+import java.util.Objects;
 
 /**
  * @author Jürgen Dufner
@@ -48,5 +48,29 @@ public class Path {
 
   public Ticket getTicket() {
     return ticket;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Path path = (Path) o;
+    return Objects.equals(start, path.start) &&
+        Objects.equals(end, path.end) &&
+        Objects.equals(ticket, path.ticket);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(start, end, ticket);
+  }
+
+  @Override
+  public String toString() {
+    return "Path{" +
+        "start=" + start +
+        ", end=" + end +
+        ", ticket=" + ticket +
+        '}';
   }
 }

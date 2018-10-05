@@ -32,8 +32,12 @@ public class Move {
   private final Path path;
 
   public Move(final PlayerInfo playerInfo, final Position start, final Position end, final Ticket ticket) {
+    this(playerInfo, new Path(start, end, ticket));
+  }
+
+  public Move(final PlayerInfo playerInfo, final Path path) {
     this.playerInfo = playerInfo;
-    this.path = new Path(start, end, ticket);
+    this.path = path;
   }
 
   public PlayerInfo getPlayerInfo() {

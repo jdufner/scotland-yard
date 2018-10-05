@@ -48,6 +48,10 @@ public class MrxGameStatus {
     this.tickets = tickets;
   }
 
+  public PlayerInfo getPlayerInfo() {
+    return playerInfo;
+  }
+
   void giveTicket(final Ticket ticket) {
     tickets.add(ticket);
   }
