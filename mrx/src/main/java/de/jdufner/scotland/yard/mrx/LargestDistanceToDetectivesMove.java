@@ -35,6 +35,8 @@ public class LargestDistanceToDetectivesMove implements MrxMove {
 
   @Override
   public Move nextMove(MrxGameStatus mrxGameStatus) {
+    // if mrx is next to a detective do a double move
+    // else
     boardService.findPositionsNextToMrxFarAwayFromDetectives(mrxGameStatus.getMrxPosition(), mrxGameStatus.getDetectivesPosition());
     return null;
   }

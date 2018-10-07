@@ -20,6 +20,7 @@ package de.jdufner.scotland.yard.gameboard.service;
 
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.joining;
 
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.move.Path;
@@ -75,8 +76,9 @@ public class BoardService {
     final List<Path> paths = new ArrayList<>();
     try (final Transaction tx = graphDatabaseService.beginTx()) {
       Result result = graphDatabaseService.execute("MATCH (n:Node)-[:TAXI|BUS|UNDERGROUND]-" +
-          "(m:Node), p=shortestPath((m)-[:TAXI|BUS|UNDERGROUND*1..]-(d:DETEKTIV)) " +
-          "WHERE n.number=" + mrxPosition.getPosition() +
+          "(m:Node), p=shortestPath((m)-[:TAXI|BUS|UNDERGROUND*1..]-(d:Node)) " +
+          "WHERE n.number=" + mrxPosition.getPosition() + " " +
+          buildWhereClauseFromPositions("d", detectivesPosition) +
           "RETURN n.number, m.number, d.number, length(p) " +
           "ORDER BY m.number, d.number asc, length(p) desc");
 
@@ -124,6 +126,16 @@ public class BoardService {
 //
 //    return position;
     return null;
+  }
+
+  private String buildWhereClauseFromPositions(String nodeAlias, List<Position> positions) {
+    return positions.stream()
+        .map(position -> buildWhereClauseFromPosition(nodeAlias, position))
+        .collect(joining());
+  }
+
+  private String buildWhereClauseFromPosition(String nodeAlias, Position position) {
+    return "AND " + nodeAlias + ".number=" + position.getPosition() + " ";
   }
 
   private Path buildPath(final Map<String, Object> row, final String start, final String ende,
@@ -214,7 +226,7 @@ public class BoardService {
             return "-[" + tickets[i].asRelation() + "]-";
           }
         })
-        .collect(Collectors.joining());
+        .collect(joining());
 
 //    String relation = "";
 //    for (int i = 0; i < index; i++) {
