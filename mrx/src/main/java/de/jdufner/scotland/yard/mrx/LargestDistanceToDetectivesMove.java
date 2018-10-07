@@ -19,7 +19,10 @@
 package de.jdufner.scotland.yard.mrx;
 
 import de.jdufner.scotland.yard.common.move.Move;
+import de.jdufner.scotland.yard.common.move.Path;
 import de.jdufner.scotland.yard.gameboard.service.BoardService;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +38,21 @@ public class LargestDistanceToDetectivesMove implements MrxMove {
 
   @Override
   public Move nextMove(MrxGameStatus mrxGameStatus) {
-    // if mrx is next to a detective do a double move
-    // else
-    boardService.findPositionsNextToMrxFarAwayFromDetectives(mrxGameStatus.getMrxPosition(), mrxGameStatus.getDetectivesPosition());
-    return null;
+    if (isDetectiveNextToMrx(mrxGameStatus)) {
+      // do a double move
+      return null;
+    } else {
+      boardService.findPositionsNextToMrxFarAwayFromDetectives(mrxGameStatus.getMrxPosition(), mrxGameStatus.getDetectivesPosition());
+      return null;
+    }
+  }
+
+  private boolean isDetectiveNextToMrx(MrxGameStatus mrxGameStatus) {
+    List<Path> allPathes = boardService.findAllPathes(mrxGameStatus.getMrxPosition());
+    Optional<Path> optionalPath = allPathes.stream()
+        .filter(path -> mrxGameStatus.getDetectivesPosition().contains(path.getEnd()))
+        .findFirst();
+    return optionalPath.isPresent();
   }
 
 }

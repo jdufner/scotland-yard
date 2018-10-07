@@ -159,7 +159,8 @@ public class BoardServiceCT {
     // arrange
 
     // act
-    boardService.findPositionsNextToMrxFarAwayFromDetectives(new Position(13), asList(new Position(14)));
+//    boardService.findPositionsNextToMrxFarAwayFromDetectives(new Position(13), asList(new Position(14)));
+    boardService.findPositionsNextToMrxFarAwayFromDetectives(new Position(13), asList(new Position(1), new Position(82)));
 
     // assert
   }
