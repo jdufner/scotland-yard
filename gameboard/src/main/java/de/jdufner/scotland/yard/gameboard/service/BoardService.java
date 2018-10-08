@@ -20,14 +20,23 @@ package de.jdufner.scotland.yard.gameboard.service;
 
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.averagingInt;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.maxBy;
+import static java.util.stream.Collectors.minBy;
+import static java.util.stream.Collectors.toList;
 
 import de.jdufner.scotland.yard.common.move.Move;
 import de.jdufner.scotland.yard.common.move.Path;
 import de.jdufner.scotland.yard.common.position.Position;
 import de.jdufner.scotland.yard.common.ticket.Ticket;
+import de.jdufner.scotland.yard.gameboard.model.Route;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -72,65 +81,67 @@ public class BoardService {
 //  }
 
   public Position findPositionsNextToMrxFarAwayFromDetectives(final Position mrxPosition, final List<Position> detectivesPosition) {
-    final List<Path> paths = new ArrayList<>();
+    final List<Route> routes = new ArrayList<>();
     try (final Transaction tx = graphDatabaseService.beginTx()) {
       Result result = graphDatabaseService.execute("MATCH (n:Node)-[:TAXI|BUS|UNDERGROUND]-" +
-          "(m:Node), p=shortestPath((m)-[:TAXI|BUS|UNDERGROUND*1..]-(d:DETEKTIV)) " +
-          "WHERE n.number=" + mrxPosition.getPosition() +
+          "(m:Node), p=shortestPath((m)-[:TAXI|BUS|UNDERGROUND*1..]-(d:Node)) " +
+          "WHERE n.number=" + mrxPosition.getPosition() + " " +
+          "AND ( " + buildWhereClauseFromPositions("d", detectivesPosition) + " ) " +
           "RETURN n.number, m.number, d.number, length(p) " +
           "ORDER BY m.number, d.number asc, length(p) desc");
 
       while (result.hasNext()) {
-        paths.add(buildPath(result.next(), "m.number", "d.number", "length(p)"));
+        routes.add(buildRoute(result.next(), "m.number", "d.number", "length(p)"));
       }
       tx.success();
     }
-    LOG.debug("Alle Wege von den Nachbarn zu allen Detektiven");
-    LOG.debug("{}", paths);
+    LOG.debug("All routes to from {} to {}: {}", mrxPosition, detectivesPosition, routes);
 
-//    Map<Position, Optional<Weg>> nachbar2KuerzesteDistanzZumNaechstenDetektiv = wege.stream()
-//        .collect(Collectors.groupingBy(Weg::getStart,
-//            Collectors.minBy(Comparator.comparing(Weg::getLaenge))));
-//    LOG.debug("Nachbar mit jeweils kürzester Distanz zu nächsten Detective");
-//    LOG.debug("{}", nachbar2KuerzesteDistanzZumNaechstenDetektiv);
-//
-//    Optional<Weg> weg = nachbar2KuerzesteDistanzZumNaechstenDetektiv.values().stream()
-//        .filter(Optional::isPresent)
-//        .map(Optional::get)
-//        .collect(Collectors.maxBy(Comparator.comparing(Weg::getLaenge)));
-//    LOG.debug("Größte Minimaldistanz zu allen Detektiven");
-//    LOG.debug("{}", weg.get().getLaenge());
-//
-//    List<Weg> nachbarnMitGroessterDistanzZuAllenDetektiven =
-//        nachbar2KuerzesteDistanzZumNaechstenDetektiv.values()
-//            .stream()
-//            .filter(Optional::isPresent)
-//            .map(Optional::get)
-//            .filter(weg1 -> weg1.getLaenge() == weg.get().getLaenge())
-//            .collect(Collectors.toList());
-//    LOG.debug("Nachbarn mit größter Distanz zu allen Detektiven");
-//    LOG.debug("{}", nachbarnMitGroessterDistanzZuAllenDetektiven);
-//
-//    Map<Position, Double> avg = nachbarnMitGroessterDistanzZuAllenDetektiven.stream()
-//        .collect(Collectors.groupingBy(Weg::getStart, Collectors.averagingInt(Weg::getLaenge)));
-//    LOG.debug("Nachbar mit durchschnittlicher Distanz zu allen Detektiven");
-//    LOG.debug("{}", avg);
-//
-//    Optional<Map.Entry<Position, Double>> optional = avg.entrySet().stream()
-//        .collect(Collectors.maxBy(Comparator.comparing(Map.Entry::getValue)));
-//    Position position = optional.get().getKey();
-//    LOG.debug("Nächste Position");
-//    LOG.debug("{}", position);
-//
-//    return position;
-    return null;
+    Map<Position, Optional<Route>> neighbor2shortestRoute = routes.stream()
+        .collect(groupingBy(Route::getStart, minBy(comparing(Route::getLength))));
+    LOG.debug("Neighbor to shortest path {}", neighbor2shortestRoute);
+
+    Optional<Route> route = neighbor2shortestRoute.values().stream()
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(maxBy(comparing(Route::getLength)));
+    LOG.debug("Distance of longest routes {}", route);
+
+    List<Route> neighborsWithLongestRoutes =
+        neighbor2shortestRoute.values().stream()
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(weg1 -> weg1.getLength() == route.get().getLength())
+            .collect(toList());
+    LOG.debug("Neighbor with longest routes {}", neighborsWithLongestRoutes);
+
+    Map<Position, Double> avg = neighborsWithLongestRoutes.stream()
+        .collect(groupingBy(Route::getStart, averagingInt(Route::getLength)));
+    LOG.debug("Neighbors average distance {}", avg);
+
+    Optional<Map.Entry<Position, Double>> optional = avg.entrySet().stream()
+        .collect(maxBy(comparing(Map.Entry::getValue)));
+    Position position = optional.get().getKey();
+    LOG.debug("Next position {}", position);
+
+    return position;
   }
 
-  private Path buildPath(final Map<String, Object> row, final String start, final String ende,
-                         final String type) {
-    return new Path(new Position(Integer.parseInt(row.get(start).toString())),
-        new Position(Integer.parseInt(row.get(ende).toString())),
-        Ticket.Factory.create(type));
+  private String buildWhereClauseFromPositions(String nodeAlias, List<Position> positions) {
+    return positions.stream()
+        .map(position -> buildWhereClauseFromPosition(nodeAlias, position))
+        .collect(joining(" OR "));
+  }
+
+  private String buildWhereClauseFromPosition(String nodeAlias, Position position) {
+    return nodeAlias + ".number=" + position.getPosition() + " ";
+  }
+
+  private Route buildRoute(final Map<String, Object> row, final String start, final String end,
+                           final String length) {
+    return new Route(new Position(Integer.parseInt(row.get(start).toString())),
+        new Position(Integer.parseInt(row.get(end).toString())),
+        Integer.parseInt(row.get(length).toString()));
   }
 
 //  public Position findeWegZuUndergroundInAnzahlZuegen(final Position start,
@@ -214,7 +225,7 @@ public class BoardService {
             return "-[" + tickets[i].asRelation() + "]-";
           }
         })
-        .collect(Collectors.joining());
+        .collect(joining());
 
 //    String relation = "";
 //    for (int i = 0; i < index; i++) {

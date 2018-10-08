@@ -18,6 +18,7 @@
 
 package de.jdufner.scotland.yard.gameboard.service;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.jdufner.scotland.yard.common.PlayerInfo;
@@ -151,6 +152,16 @@ public class BoardServiceCT {
         new Position(33), new Position(45), new Position(46), new Position(47), new Position(51),
         new Position(61), new Position(66), new Position(67), new Position(68), new Position(71),
         new Position(84), new Position(88), new Position(89), new Position(105));
+  }
+
+  @Test
+  public void testFindPositionsNextToMrxFarAwayFromDetectives_whenCalled_expectResult() {
+    // arrange
+
+    // act
+    boardService.findPositionsNextToMrxFarAwayFromDetectives(new Position(13), asList(new Position(1), new Position(82)));
+
+    // assert
   }
 
 }
