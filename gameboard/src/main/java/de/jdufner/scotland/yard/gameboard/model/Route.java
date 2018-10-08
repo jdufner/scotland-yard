@@ -19,6 +19,7 @@
 package de.jdufner.scotland.yard.gameboard.model;
 
 import de.jdufner.scotland.yard.common.position.Position;
+import java.util.Objects;
 
 /**
  *
@@ -45,5 +46,29 @@ public class Route {
 
   public int getLength() {
     return length;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Route route = (Route) o;
+    return length == route.length &&
+        Objects.equals(start, route.start) &&
+        Objects.equals(end, route.end);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(start, end, length);
+  }
+
+  @Override
+  public String toString() {
+    return "Route{" +
+        "start=" + start +
+        ", end=" + end +
+        ", length=" + length +
+        '}';
   }
 }

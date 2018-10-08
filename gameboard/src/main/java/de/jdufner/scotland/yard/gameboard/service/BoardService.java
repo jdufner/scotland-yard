@@ -21,6 +21,7 @@ package de.jdufner.scotland.yard.gameboard.service;
 import static java.util.Collections.singletonList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.averagingInt;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.maxBy;
@@ -96,37 +97,34 @@ public class BoardService {
     }
     LOG.debug("All routes to from {} to {}: {}", mrxPosition, detectivesPosition, routes);
 
-    Map<Position, Optional<Route>> neighbor2shortestPath = routes.stream()
+    Map<Position, Optional<Route>> neighbor2shortestRoute = routes.stream()
         .collect(groupingBy(Route::getStart, minBy(comparing(Route::getLength))));
-    LOG.debug("Neighbor to shortest path {}", neighbor2shortestPath);
+    LOG.debug("Neighbor to shortest path {}", neighbor2shortestRoute);
 
-    Optional<Route> route = neighbor2shortestPath.values().stream()
+    Optional<Route> route = neighbor2shortestRoute.values().stream()
         .filter(Optional::isPresent)
         .map(Optional::get)
         .collect(maxBy(comparing(Route::getLength)));
     LOG.debug("Distance of longest routes {}", route);
 
     List<Route> neighborsWithLongestRoutes =
-        neighbor2shortestPath.values().stream()
+        neighbor2shortestRoute.values().stream()
             .filter(Optional::isPresent)
             .map(Optional::get)
             .filter(weg1 -> weg1.getLength() == route.get().getLength())
             .collect(toList());
     LOG.debug("Neighbor with longest routes {}", neighborsWithLongestRoutes);
 
-//    Map<Position, Double> avg = neighborsWithLongestRoutes.stream()
-//        .collect(Collectors.groupingBy(Weg::getStart, Collectors.averagingInt(Weg::getLaenge)));
-//    LOG.debug("Nachbar mit durchschnittlicher Distanz zu allen Detektiven");
-//    LOG.debug("{}", avg);
-//
-//    Optional<Map.Entry<Position, Double>> optional = avg.entrySet().stream()
-//        .collect(Collectors.maxBy(Comparator.comparing(Map.Entry::getValue)));
-//    Position position = optional.get().getKey();
-//    LOG.debug("Nächste Position");
-//    LOG.debug("{}", position);
-//
-//    return position;
-    return null;
+    Map<Position, Double> avg = neighborsWithLongestRoutes.stream()
+        .collect(groupingBy(Route::getStart, averagingInt(Route::getLength)));
+    LOG.debug("Neighbors average distance {}", avg);
+
+    Optional<Map.Entry<Position, Double>> optional = avg.entrySet().stream()
+        .collect(maxBy(comparing(Map.Entry::getValue)));
+    Position position = optional.get().getKey();
+    LOG.debug("Next position {}", position);
+
+    return position;
   }
 
   private String buildWhereClauseFromPositions(String nodeAlias, List<Position> positions) {
